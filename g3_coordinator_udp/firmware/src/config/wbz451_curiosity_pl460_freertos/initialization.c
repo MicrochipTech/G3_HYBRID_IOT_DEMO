@@ -752,7 +752,7 @@ void SYS_Initialize ( void* data )
 //ah    EIC_CallbackRegister(DRV_PLC_EXT_INT_PIN, DRV_G3_MACRT_ExternalInterruptHandler, sysObj.drvG3MacRt);
 
     // Initialize RF System
-    SYS_Load_Cal(WSS_ENABLE_NONE);
+    SYS_Load_Cal(WSS_ENABLE_ZB);
  
     // Set up OSAL for RF Stack Library usage
     osalAPIList.OSAL_CRIT_Enter      = OSAL_CRIT_Enter;
