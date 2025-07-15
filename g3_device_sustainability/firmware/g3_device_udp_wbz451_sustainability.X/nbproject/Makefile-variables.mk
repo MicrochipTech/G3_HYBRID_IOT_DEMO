@@ -1,0 +1,10 @@
+#
+# Generated - do not edit!
+#
+# NOCDDL
+#
+CND_BASEDIR=`pwd`
+# wbz451_curiosity_pl460_freertos configuration
+CND_ARTIFACT_DIR_wbz451_curiosity_pl460_freertos=dist/wbz451_curiosity_pl460_freertos/production
+CND_ARTIFACT_NAME_wbz451_curiosity_pl460_freertos=g3_device_udp_wbz451_sustainability.X.production.hex
+CND_ARTIFACT_PATH_wbz451_curiosity_pl460_freertos=dist/wbz451_curiosity_pl460_freertos/production/g3_device_udp_wbz451_sustainability.X.production.hex
