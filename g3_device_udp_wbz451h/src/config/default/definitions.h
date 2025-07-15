@@ -69,8 +69,8 @@
 #include "stack/g3/adaptation/lbp_defs.h"
 #include "stack/g3/adaptation/lbp_dev.h"
 #include "peripheral/tc/plib_tc0.h"
-#include "peripheral/nvm/plib_nvm.h"
 #include "system/time/sys_time.h"
+#include "peripheral/nvm/plib_nvm.h"
 #include "service/log_report/srv_log_report.h"
 #include "driver/IEEE_802154_PHY/phy/inc/phy.h"
 #include "driver/IEEE_802154_PHY/phy/inc/phy_tasks.h"
@@ -115,6 +115,7 @@
 #include "system/debug/sys_debug.h"
 #include "peripheral/sercom/spi_master/plib_sercom2_spi_master.h"
 #include "peripheral/evsys/plib_evsys.h"
+#include "peripheral/sercom/usart/plib_sercom0_usart.h"
 /*******************************************************************************
 * Copyright (C) 2022 Microchip Technology Inc. and its subsidiaries.
 *
@@ -139,11 +140,11 @@
 *******************************************************************************/
 #include "driver/pds/include/pds.h"
 #include "driver/pds/include/pds_config.h"
-#include "peripheral/sercom/usart/plib_sercom0_usart.h"
 #include "peripheral/clk/plib_clk.h"
 #include "peripheral/gpio/plib_gpio.h"
 #include "peripheral/nvic/plib_nvic.h"
 #include "peripheral/dmac/plib_dmac.h"
+#include "peripheral/wdt/plib_wdt.h"
 #include "peripheral/cmcc/plib_cmcc.h"
 #include "peripheral/eic/plib_eic.h"
 #include "service/pcrc/srv_pcrc.h"

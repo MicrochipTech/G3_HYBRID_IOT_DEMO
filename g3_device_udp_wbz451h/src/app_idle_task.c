@@ -65,7 +65,7 @@ void app_idle_task( void )
                }
                else
                {
-                   RF_Timer_Cal(WSS_ENABLE_NONE);
+                   RF_Timer_Cal(WSS_ENABLE_ZB);
                }
             }
         }

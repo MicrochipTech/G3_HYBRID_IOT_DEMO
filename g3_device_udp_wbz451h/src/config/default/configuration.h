@@ -124,8 +124,8 @@ extern "C" {
 #define DRV_PLC_EXT_INT_PIO                   SYS_PORT_PIN_RA2
 #define DRV_PLC_EXT_INT_PIN                   EIC_PIN_0
 #define DRV_PLC_RESET_PIN                     SYS_PORT_PIN_RB2
-#define DRV_PLC_LDO_EN_PIN                    SYS_PORT_PIN_RA13
-#define DRV_PLC_TX_ENABLE_PIN                 SYS_PORT_PIN_RA14
+#define DRV_PLC_LDO_EN_PIN                    SYS_PORT_PIN_RA7
+#define DRV_PLC_TX_ENABLE_PIN                 SYS_PORT_PIN_RA8
 #define DRV_PLC_SPI_CLK                       1000000
 
 /* PLC MAC RT Driver RTOS Configuration Options */
@@ -235,8 +235,6 @@ extern "C" {
 #define TCPIP_NETWORK_DEFAULT_SECOND_DNS_IDX0         "0.0.0.0"
 #define TCPIP_NETWORK_DEFAULT_POWER_MODE_IDX0         "full"
 #define TCPIP_NETWORK_DEFAULT_INTERFACE_FLAGS_IDX0            \
-                                                    TCPIP_NETWORK_CONFIG_DHCP_CLIENT_ON |\
-                                                    TCPIP_NETWORK_CONFIG_DNS_CLIENT_ON |\
                                                     TCPIP_NETWORK_CONFIG_MULTICAST_ON |\
                                                     (TCPIP_NETWORK_CONFIG_IPV6_G3_NET | TCPIP_NETWORK_CONFIG_IPV6_NO_DAD) |\
                                                     TCPIP_NETWORK_CONFIG_IPV6_UNICAST_RS |\

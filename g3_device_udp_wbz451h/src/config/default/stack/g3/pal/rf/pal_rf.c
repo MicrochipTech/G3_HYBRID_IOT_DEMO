@@ -84,7 +84,7 @@ static PAL_RF_PHY_STATUS palRfPhyStatus[] = {
 };
 
 // Transceiver Configuration
-#define CHANNEL_TRANSMIT_RECEIVE (11U)
+#define CHANNEL_TRANSMIT_RECEIVE (20U)
 #define CHANNEL_PAGE_TRANSMIT_RECEIVE (0U)
 #define CCA_MODE (1U)
 #define PROMISCUOUS_MODE (true)
@@ -105,6 +105,11 @@ static void lPAL_RF_ReportResultTX(PAL_RF_PHY_STATUS status, uint64_t timeStamp,
 
     rfStats = &palRfData.stats;
     palRfData.txCfmStatus = status;
+
+    if (rfStats->txCfmNotHandled == 0)
+    {
+        return;
+    }
 
     switch (status)
     {

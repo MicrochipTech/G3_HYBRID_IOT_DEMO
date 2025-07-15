@@ -5,7 +5,7 @@
     Microchip Technology Inc.
 
   File Name:
-    app_storage_wbz451h.h
+    app_storage_pic32cxmt.h
 
   Summary:
     This header file provides prototypes and definitions for the application.
@@ -13,9 +13,10 @@
   Description:
     This header file provides function prototypes and data type definitions for
     the application.  Some of these are required by the system (such as the
-    "APP_STORAGE_WBZ451H_Initialize" and "APP_STORAGE_WBZ451H_Tasks" prototypes) and some of them are only used
-    internally by the application (such as the "APP_STORAGE_WBZ451H_STATES" definition).  Both
-    are defined here for convenience.
+    "APP_STORAGE_WBZ451H_Initialize" and "APP_STORAGE_WBZ451H_Tasks"
+    prototypes) and some of them are only used internally by the application
+    (such as the "APP_STORAGE_WBZ451H_STATES" definition). Both are defined
+    here for convenience.
 *******************************************************************************/
 
 #ifndef _APP_STORAGE_WBZ451H_H
@@ -32,6 +33,8 @@
 #include <stddef.h>
 #include <stdlib.h>
 #include "configuration.h"
+#include "stack/g3/adaptation/adp.h"
+#include "osal/osal.h"
 
 // DOM-IGNORE-BEGIN
 #ifdef __cplusplus  // Provide C++ Compatibility
@@ -43,30 +46,23 @@ extern "C" {
 
 // *****************************************************************************
 // *****************************************************************************
+// Section: Macro Definitions
+// *****************************************************************************
+// *****************************************************************************
+
+/* Key to detect valid non-volatile data */
+#define APP_STORAGE_DATA_KEY 0xA55A
+
+// *****************************************************************************
+// *****************************************************************************
 // Section: Type Definitions
 // *****************************************************************************
 // *****************************************************************************
-
-// *****************************************************************************
-/* Application states
-
-  Summary:
-    Application states enumeration
-
-  Description:
-    This enumeration defines the valid application states.  These states
-    determine the behavior of the application at various times.
-*/
-
-typedef enum
+    
+enum 
 {
-    /* Application's state machine's initial state. */
-    APP_STORAGE_WBZ451H_STATE_INIT=0,
-    APP_STORAGE_WBZ451H_STATE_SERVICE_TASKS,
-    /* TODO: Define states used by the application state machine. */
-
-} APP_STORAGE_WBZ451H_STATES;
-
+    APP_STORAGE_PDS_ITEM_1 = (PDS_MODULE_APP_OFFSET),
+}; 
 
 // *****************************************************************************
 /* Application Data
@@ -83,20 +79,20 @@ typedef enum
 
 typedef struct
 {
-    /* The application's current state */
-    APP_STORAGE_WBZ451H_STATES state;
-
-    /* TODO: Define any additional data used by the application. */
+    /* Key to detect valid non-volatile data */
+    uint16_t key;
+    
+    /* EUI64 address */
+    uint8_t eui64[8];
+    
+    /* Current non-volatile data */
+    ADP_NON_VOLATILE_DATA_IND_PARAMS nonVolatileData;
+    
+    bool writeMemConfirm;
+    bool updateMemConfirm;
+;
 
 } APP_STORAGE_WBZ451H_DATA;
-
-// *****************************************************************************
-// *****************************************************************************
-// Section: Application Callback Routines
-// *****************************************************************************
-// *****************************************************************************
-/* These routines are called by drivers when certain events occur.
-*/
 
 // *****************************************************************************
 // *****************************************************************************
@@ -137,7 +133,6 @@ typedef struct
 
 void APP_STORAGE_WBZ451H_Initialize ( void );
 
-
 /*******************************************************************************
   Function:
     void APP_STORAGE_WBZ451H_Tasks ( void )
@@ -169,6 +164,118 @@ void APP_STORAGE_WBZ451H_Initialize ( void );
  */
 
 void APP_STORAGE_WBZ451H_Tasks( void );
+
+// *****************************************************************************
+// *****************************************************************************
+// Section: Application Interface Functions
+// *****************************************************************************
+// *****************************************************************************
+
+/*******************************************************************************
+  Function:
+    void APP_STORAGE_GetExtendedAddress(uint8_t* eui64)
+
+  Summary:
+    Gets extended address.
+
+  Description:
+    This function gets the extended address of the device, ensuring it is
+    unique for each device.
+
+  Precondition:
+    APP_STORAGE_WBZ451H_Initialize should be called before calling this
+    routine.
+
+  Parameters:
+    eui64 - Pointer to store extended address (8 bytes).
+
+  Returns:
+    None.
+
+  Example:
+    <code>
+    uint8_t eui64[8];
+    APP_STORAGE_GetExtendedAddress(eui64);
+    </code>
+
+  Remarks:
+    In this implementation the extended address is derived from UniqueID.
+*/
+
+void APP_STORAGE_GetExtendedAddress(uint8_t* eui64);
+
+/*******************************************************************************
+  Function:
+    ADP_NON_VOLATILE_DATA_IND_PARAMS* APP_STORAGE_GetNonVolatileData(void)
+
+  Summary:
+    Gets non-volatile data.
+
+  Description:
+    This function gets the G3 non-volatile data, if it is valid.
+
+  Precondition:
+    APP_STORAGE_WBZ451H_Initialize should be called before calling this
+    routine.
+
+  Parameters:
+    None.
+
+  Returns:
+    Pointer to non-volatile data, or NULL if there is no valid non-volatile
+    data.
+
+  Example:
+    <code>
+    ADP_NON_VOLATILE_DATA_IND_PARAMS* pNonVolatileData;
+    pNonVolatileData = APP_STORAGE_GetNonVolatileData();
+    if (pNonVolatileData != NULL)
+    {
+
+    }
+    </code>
+
+  Remarks:
+    In this implementation the non-volatile data is read from User Signature
+    (power-on reset) or GPBR (not power-on reset).
+*/
+
+ADP_NON_VOLATILE_DATA_IND_PARAMS* APP_STORAGE_GetNonVolatileData(void);
+
+/*******************************************************************************
+  Function:
+    void APP_STORAGE_UpdateNonVolatileData(ADP_NON_VOLATILE_DATA_IND_PARAMS* pNonVolatileData)
+
+  Summary:
+    Updates non-volatile data.
+
+  Description:
+    This function updates the G3 non-volatile data.
+
+  Precondition:
+    APP_STORAGE_WBZ451H_Initialize should be called before calling this
+    routine.
+
+  Parameters:
+    pNonVolatileData - Pointer to new non-volatile data.
+
+  Returns:
+    None.
+
+  Example:
+    <code>
+    static void _ADP_NonVolatileDataIndication(ADP_NON_VOLATILE_DATA_IND_PARAMS* pNonVolatileData)
+    {
+        APP_STORAGE_UpdateNonVolatileData(pNonVolatileData);
+    }
+    </code>
+
+  Remarks:
+    In this implementation the non-volatile data is stored in GPBR each time it
+    is updated and in User Signature at power-down.
+*/
+
+void APP_STORAGE_UpdateNonVolatileData(ADP_NON_VOLATILE_DATA_IND_PARAMS* pNonVolatileData);
 
 //DOM-IGNORE-BEGIN
 #ifdef __cplusplus

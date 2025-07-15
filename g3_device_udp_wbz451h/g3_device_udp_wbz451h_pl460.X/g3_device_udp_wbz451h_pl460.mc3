@@ -11287,13 +11287,13 @@
          <key class="com.microchip.mcc.core.tokenManager.CustomKey" moduleName="core" name="!@#harmonyUserData"/>
          <value>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;UserData&gt;
   &lt;UserData dnOrder=&quot;0&quot;&gt;
-    &lt;GraphSettings canvasHeight=&quot;514&quot; canvasWidth=&quot;701&quot; dnOrder=&quot;0&quot;/&gt;
+    &lt;GraphSettings canvasHeight=&quot;750&quot; canvasWidth=&quot;822&quot; dnOrder=&quot;0&quot;/&gt;
     &lt;PowerProfiles dnOrder=&quot;1&quot;&gt;
       &lt;Profile dnOrder=&quot;0&quot; id=&quot;profile0&quot; name=&quot;Main&quot;/&gt;
     &lt;/PowerProfiles&gt;
     &lt;ComponentGraph dnOrder=&quot;2&quot; id=&quot;BASIC CONFIGURATION&quot;&gt;
       &lt;ElementPositions dnOrder=&quot;0&quot;&gt;
-        &lt;ElementPosition dnOrder=&quot;0&quot; id=&quot;tcpipStack&quot; x=&quot;20&quot; y=&quot;20&quot;/&gt;
+        &lt;ElementPosition dnOrder=&quot;0&quot; id=&quot;tcpipStack&quot; x=&quot;21&quot; y=&quot;20&quot;/&gt;
       &lt;/ElementPositions&gt;
     &lt;/ComponentGraph&gt;
     &lt;ComponentGraph dnOrder=&quot;3&quot; id=&quot;DATA LINK LAYER&quot;&gt;
@@ -11324,7 +11324,7 @@
     &lt;/ComponentGraph&gt;
     &lt;ComponentGraph dnOrder=&quot;6&quot; id=&quot;TCP/IP STACK&quot;&gt;
       &lt;ElementPositions dnOrder=&quot;0&quot;&gt;
-        &lt;ElementPosition dnOrder=&quot;0&quot; id=&quot;BASIC CONFIGURATION&quot; x=&quot;20&quot; y=&quot;20&quot;/&gt;
+        &lt;ElementPosition dnOrder=&quot;0&quot; id=&quot;BASIC CONFIGURATION&quot; x=&quot;20&quot; y=&quot;19&quot;/&gt;
         &lt;ElementPosition dnOrder=&quot;1&quot; id=&quot;DATA LINK LAYER&quot; x=&quot;601&quot; y=&quot;27&quot;/&gt;
         &lt;ElementPosition dnOrder=&quot;2&quot; id=&quot;NETWORK LAYER&quot; x=&quot;423&quot; y=&quot;25&quot;/&gt;
         &lt;ElementPosition dnOrder=&quot;3&quot; id=&quot;TRANSPORT LAYER&quot; x=&quot;241&quot; y=&quot;25&quot;/&gt;
@@ -11340,13 +11340,13 @@
         &lt;ElementPosition dnOrder=&quot;0&quot; id=&quot;BSP_WBZ451HPE_Curiosity&quot; x=&quot;20&quot; y=&quot;85&quot;/&gt;
         &lt;ElementPosition dnOrder=&quot;1&quot; id=&quot;FreeRTOS&quot; x=&quot;460&quot; y=&quot;21&quot;/&gt;
         &lt;ElementPosition dnOrder=&quot;2&quot; id=&quot;G3 STACK&quot; x=&quot;508&quot; y=&quot;306&quot;/&gt;
-        &lt;ElementPosition dnOrder=&quot;3&quot; id=&quot;HarmonyCore&quot; x=&quot;678&quot; y=&quot;18&quot;/&gt;
+        &lt;ElementPosition dnOrder=&quot;3&quot; id=&quot;HarmonyCore&quot; x=&quot;679&quot; y=&quot;18&quot;/&gt;
         &lt;ElementPosition dnOrder=&quot;4&quot; id=&quot;IEEE_802154_PHY&quot; x=&quot;680&quot; y=&quot;550&quot;/&gt;
         &lt;ElementPosition dnOrder=&quot;5&quot; id=&quot;TCP/IP STACK&quot; x=&quot;470&quot; y=&quot;549&quot;/&gt;
         &lt;ElementPosition dnOrder=&quot;6&quot; id=&quot;cmsis&quot; x=&quot;323&quot; y=&quot;86&quot;/&gt;
-        &lt;ElementPosition dnOrder=&quot;7&quot; id=&quot;core&quot; x=&quot;228&quot; y=&quot;86&quot;/&gt;
+        &lt;ElementPosition dnOrder=&quot;7&quot; id=&quot;core&quot; x=&quot;229&quot; y=&quot;86&quot;/&gt;
         &lt;ElementPosition dnOrder=&quot;8&quot; id=&quot;dfp&quot; x=&quot;226&quot; y=&quot;21&quot;/&gt;
-        &lt;ElementPosition dnOrder=&quot;9&quot; id=&quot;drvG3MacRt&quot; x=&quot;213&quot; y=&quot;218&quot;/&gt;
+        &lt;ElementPosition dnOrder=&quot;9&quot; id=&quot;drvG3MacRt&quot; x=&quot;216&quot; y=&quot;217&quot;/&gt;
         &lt;ElementPosition dnOrder=&quot;10&quot; id=&quot;eic&quot; x=&quot;21&quot; y=&quot;132&quot;/&gt;
         &lt;ElementPosition dnOrder=&quot;11&quot; id=&quot;evsys&quot; x=&quot;20&quot; y=&quot;20&quot;/&gt;
         &lt;ElementPosition dnOrder=&quot;12&quot; id=&quot;nvm&quot; x=&quot;27&quot; y=&quot;638&quot;/&gt;
@@ -11422,6 +11422,15 @@
          <key class="com.microchip.mcc.core.tokenManager.CustomKey" moduleName="core" name="BSP_PIN_13_MODE"/>
          <value>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;core&gt;
   &lt;core dnOrder=&quot;0&quot; id=&quot;BSP_PIN_13_MODE&quot;&gt;
+    &lt;Values dnOrder=&quot;0&quot;/&gt;
+  &lt;/core&gt;
+&lt;/core&gt;
+</value>
+      </entry>
+      <entry>
+         <key class="com.microchip.mcc.core.tokenManager.CustomKey" moduleName="core" name="BSP_PIN_15_MODE"/>
+         <value>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;core&gt;
+  &lt;core dnOrder=&quot;0&quot; id=&quot;BSP_PIN_15_MODE&quot;&gt;
     &lt;Values dnOrder=&quot;0&quot;/&gt;
   &lt;/core&gt;
 &lt;/core&gt;
@@ -11593,11 +11602,77 @@
 </value>
       </entry>
       <entry>
+         <key class="com.microchip.mcc.core.tokenManager.CustomKey" moduleName="core" name="BSP_PIN_29_DIR"/>
+         <value>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;core&gt;
+  &lt;core dnOrder=&quot;0&quot; id=&quot;BSP_PIN_29_DIR&quot;&gt;
+    &lt;Values dnOrder=&quot;0&quot;&gt;
+      &lt;User dnOrder=&quot;0&quot; value=&quot;Out&quot;/&gt;
+    &lt;/Values&gt;
+  &lt;/core&gt;
+&lt;/core&gt;
+</value>
+      </entry>
+      <entry>
+         <key class="com.microchip.mcc.core.tokenManager.CustomKey" moduleName="core" name="BSP_PIN_29_FUNCTION_NAME"/>
+         <value>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;core&gt;
+  &lt;core dnOrder=&quot;0&quot; id=&quot;BSP_PIN_29_FUNCTION_NAME&quot;&gt;
+    &lt;Values dnOrder=&quot;0&quot;&gt;
+      &lt;User dnOrder=&quot;0&quot; value=&quot;PLC_TX_ENABLE&quot;/&gt;
+    &lt;/Values&gt;
+  &lt;/core&gt;
+&lt;/core&gt;
+</value>
+      </entry>
+      <entry>
+         <key class="com.microchip.mcc.core.tokenManager.CustomKey" moduleName="core" name="BSP_PIN_29_FUNCTION_TYPE"/>
+         <value>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;core&gt;
+  &lt;core dnOrder=&quot;0&quot; id=&quot;BSP_PIN_29_FUNCTION_TYPE&quot;&gt;
+    &lt;Values dnOrder=&quot;0&quot;&gt;
+      &lt;User dnOrder=&quot;0&quot; value=&quot;GPIO&quot;/&gt;
+    &lt;/Values&gt;
+  &lt;/core&gt;
+&lt;/core&gt;
+</value>
+      </entry>
+      <entry>
          <key class="com.microchip.mcc.core.tokenManager.CustomKey" moduleName="core" name="BSP_PIN_29_MODE"/>
          <value>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;core&gt;
   &lt;core dnOrder=&quot;0&quot; id=&quot;BSP_PIN_29_MODE&quot;&gt;
     &lt;Values dnOrder=&quot;0&quot;&gt;
       &lt;User dnOrder=&quot;0&quot; value=&quot;DIGITAL&quot;/&gt;
+    &lt;/Values&gt;
+  &lt;/core&gt;
+&lt;/core&gt;
+</value>
+      </entry>
+      <entry>
+         <key class="com.microchip.mcc.core.tokenManager.CustomKey" moduleName="core" name="BSP_PIN_31_DIR"/>
+         <value>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;core&gt;
+  &lt;core dnOrder=&quot;0&quot; id=&quot;BSP_PIN_31_DIR&quot;&gt;
+    &lt;Values dnOrder=&quot;0&quot;&gt;
+      &lt;User dnOrder=&quot;0&quot; value=&quot;Out&quot;/&gt;
+    &lt;/Values&gt;
+  &lt;/core&gt;
+&lt;/core&gt;
+</value>
+      </entry>
+      <entry>
+         <key class="com.microchip.mcc.core.tokenManager.CustomKey" moduleName="core" name="BSP_PIN_31_FUNCTION_NAME"/>
+         <value>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;core&gt;
+  &lt;core dnOrder=&quot;0&quot; id=&quot;BSP_PIN_31_FUNCTION_NAME&quot;&gt;
+    &lt;Values dnOrder=&quot;0&quot;&gt;
+      &lt;User dnOrder=&quot;0&quot; value=&quot;PLC_LDO&quot;/&gt;
+    &lt;/Values&gt;
+  &lt;/core&gt;
+&lt;/core&gt;
+</value>
+      </entry>
+      <entry>
+         <key class="com.microchip.mcc.core.tokenManager.CustomKey" moduleName="core" name="BSP_PIN_31_FUNCTION_TYPE"/>
+         <value>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;core&gt;
+  &lt;core dnOrder=&quot;0&quot; id=&quot;BSP_PIN_31_FUNCTION_TYPE&quot;&gt;
+    &lt;Values dnOrder=&quot;0&quot;&gt;
+      &lt;User dnOrder=&quot;0&quot; value=&quot;GPIO&quot;/&gt;
     &lt;/Values&gt;
   &lt;/core&gt;
 &lt;/core&gt;
@@ -11615,12 +11690,21 @@
 </value>
       </entry>
       <entry>
+         <key class="com.microchip.mcc.core.tokenManager.CustomKey" moduleName="core" name="BSP_PIN_33_DIR"/>
+         <value>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;core&gt;
+  &lt;core dnOrder=&quot;0&quot; id=&quot;BSP_PIN_33_DIR&quot;&gt;
+    &lt;Values dnOrder=&quot;0&quot;&gt;
+      &lt;User dnOrder=&quot;0&quot; value=&quot;&quot;/&gt;
+    &lt;/Values&gt;
+  &lt;/core&gt;
+&lt;/core&gt;
+</value>
+      </entry>
+      <entry>
          <key class="com.microchip.mcc.core.tokenManager.CustomKey" moduleName="core" name="BSP_PIN_33_FUNCTION_NAME"/>
          <value>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;core&gt;
   &lt;core dnOrder=&quot;0&quot; id=&quot;BSP_PIN_33_FUNCTION_NAME&quot;&gt;
-    &lt;Values dnOrder=&quot;0&quot;&gt;
-      &lt;User dnOrder=&quot;0&quot; value=&quot;PLC_LDO&quot;/&gt;
-    &lt;/Values&gt;
+    &lt;Values dnOrder=&quot;0&quot;/&gt;
   &lt;/core&gt;
 &lt;/core&gt;
 </value>
@@ -11629,9 +11713,7 @@
          <key class="com.microchip.mcc.core.tokenManager.CustomKey" moduleName="core" name="BSP_PIN_33_FUNCTION_TYPE"/>
          <value>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;core&gt;
   &lt;core dnOrder=&quot;0&quot; id=&quot;BSP_PIN_33_FUNCTION_TYPE&quot;&gt;
-    &lt;Values dnOrder=&quot;0&quot;&gt;
-      &lt;User dnOrder=&quot;0&quot; value=&quot;GPIO&quot;/&gt;
-    &lt;/Values&gt;
+    &lt;Values dnOrder=&quot;0&quot;/&gt;
   &lt;/core&gt;
 &lt;/core&gt;
 </value>
@@ -11651,9 +11733,7 @@
          <key class="com.microchip.mcc.core.tokenManager.CustomKey" moduleName="core" name="BSP_PIN_34_FUNCTION_NAME"/>
          <value>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;core&gt;
   &lt;core dnOrder=&quot;0&quot; id=&quot;BSP_PIN_34_FUNCTION_NAME&quot;&gt;
-    &lt;Values dnOrder=&quot;0&quot;&gt;
-      &lt;User dnOrder=&quot;0&quot; value=&quot;PLC_TX_ENABLE&quot;/&gt;
-    &lt;/Values&gt;
+    &lt;Values dnOrder=&quot;0&quot;/&gt;
   &lt;/core&gt;
 &lt;/core&gt;
 </value>
@@ -11662,9 +11742,7 @@
          <key class="com.microchip.mcc.core.tokenManager.CustomKey" moduleName="core" name="BSP_PIN_34_FUNCTION_TYPE"/>
          <value>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;core&gt;
   &lt;core dnOrder=&quot;0&quot; id=&quot;BSP_PIN_34_FUNCTION_TYPE&quot;&gt;
-    &lt;Values dnOrder=&quot;0&quot;&gt;
-      &lt;User dnOrder=&quot;0&quot; value=&quot;GPIO&quot;/&gt;
-    &lt;/Values&gt;
+    &lt;Values dnOrder=&quot;0&quot;/&gt;
   &lt;/core&gt;
 &lt;/core&gt;
 </value>
@@ -11793,7 +11871,7 @@
          <value>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;core&gt;
   &lt;core dnOrder=&quot;0&quot; id=&quot;BSP_PIN_39_FUNCTION_NAME&quot;&gt;
     &lt;Values dnOrder=&quot;0&quot;&gt;
-      &lt;User dnOrder=&quot;0&quot; value=&quot;&quot;/&gt;
+      &lt;User dnOrder=&quot;0&quot; value=&quot;mikroBUS MOSI&quot;/&gt;
     &lt;/Values&gt;
   &lt;/core&gt;
 &lt;/core&gt;
@@ -11804,7 +11882,7 @@
          <value>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;core&gt;
   &lt;core dnOrder=&quot;0&quot; id=&quot;BSP_PIN_39_FUNCTION_TYPE&quot;&gt;
     &lt;Values dnOrder=&quot;0&quot;&gt;
-      &lt;User dnOrder=&quot;0&quot; value=&quot;SERCOM2_PAD1 (out)&quot;/&gt;
+      &lt;User dnOrder=&quot;0&quot; value=&quot;SERCOM2_PAD0 (out)&quot;/&gt;
     &lt;/Values&gt;
   &lt;/core&gt;
 &lt;/core&gt;
@@ -11823,7 +11901,9 @@
          <key class="com.microchip.mcc.core.tokenManager.CustomKey" moduleName="core" name="BSP_PIN_39_PU"/>
          <value>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;core&gt;
   &lt;core dnOrder=&quot;0&quot; id=&quot;BSP_PIN_39_PU&quot;&gt;
-    &lt;Values dnOrder=&quot;0&quot;/&gt;
+    &lt;Values dnOrder=&quot;0&quot;&gt;
+      &lt;User dnOrder=&quot;0&quot; value=&quot;True&quot;/&gt;
+    &lt;/Values&gt;
   &lt;/core&gt;
 &lt;/core&gt;
 </value>
@@ -11900,7 +11980,7 @@
          <value>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;core&gt;
   &lt;core dnOrder=&quot;0&quot; id=&quot;BSP_PIN_5_FUNCTION_NAME&quot;&gt;
     &lt;Values dnOrder=&quot;0&quot;&gt;
-      &lt;User dnOrder=&quot;0&quot; value=&quot;&quot;/&gt;
+      &lt;User dnOrder=&quot;0&quot; value=&quot;mikroBUS SCK&quot;/&gt;
     &lt;/Values&gt;
   &lt;/core&gt;
 &lt;/core&gt;
@@ -11911,7 +11991,7 @@
          <value>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;core&gt;
   &lt;core dnOrder=&quot;0&quot; id=&quot;BSP_PIN_5_FUNCTION_TYPE&quot;&gt;
     &lt;Values dnOrder=&quot;0&quot;&gt;
-      &lt;User dnOrder=&quot;0&quot; value=&quot;SERCOM2_PAD0 (out)&quot;/&gt;
+      &lt;User dnOrder=&quot;0&quot; value=&quot;SERCOM2_PAD1 (out)&quot;/&gt;
     &lt;/Values&gt;
   &lt;/core&gt;
 &lt;/core&gt;
@@ -11951,7 +12031,7 @@
          <value>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;core&gt;
   &lt;core dnOrder=&quot;0&quot; id=&quot;BSP_PIN_6_FUNCTION_NAME&quot;&gt;
     &lt;Values dnOrder=&quot;0&quot;&gt;
-      &lt;User dnOrder=&quot;0&quot; value=&quot;&quot;/&gt;
+      &lt;User dnOrder=&quot;0&quot; value=&quot;mikroBUS MISO&quot;/&gt;
     &lt;/Values&gt;
   &lt;/core&gt;
 &lt;/core&gt;
@@ -11982,6 +12062,17 @@
          <value>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;core&gt;
   &lt;core dnOrder=&quot;0&quot; id=&quot;BSP_PIN_6_MODE&quot;&gt;
     &lt;Values dnOrder=&quot;0&quot;/&gt;
+  &lt;/core&gt;
+&lt;/core&gt;
+</value>
+      </entry>
+      <entry>
+         <key class="com.microchip.mcc.core.tokenManager.CustomKey" moduleName="core" name="BSP_PIN_6_PD"/>
+         <value>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;core&gt;
+  &lt;core dnOrder=&quot;0&quot; id=&quot;BSP_PIN_6_PD&quot;&gt;
+    &lt;Values dnOrder=&quot;0&quot;&gt;
+      &lt;User dnOrder=&quot;0&quot; value=&quot;True&quot;/&gt;
+    &lt;/Values&gt;
   &lt;/core&gt;
 &lt;/core&gt;
 </value>
@@ -13626,11 +13717,33 @@
 </value>
       </entry>
       <entry>
+         <key class="com.microchip.mcc.core.tokenManager.CustomKey" moduleName="core" name="SYS_PORT_A_TRIS"/>
+         <value>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;core&gt;
+  &lt;core dnOrder=&quot;0&quot; id=&quot;SYS_PORT_A_TRIS&quot;&gt;
+    &lt;Values dnOrder=&quot;0&quot;&gt;
+      &lt;Dynamic dnOrder=&quot;0&quot; id=&quot;core&quot; value=&quot;384&quot;/&gt;
+    &lt;/Values&gt;
+  &lt;/core&gt;
+&lt;/core&gt;
+</value>
+      </entry>
+      <entry>
          <key class="com.microchip.mcc.core.tokenManager.CustomKey" moduleName="core" name="SYS_PORT_B_ANSEL"/>
          <value>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;core&gt;
   &lt;core dnOrder=&quot;0&quot; id=&quot;SYS_PORT_B_ANSEL&quot;&gt;
     &lt;Values dnOrder=&quot;0&quot;&gt;
       &lt;Dynamic dnOrder=&quot;0&quot; id=&quot;core&quot; value=&quot;189&quot;/&gt;
+    &lt;/Values&gt;
+  &lt;/core&gt;
+&lt;/core&gt;
+</value>
+      </entry>
+      <entry>
+         <key class="com.microchip.mcc.core.tokenManager.CustomKey" moduleName="core" name="SYS_PORT_B_CNPD"/>
+         <value>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;core&gt;
+  &lt;core dnOrder=&quot;0&quot; id=&quot;SYS_PORT_B_CNPD&quot;&gt;
+    &lt;Values dnOrder=&quot;0&quot;&gt;
+      &lt;Dynamic dnOrder=&quot;0&quot; id=&quot;core&quot; value=&quot;32&quot;/&gt;
     &lt;/Values&gt;
   &lt;/core&gt;
 &lt;/core&gt;
@@ -13711,7 +13824,7 @@
       &lt;/Boolean&gt;
     &lt;/Attributes&gt;
     &lt;Values dnOrder=&quot;1&quot;&gt;
-      &lt;User dnOrder=&quot;0&quot; value=&quot;16&quot;/&gt;
+      &lt;User dnOrder=&quot;0&quot; value=&quot;17&quot;/&gt;
     &lt;/Values&gt;
   &lt;/core&gt;
 &lt;/core&gt;
@@ -13820,12 +13933,45 @@
          <value>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;core&gt;
   &lt;core dnOrder=&quot;0&quot; id=&quot;SYS_PORT_PPS_INPUT_PIN_2&quot;&gt;
     &lt;Attributes dnOrder=&quot;0&quot;&gt;
-      &lt;Boolean dnOrder=&quot;0&quot; id=&quot;visible&quot;&gt;
+      &lt;KeyValuePairList dnOrder=&quot;0&quot; id=&quot;pairs&quot;&gt;
+        &lt;Pairs dnOrder=&quot;0&quot;&gt;
+          &lt;Pair description=&quot;RPB2&quot; dnOrder=&quot;0&quot; key=&quot;RPB2&quot; value=&quot;11&quot;/&gt;
+          &lt;Pair description=&quot;RPB3&quot; dnOrder=&quot;1&quot; key=&quot;RPB3&quot; value=&quot;12&quot;/&gt;
+          &lt;Pair description=&quot;RPB0&quot; dnOrder=&quot;2&quot; key=&quot;RPB0&quot; value=&quot;11&quot;/&gt;
+          &lt;Pair description=&quot;RPA10&quot; dnOrder=&quot;3&quot; key=&quot;RPA10&quot; value=&quot;2&quot;/&gt;
+          &lt;Pair description=&quot;RPB1&quot; dnOrder=&quot;4&quot; key=&quot;RPB1&quot; value=&quot;11&quot;/&gt;
+          &lt;Pair description=&quot;RPA11&quot; dnOrder=&quot;5&quot; key=&quot;RPA11&quot; value=&quot;10&quot;/&gt;
+          &lt;Pair description=&quot;RPB10&quot; dnOrder=&quot;6&quot; key=&quot;RPB10&quot; value=&quot;13&quot;/&gt;
+          &lt;Pair description=&quot;RPB11&quot; dnOrder=&quot;7&quot; key=&quot;RPB11&quot; value=&quot;6&quot;/&gt;
+          &lt;Pair description=&quot;RPA12&quot; dnOrder=&quot;8&quot; key=&quot;RPA12&quot; value=&quot;10&quot;/&gt;
+          &lt;Pair description=&quot;RPB12&quot; dnOrder=&quot;9&quot; key=&quot;RPB12&quot; value=&quot;14&quot;/&gt;
+          &lt;Pair description=&quot;RPA13&quot; dnOrder=&quot;10&quot; key=&quot;RPA13&quot; value=&quot;10&quot;/&gt;
+          &lt;Pair description=&quot;RPA14&quot; dnOrder=&quot;11&quot; key=&quot;RPA14&quot; value=&quot;3&quot;/&gt;
+          &lt;Pair description=&quot;RPB13&quot; dnOrder=&quot;12&quot; key=&quot;RPB13&quot; value=&quot;14&quot;/&gt;
+          &lt;Pair description=&quot;RPB8&quot; dnOrder=&quot;13&quot; key=&quot;RPB8&quot; value=&quot;13&quot;/&gt;
+          &lt;Pair description=&quot;RPB9&quot; dnOrder=&quot;14&quot; key=&quot;RPB9&quot; value=&quot;13&quot;/&gt;
+          &lt;Pair description=&quot;RPB6&quot; dnOrder=&quot;15&quot; key=&quot;RPB6&quot; value=&quot;12&quot;/&gt;
+          &lt;Pair description=&quot;RPB7&quot; dnOrder=&quot;16&quot; key=&quot;RPB7&quot; value=&quot;5&quot;/&gt;
+          &lt;Pair description=&quot;RPB4&quot; dnOrder=&quot;17&quot; key=&quot;RPB4&quot; value=&quot;12&quot;/&gt;
+          &lt;Pair description=&quot;RPB5&quot; dnOrder=&quot;18&quot; key=&quot;RPB5&quot; value=&quot;12&quot;/&gt;
+          &lt;Pair description=&quot;RPA1&quot; dnOrder=&quot;19&quot; key=&quot;RPA1&quot; value=&quot;7&quot;/&gt;
+          &lt;Pair description=&quot;RPA2&quot; dnOrder=&quot;20&quot; key=&quot;RPA2&quot; value=&quot;15&quot;/&gt;
+          &lt;Pair description=&quot;RPA0&quot; dnOrder=&quot;21&quot; key=&quot;RPA0&quot; value=&quot;7&quot;/&gt;
+          &lt;Pair description=&quot;RPA9&quot; dnOrder=&quot;22&quot; key=&quot;RPA9&quot; value=&quot;9&quot;/&gt;
+          &lt;Pair description=&quot;RPA7&quot; dnOrder=&quot;23&quot; key=&quot;RPA7&quot; value=&quot;9&quot;/&gt;
+          &lt;Pair description=&quot;RPA8&quot; dnOrder=&quot;24&quot; key=&quot;RPA8&quot; value=&quot;14&quot;/&gt;
+          &lt;Pair description=&quot;RPA5&quot; dnOrder=&quot;25&quot; key=&quot;RPA5&quot; value=&quot;8&quot;/&gt;
+          &lt;Pair description=&quot;RPA6&quot; dnOrder=&quot;26&quot; key=&quot;RPA6&quot; value=&quot;1&quot;/&gt;
+          &lt;Pair description=&quot;RPA3&quot; dnOrder=&quot;27&quot; key=&quot;RPA3&quot; value=&quot;8&quot;/&gt;
+          &lt;Pair description=&quot;RPA4&quot; dnOrder=&quot;28&quot; key=&quot;RPA4&quot; value=&quot;8&quot;/&gt;
+        &lt;/Pairs&gt;
+      &lt;/KeyValuePairList&gt;
+      &lt;Boolean dnOrder=&quot;1&quot; id=&quot;visible&quot;&gt;
         &lt;Value dnOrder=&quot;0&quot;&gt;true&lt;/Value&gt;
       &lt;/Boolean&gt;
     &lt;/Attributes&gt;
     &lt;Values dnOrder=&quot;1&quot;&gt;
-      &lt;User dnOrder=&quot;0&quot; value=&quot;26&quot;/&gt;
+      &lt;User dnOrder=&quot;0&quot; value=&quot;1&quot;/&gt;
     &lt;/Values&gt;
   &lt;/core&gt;
 &lt;/core&gt;
@@ -13868,7 +14014,7 @@
           &lt;Pair description=&quot;TCC1_WO2&quot; dnOrder=&quot;27&quot; key=&quot;TCC1_WO2&quot; value=&quot;14&quot;/&gt;
           &lt;Pair description=&quot;TCC0_WO4&quot; dnOrder=&quot;28&quot; key=&quot;TCC0_WO4&quot; value=&quot;13&quot;/&gt;
           &lt;Pair description=&quot;TCC0_WO3&quot; dnOrder=&quot;29&quot; key=&quot;TCC0_WO3&quot; value=&quot;11&quot;/&gt;
-          &lt;Pair description=&quot;SERCOM2_PAD1 (out)&quot; dnOrder=&quot;30&quot; key=&quot;SERCOM2_PAD1 (out)&quot; value=&quot;7&quot;/&gt;
+          &lt;Pair description=&quot;SERCOM2_PAD1 (out)&quot; dnOrder=&quot;30&quot; key=&quot;SERCOM2_PAD1 (out)&quot; value=&quot;8&quot;/&gt;
           &lt;Pair description=&quot;TCC0_WO5&quot; dnOrder=&quot;31&quot; key=&quot;TCC0_WO5&quot; value=&quot;13&quot;/&gt;
           &lt;Pair description=&quot;QSPI_DATA0 (out)&quot; dnOrder=&quot;32&quot; key=&quot;QSPI_DATA0 (out)&quot; value=&quot;27&quot;/&gt;
           &lt;Pair description=&quot;REFO3&quot; dnOrder=&quot;33&quot; key=&quot;REFO3&quot; value=&quot;19&quot;/&gt;
@@ -13899,7 +14045,7 @@
       &lt;/Boolean&gt;
     &lt;/Attributes&gt;
     &lt;Values dnOrder=&quot;1&quot;&gt;
-      &lt;User dnOrder=&quot;0&quot; value=&quot;16&quot;/&gt;
+      &lt;User dnOrder=&quot;0&quot; value=&quot;30&quot;/&gt;
     &lt;/Values&gt;
   &lt;/core&gt;
 &lt;/core&gt;
@@ -14002,7 +14148,7 @@
           &lt;Pair description=&quot;SERCOM1_PAD0 (out)&quot; dnOrder=&quot;13&quot; key=&quot;SERCOM1_PAD0 (out)&quot; value=&quot;6&quot;/&gt;
           &lt;Pair description=&quot;SERCOM3_PAD3 (out)&quot; dnOrder=&quot;14&quot; key=&quot;SERCOM3_PAD3 (out)&quot; value=&quot;9&quot;/&gt;
           &lt;Pair description=&quot;SERCOM0_PAD1 (out)&quot; dnOrder=&quot;15&quot; key=&quot;SERCOM0_PAD1 (out)&quot; value=&quot;2&quot;/&gt;
-          &lt;Pair description=&quot;SERCOM2_PAD0 (out)&quot; dnOrder=&quot;16&quot; key=&quot;SERCOM2_PAD0 (out)&quot; value=&quot;8&quot;/&gt;
+          &lt;Pair description=&quot;SERCOM2_PAD0 (out)&quot; dnOrder=&quot;16&quot; key=&quot;SERCOM2_PAD0 (out)&quot; value=&quot;7&quot;/&gt;
           &lt;Pair description=&quot;SERCOM2_PAD3 (out)&quot; dnOrder=&quot;17&quot; key=&quot;SERCOM2_PAD3 (out)&quot; value=&quot;7&quot;/&gt;
           &lt;Pair description=&quot;TCC1_WO1&quot; dnOrder=&quot;18&quot; key=&quot;TCC1_WO1&quot; value=&quot;15&quot;/&gt;
           &lt;Pair description=&quot;TCC1_WO0&quot; dnOrder=&quot;19&quot; key=&quot;TCC1_WO0&quot; value=&quot;15&quot;/&gt;
@@ -14047,7 +14193,7 @@
       &lt;/Boolean&gt;
     &lt;/Attributes&gt;
     &lt;Values dnOrder=&quot;1&quot;&gt;
-      &lt;User dnOrder=&quot;0&quot; value=&quot;30&quot;/&gt;
+      &lt;User dnOrder=&quot;0&quot; value=&quot;16&quot;/&gt;
     &lt;/Values&gt;
   &lt;/core&gt;
 &lt;/core&gt;
@@ -14580,6 +14726,45 @@
 </value>
       </entry>
       <entry>
+         <key class="com.microchip.mcc.core.tokenManager.CustomKey" moduleName="core" name="WDT_HEADER"/>
+         <value>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;core&gt;
+  &lt;core dnOrder=&quot;0&quot; id=&quot;WDT_HEADER&quot;&gt;
+    &lt;Attributes dnOrder=&quot;0&quot;&gt;
+      &lt;Boolean dnOrder=&quot;0&quot; id=&quot;enabled&quot;&gt;
+        &lt;Value dnOrder=&quot;0&quot;&gt;true&lt;/Value&gt;
+      &lt;/Boolean&gt;
+    &lt;/Attributes&gt;
+  &lt;/core&gt;
+&lt;/core&gt;
+</value>
+      </entry>
+      <entry>
+         <key class="com.microchip.mcc.core.tokenManager.CustomKey" moduleName="core" name="WDT_SOURCE"/>
+         <value>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;core&gt;
+  &lt;core dnOrder=&quot;0&quot; id=&quot;WDT_SOURCE&quot;&gt;
+    &lt;Attributes dnOrder=&quot;0&quot;&gt;
+      &lt;Boolean dnOrder=&quot;0&quot; id=&quot;enabled&quot;&gt;
+        &lt;Value dnOrder=&quot;0&quot;&gt;true&lt;/Value&gt;
+      &lt;/Boolean&gt;
+    &lt;/Attributes&gt;
+  &lt;/core&gt;
+&lt;/core&gt;
+</value>
+      </entry>
+      <entry>
+         <key class="com.microchip.mcc.core.tokenManager.CustomKey" moduleName="core" name="WDT_SYS_DEF"/>
+         <value>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;core&gt;
+  &lt;core dnOrder=&quot;0&quot; id=&quot;WDT_SYS_DEF&quot;&gt;
+    &lt;Attributes dnOrder=&quot;0&quot;&gt;
+      &lt;Boolean dnOrder=&quot;0&quot; id=&quot;enabled&quot;&gt;
+        &lt;Value dnOrder=&quot;0&quot;&gt;true&lt;/Value&gt;
+      &lt;/Boolean&gt;
+    &lt;/Attributes&gt;
+  &lt;/core&gt;
+&lt;/core&gt;
+</value>
+      </entry>
+      <entry>
          <key class="com.microchip.mcc.core.tokenManager.CustomKey" moduleName="core" name="WDT_TIMEOUT_PERIOD"/>
          <value>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;core&gt;
   &lt;core dnOrder=&quot;0&quot; id=&quot;WDT_TIMEOUT_PERIOD&quot;&gt;
@@ -14591,11 +14776,23 @@
 </value>
       </entry>
       <entry>
+         <key class="com.microchip.mcc.core.tokenManager.CustomKey" moduleName="core" name="WDT_USE"/>
+         <value>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;core&gt;
+  &lt;core dnOrder=&quot;0&quot; id=&quot;WDT_USE&quot;&gt;
+    &lt;Values dnOrder=&quot;0&quot;&gt;
+      &lt;User dnOrder=&quot;0&quot; value=&quot;true&quot;/&gt;
+    &lt;/Values&gt;
+  &lt;/core&gt;
+&lt;/core&gt;
+</value>
+      </entry>
+      <entry>
          <key class="com.microchip.mcc.core.tokenManager.CustomKey" moduleName="core" name="XC32_HEAP_SIZE"/>
          <value>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;core&gt;
   &lt;core dnOrder=&quot;0&quot; id=&quot;XC32_HEAP_SIZE&quot;&gt;
     &lt;Values dnOrder=&quot;0&quot;&gt;
       &lt;Dynamic dnOrder=&quot;0&quot; id=&quot;core&quot; value=&quot;1024&quot;/&gt;
+      &lt;User dnOrder=&quot;1&quot; value=&quot;15360&quot;/&gt;
     &lt;/Values&gt;
   &lt;/core&gt;
 &lt;/core&gt;
@@ -14781,7 +14978,7 @@
          <value>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;drvG3MacRt&gt;
   &lt;drvG3MacRt dnOrder=&quot;0&quot; id=&quot;DRV_PLC_LDO_EN_PIN&quot;&gt;
     &lt;Values dnOrder=&quot;0&quot;&gt;
-      &lt;User dnOrder=&quot;0&quot; value=&quot;11&quot;/&gt;
+      &lt;User dnOrder=&quot;0&quot; value=&quot;7&quot;/&gt;
     &lt;/Values&gt;
   &lt;/drvG3MacRt&gt;
 &lt;/drvG3MacRt&gt;
@@ -15043,7 +15240,7 @@
          <value>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;drvG3MacRt&gt;
   &lt;drvG3MacRt dnOrder=&quot;0&quot; id=&quot;DRV_PLC_TX_ENABLE_PIN&quot;&gt;
     &lt;Values dnOrder=&quot;0&quot;&gt;
-      &lt;User dnOrder=&quot;0&quot; value=&quot;12&quot;/&gt;
+      &lt;User dnOrder=&quot;0&quot; value=&quot;8&quot;/&gt;
     &lt;/Values&gt;
   &lt;/drvG3MacRt&gt;
 &lt;/drvG3MacRt&gt;
@@ -31697,7 +31894,12 @@
          <key class="com.microchip.mcc.core.tokenManager.CustomKey" moduleName="tcpipIPv6" name="TCPIP_IPV6_HEAP_SIZE"/>
          <value>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;tcpipIPv6&gt;
   &lt;tcpipIPv6 dnOrder=&quot;0&quot; id=&quot;TCPIP_IPV6_HEAP_SIZE&quot;&gt;
-    &lt;Values dnOrder=&quot;0&quot;&gt;
+    &lt;Attributes dnOrder=&quot;0&quot;&gt;
+      &lt;Boolean dnOrder=&quot;0&quot; id=&quot;visible&quot;&gt;
+        &lt;Value dnOrder=&quot;0&quot;&gt;false&lt;/Value&gt;
+      &lt;/Boolean&gt;
+    &lt;/Attributes&gt;
+    &lt;Values dnOrder=&quot;1&quot;&gt;
       &lt;Dynamic dnOrder=&quot;0&quot; id=&quot;tcpipIPv6&quot; value=&quot;1024&quot;/&gt;
     &lt;/Values&gt;
   &lt;/tcpipIPv6&gt;
@@ -32390,7 +32592,9 @@
          <key class="com.microchip.mcc.core.tokenManager.CustomKey" moduleName="tcpipNetConfig_0" name="TCPIP_NETWORK_INTERFACE_FLAG_DHCP_IDX0"/>
          <value>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;tcpipNetConfig_0&gt;
   &lt;tcpipNetConfig_0 dnOrder=&quot;0&quot; id=&quot;TCPIP_NETWORK_INTERFACE_FLAG_DHCP_IDX0&quot;&gt;
-    &lt;Values dnOrder=&quot;0&quot;/&gt;
+    &lt;Values dnOrder=&quot;0&quot;&gt;
+      &lt;User dnOrder=&quot;0&quot; value=&quot;3&quot;/&gt;
+    &lt;/Values&gt;
   &lt;/tcpipNetConfig_0&gt;
 &lt;/tcpipNetConfig_0&gt;
 </value>
@@ -32399,7 +32603,9 @@
          <key class="com.microchip.mcc.core.tokenManager.CustomKey" moduleName="tcpipNetConfig_0" name="TCPIP_NETWORK_INTERFACE_FLAG_DNS_IDX0"/>
          <value>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;tcpipNetConfig_0&gt;
   &lt;tcpipNetConfig_0 dnOrder=&quot;0&quot; id=&quot;TCPIP_NETWORK_INTERFACE_FLAG_DNS_IDX0&quot;&gt;
-    &lt;Values dnOrder=&quot;0&quot;/&gt;
+    &lt;Values dnOrder=&quot;0&quot;&gt;
+      &lt;User dnOrder=&quot;0&quot; value=&quot;2&quot;/&gt;
+    &lt;/Values&gt;
   &lt;/tcpipNetConfig_0&gt;
 &lt;/tcpipNetConfig_0&gt;
 </value>
@@ -32426,6 +32632,7 @@
     &lt;/Attributes&gt;
     &lt;Values dnOrder=&quot;1&quot;&gt;
       &lt;Dynamic dnOrder=&quot;0&quot; id=&quot;tcpipNetConfig_0&quot; value=&quot;true&quot;/&gt;
+      &lt;User dnOrder=&quot;1&quot; value=&quot;true&quot;/&gt;
     &lt;/Values&gt;
   &lt;/tcpipNetConfig_0&gt;
 &lt;/tcpipNetConfig_0&gt;
@@ -33084,7 +33291,9 @@
          <key class="com.microchip.mcc.core.tokenManager.CustomKey" moduleName="tcpipStack" name="TCPIP_RTOS_TASK_STACK_SIZE"/>
          <value>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;tcpipStack&gt;
   &lt;tcpipStack dnOrder=&quot;0&quot; id=&quot;TCPIP_RTOS_TASK_STACK_SIZE&quot;&gt;
-    &lt;Values dnOrder=&quot;0&quot;/&gt;
+    &lt;Values dnOrder=&quot;0&quot;&gt;
+      &lt;User dnOrder=&quot;0&quot; value=&quot;4096&quot;/&gt;
+    &lt;/Values&gt;
   &lt;/tcpipStack&gt;
 &lt;/tcpipStack&gt;
 </value>
@@ -33140,7 +33349,9 @@
          <key class="com.microchip.mcc.core.tokenManager.CustomKey" moduleName="tcpipStack" name="TCPIP_STACK_DRAM_RUN_LIMIT"/>
          <value>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;tcpipStack&gt;
   &lt;tcpipStack dnOrder=&quot;0&quot; id=&quot;TCPIP_STACK_DRAM_RUN_LIMIT&quot;&gt;
-    &lt;Values dnOrder=&quot;0&quot;/&gt;
+    &lt;Values dnOrder=&quot;0&quot;&gt;
+      &lt;User dnOrder=&quot;0&quot; value=&quot;2048&quot;/&gt;
+    &lt;/Values&gt;
   &lt;/tcpipStack&gt;
 &lt;/tcpipStack&gt;
 </value>
@@ -33742,7 +33953,7 @@
   &lt;tcpipUdp dnOrder=&quot;0&quot; id=&quot;TCPIP_UDP_HEAP_SIZE&quot;&gt;
     &lt;Attributes dnOrder=&quot;0&quot;&gt;
       &lt;Boolean dnOrder=&quot;0&quot; id=&quot;visible&quot;&gt;
-        &lt;Value dnOrder=&quot;0&quot;&gt;true&lt;/Value&gt;
+        &lt;Value dnOrder=&quot;0&quot;&gt;false&lt;/Value&gt;
       &lt;/Boolean&gt;
     &lt;/Attributes&gt;
     &lt;Values dnOrder=&quot;1&quot;&gt;
@@ -33987,7 +34198,7 @@
       </entry>
       <entry>
          <file>..\src\config\default\configuration.h</file>
-         <hash>ef37b83c7f806c5713c5f0641c7211962ee86c1c5fc813f688ef4505f473a40b</hash>
+         <hash>d7ec6398adf597a62a854dc296045f3223ddb76d6e62570f3cbda583da2a6d8e</hash>
       </entry>
       <entry>
          <file>..\src\config\default\crypto\common_crypto\MCHP_Crypto_Aead_Cipher.h</file>
@@ -34143,7 +34354,7 @@
       </entry>
       <entry>
          <file>..\src\config\default\definitions.h</file>
-         <hash>e99859731cae03cd2e5b53ecf8f19e713322f6b5eec6ed6b9dc47a492d02c19e</hash>
+         <hash>abac2e3c007619fb4baf03a7e37bc126823ea31f0b08dd6be46ed26147277bad</hash>
       </entry>
       <entry>
          <file>..\src\config\default\device.h</file>
@@ -34923,7 +35134,7 @@
       </entry>
       <entry>
          <file>..\src\config\default\peripheral\clk\plib_clk.c</file>
-         <hash>baecea965018ac20f22e56c2d47ffb37164476f50c1d4b339c3c11fd48fa1d71</hash>
+         <hash>081581c5bdd0f4df927c4e15e7a682fe7c6ee200781dff643216466491449ebf</hash>
       </entry>
       <entry>
          <file>..\src\config\default\peripheral\clk\plib_clk.h</file>
@@ -34963,11 +35174,11 @@
       </entry>
       <entry>
          <file>..\src\config\default\peripheral\gpio\plib_gpio.c</file>
-         <hash>f6145be8cc0bb9535eeed2d59a4acfa5188543e297650ef53b918b91a9d98db8</hash>
+         <hash>d62a490feb27303b84256c0a11de3ff2a1890c14992c581fc9aebcee45965310</hash>
       </entry>
       <entry>
          <file>..\src\config\default\peripheral\gpio\plib_gpio.h</file>
-         <hash>365f4dd00354be009bff136239df64b856c8bf40a689fe2f81080acc79b86ddb</hash>
+         <hash>7d7c48380d62c38a262218395258deff3b39f36e2cb7776f3cf056b4335ecb37</hash>
       </entry>
       <entry>
          <file>..\src\config\default\peripheral\nvic\plib_nvic.c</file>
@@ -35028,6 +35239,14 @@
       <entry>
          <file>..\src\config\default\peripheral\trng\plib_trng.h</file>
          <hash>ec9ba6d8690f41be428a6004d5c6434facf8c7e5fb0ab6a18a8ae30df7f17c90</hash>
+      </entry>
+      <entry>
+         <file>..\src\config\default\peripheral\wdt\plib_wdt.c</file>
+         <hash>a0e96e293619041c23ba2eb1134c6f2c0f722f5377d651901be6ab6eb059e452</hash>
+      </entry>
+      <entry>
+         <file>..\src\config\default\peripheral\wdt\plib_wdt.h</file>
+         <hash>cb8dd5865885397dedcf11696f54ad5f8eca20c8a28d3c707b48efbf355e2812</hash>
       </entry>
       <entry>
          <file>..\src\config\default\service\log_report\srv_log_report.h</file>

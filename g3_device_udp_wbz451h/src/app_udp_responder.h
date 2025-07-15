@@ -32,6 +32,7 @@
 #include <stddef.h>
 #include <stdlib.h>
 #include "configuration.h"
+#include "library/tcpip/tcpip.h"
 
 // DOM-IGNORE-BEGIN
 #ifdef __cplusplus  // Provide C++ Compatibility
@@ -41,6 +42,15 @@ extern "C" {
 #endif
 // DOM-IGNORE-END
 
+// *****************************************************************************
+// *****************************************************************************
+// Section: Macro Definitions
+// *****************************************************************************
+// *****************************************************************************
+
+/* Port number for conformance UDP responder */
+#define APP_UDP_RESPONDER_SOCKET_PORT_CONFORMANCE 0xF0BF
+    
 // *****************************************************************************
 // *****************************************************************************
 // Section: Type Definitions
@@ -60,10 +70,17 @@ extern "C" {
 
 typedef enum
 {
-    /* Application's state machine's initial state. */
-    APP_UDP_RESPONDER_STATE_INIT=0,
-    APP_UDP_RESPONDER_STATE_SERVICE_TASKS,
-    /* TODO: Define states used by the application state machine. */
+    /* Application's state machine's initial state */
+    APP_UDP_RESPONDER_STATE_WAIT_TCPIP_READY = 0,
+
+    /* Opening UDP server */
+    APP_UDP_RESPONDER_STATE_OPENING_SERVER,
+
+    /* Serving connection on UDP port */
+    APP_UDP_RESPONDER_STATE_SERVING_CONNECTION,
+
+    /* Error state */
+    APP_UDP_RESPONDER_STATE_ERROR,
 
 } APP_UDP_RESPONDER_STATES;
 
@@ -83,6 +100,9 @@ typedef enum
 
 typedef struct
 {
+    /* Semaphore identifier. Used to suspend task */
+    OSAL_SEM_DECLARE(semaphoreID);
+    
     /* The application's current state */
     APP_UDP_RESPONDER_STATES state;
 

@@ -27,13 +27,21 @@
 // *****************************************************************************
 // *****************************************************************************
 
+#include <string.h>
+#include "definitions.h"
 #include "app_storage_wbz451h.h"
+//#include "driver/pds/include/pds.h"
+//#include "system/debug/sys_debug.h"
+//#include "peripheral/trng/plib_trng.h"
 
 // *****************************************************************************
 // *****************************************************************************
 // Section: Global Data Definitions
 // *****************************************************************************
 // *****************************************************************************
+
+/* Semaphore identifier. Used to suspend task */
+OSAL_SEM_DECLARE(appStorageSemaphoreID);
 
 // *****************************************************************************
 /* Application Data
@@ -54,22 +62,31 @@ APP_STORAGE_WBZ451H_DATA app_storage_wbz451hData;
 
 // *****************************************************************************
 // *****************************************************************************
-// Section: Application Callback Functions
+// Section: Local Variables
 // *****************************************************************************
 // *****************************************************************************
 
-/* TODO:  Add any necessary callback functions.
-*/
+PDS_DECLARE_FILE(APP_STORAGE_PDS_ITEM_1, sizeof(APP_STORAGE_WBZ451H_DATA), &app_storage_wbz451hData, NO_FILE_MARKS);
+
+// *****************************************************************************
+// *****************************************************************************
+// Section: Application Callback Functions
+// *****************************************************************************
+// *****************************************************************************
+void APP_STORAGE_PDSWriteCompleteCallback(PDS_MemId_t itemID)
+{
+    if (itemID == APP_STORAGE_PDS_ITEM_1)
+    {
+        app_storage_wbz451hData.writeMemConfirm = true;
+    }
+
+}
 
 // *****************************************************************************
 // *****************************************************************************
 // Section: Application Local Functions
 // *****************************************************************************
 // *****************************************************************************
-
-
-/* TODO:  Add any necessary local functions.
-*/
 
 
 // *****************************************************************************
@@ -88,16 +105,48 @@ APP_STORAGE_WBZ451H_DATA app_storage_wbz451hData;
 
 void APP_STORAGE_WBZ451H_Initialize ( void )
 {
-    /* Place the App state machine in its initial state. */
-    app_storage_wbz451hData.state = APP_STORAGE_WBZ451H_STATE_INIT;
+    PDS_RegisterWriteCompleteCallback(APP_STORAGE_PDSWriteCompleteCallback);
 
+    if (PDS_IsAbleToRestore(APP_STORAGE_PDS_ITEM_1))
+    {
+        /* Restore parameters */
+        if (PDS_Restore(APP_STORAGE_PDS_ITEM_1))
+        {
+            if (app_storage_wbz451hData.key != APP_STORAGE_DATA_KEY)
+            {
+                SYS_DEBUG_MESSAGE(SYS_ERROR_DEBUG, "APP_STORAGE: Key error\r\n");
+            }
+            else
+            {
+                app_storage_wbz451hData.writeMemConfirm = true;
+            }
+        }
+    }
+    else
+    {
+        uint32_t randomValue;
 
+        /* Initialize Parameters */
+        app_storage_wbz451hData.nonVolatileData.discoverSeqNumber = 0;
+        app_storage_wbz451hData.nonVolatileData.broadcastSeqNumber = 0;
+        app_storage_wbz451hData.nonVolatileData.frameCounter = 0;
+        app_storage_wbz451hData.nonVolatileData.frameCounterRF = 0;
 
-    /* TODO: Initialize your application's state machine and other
-     * parameters.
-     */
+        randomValue = TRNG_ReadData();
+        *(uint32_t *)&app_storage_wbz451hData.eui64[0] = randomValue;
+        randomValue = TRNG_ReadData();
+        *(uint32_t *)&app_storage_wbz451hData.eui64[4] = randomValue;
+
+        app_storage_wbz451hData.key = APP_STORAGE_DATA_KEY;
+        app_storage_wbz451hData.writeMemConfirm = false;
+        app_storage_wbz451hData.updateMemConfirm = false;
+        /* Store Data in NVM */
+        PDS_Store(APP_STORAGE_PDS_ITEM_1);
+    }
+
+    /* Create semaphore. It is used to suspend task. */
+    OSAL_SEM_Create(&appStorageSemaphoreID, OSAL_SEM_TYPE_BINARY, 0, 0);
 }
-
 
 /******************************************************************************
   Function:
@@ -109,42 +158,76 @@ void APP_STORAGE_WBZ451H_Initialize ( void )
 
 void APP_STORAGE_WBZ451H_Tasks ( void )
 {
-
-    /* Check the application's current state. */
-    switch ( app_storage_wbz451hData.state )
+    /* Nothing to do. Suspend task forever (RTOS mode) */
+    if (appStorageSemaphoreID != 0)
     {
-        /* Application's initial state. */
-        case APP_STORAGE_WBZ451H_STATE_INIT:
-        {
-            bool appInitialized = true;
-
-
-            if (appInitialized)
-            {
-
-                app_storage_wbz451hData.state = APP_STORAGE_WBZ451H_STATE_SERVICE_TASKS;
-            }
-            break;
-        }
-
-        case APP_STORAGE_WBZ451H_STATE_SERVICE_TASKS:
-        {
-
-            break;
-        }
-
-        /* TODO: implement your application state machine.*/
-
-
-        /* The default state should never be executed. */
-        default:
-        {
-            /* TODO: Handle error in application's state machine. */
-            break;
-        }
+        OSAL_SEM_Pend(&appStorageSemaphoreID, OSAL_WAIT_FOREVER);
     }
 }
 
+// *****************************************************************************
+// *****************************************************************************
+// Section: Application Interface Functions
+// *****************************************************************************
+// *****************************************************************************
+
+void APP_STORAGE_GetExtendedAddress(uint8_t* eui64)
+{
+    if (app_storage_wbz451hData.key != APP_STORAGE_DATA_KEY)
+    {
+        memset(eui64, 0xFF, sizeof(app_storage_wbz451hData.eui64));
+        SYS_DEBUG_MESSAGE(SYS_ERROR_DEBUG, "APP_STORAGE: Data is not valid (EUI64)\r\n");
+    }
+    else
+    {
+        memcpy(eui64, app_storage_wbz451hData.eui64,
+               sizeof(app_storage_wbz451hData.eui64));
+    }
+}
+
+ADP_NON_VOLATILE_DATA_IND_PARAMS* APP_STORAGE_GetNonVolatileData(void)
+{
+    if (PDS_IsAbleToRestore(APP_STORAGE_PDS_ITEM_1))
+    {
+        if (app_storage_wbz451hData.key == APP_STORAGE_DATA_KEY)
+        {
+            return &app_storage_wbz451hData.nonVolatileData;
+        }
+        else
+        {
+            SYS_DEBUG_MESSAGE(SYS_ERROR_DEBUG, "APP_STORAGE: Data is not valid (GET)\r\n");
+        }
+    }
+    else
+    {
+        SYS_DEBUG_MESSAGE(SYS_ERROR_DEBUG, "APP_STORAGE: Data is not found (GET)\r\n");
+    }
+
+    return NULL;
+}
+
+void APP_STORAGE_UpdateNonVolatileData(ADP_NON_VOLATILE_DATA_IND_PARAMS* pNonVolatileData)
+{
+    if (PDS_IsAbleToRestore(APP_STORAGE_PDS_ITEM_1))
+    {
+        if (app_storage_wbz451hData.key == APP_STORAGE_DATA_KEY)
+        {
+            app_storage_wbz451hData.nonVolatileData = *pNonVolatileData;
+            app_storage_wbz451hData.key = APP_STORAGE_DATA_KEY;
+
+            app_storage_wbz451hData.writeMemConfirm = false;
+            PDS_Store(APP_STORAGE_PDS_ITEM_1);
+        }
+        else
+        {
+            SYS_DEBUG_MESSAGE(SYS_ERROR_DEBUG, "APP_STORAGE: Data is not valid (SET)\r\n");
+        }
+    }
+    else
+    {
+        SYS_DEBUG_MESSAGE(SYS_ERROR_DEBUG, "APP_STORAGE: Data is not found (SET)\r\n");
+    }
+}
 
 /*******************************************************************************
  End of File
