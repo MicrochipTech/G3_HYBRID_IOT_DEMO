@@ -177,6 +177,17 @@ static void lAPP_TCPIP_MANAGEMENT_Tasks(  void *pvParameters  )
     }
 }
 
+TaskHandle_t xSYS_CMD_Tasks;
+void lSYS_CMD_Tasks(  void *pvParameters  )
+{
+    while(1)
+    {
+        SYS_CMD_Tasks();
+        vTaskDelay(10 / portTICK_PERIOD_MS);
+    }
+}
+
+
 
 static void lPAL_RF_Tasks(  void *pvParameters  )
 {
@@ -207,6 +218,16 @@ void SYS_Tasks ( void )
 {
     /* Maintain system services */
     
+
+    (void) xTaskCreate( lSYS_CMD_Tasks,
+        "SYS_CMD_TASKS",
+        SYS_CMD_RTOS_STACK_SIZE,
+        (void*)NULL,
+        SYS_CMD_RTOS_TASK_PRIORITY,
+        &xSYS_CMD_Tasks
+    );
+
+
 
 
     /* Maintain Device Drivers */

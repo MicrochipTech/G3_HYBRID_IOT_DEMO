@@ -648,6 +648,14 @@ __attribute__((ramfunc, long_call, section(".ramfunc"),unique_section)) void PCH
 }
 
 
+const SYS_CMD_INIT sysCmdInit =
+{
+    .moduleInit = {0},
+    .consoleCmdIOParam = SYS_CMD_SINGLE_CHARACTER_READ_CONSOLE_IO_PARAM,
+	.consoleIndex = 0,
+};
+
+
 static const SYS_DEBUG_INIT debugInit =
 {
     .moduleInit = {0},
@@ -819,6 +827,8 @@ void SYS_Initialize ( void* data )
      H3_MISRAC_2012_R_11_3_DR_1 & H3_MISRAC_2012_R_11_8_DR_1*/
         sysObj.sysConsole0 = SYS_CONSOLE_Initialize(SYS_CONSOLE_INDEX_0, (SYS_MODULE_INIT *)&sysConsole0Init);
    /* MISRAC 2012 deviation block end */
+    SYS_CMD_Initialize((SYS_MODULE_INIT*)&sysCmdInit);
+
     /* MISRA C-2012 Rule 11.3, 11.8 deviated below. Deviation record ID -  
      H3_MISRAC_2012_R_11_3_DR_1 & H3_MISRAC_2012_R_11_8_DR_1*/
         
@@ -848,12 +858,14 @@ void SYS_Initialize ( void* data )
 
 
     /* MISRAC 2012 deviation block end */
+    //APP_Initialize();
     APP_G3_MANAGEMENT_Initialize();
     APP_UDP_RESPONDER_Initialize();
     APP_STORAGE_WBZ451_Initialize();
     APP_EAP_SERVER_Initialize();
     APP_CYCLES_Initialize();
     APP_TCPIP_MANAGEMENT_Initialize();
+    INTERFACE_Initialize();
 
 
     NVIC_Initialize();

@@ -4,6 +4,9 @@
     <logicalFolder name="HeaderFiles"
                    displayName="Header Files"
                    projectFiles="true">
+      <logicalFolder name="f1" displayName="common" projectFiles="true">
+        <itemPath>../src/common/common.h</itemPath>
+      </logicalFolder>
       <logicalFolder name="config" displayName="config" projectFiles="true">
         <logicalFolder name="wbz451_curiosity_pl460_freertos"
                        displayName="wbz451_curiosity_pl460_freertos"
@@ -363,6 +366,9 @@
             <logicalFolder name="cache" displayName="cache" projectFiles="true">
               <itemPath>../src/config/wbz451_curiosity_pl460_freertos/system/cache/sys_cache.h</itemPath>
             </logicalFolder>
+            <logicalFolder name="command" displayName="command" projectFiles="true">
+              <itemPath>../src/config/wbz451_curiosity_pl460_freertos/system/command/sys_command.h</itemPath>
+            </logicalFolder>
             <logicalFolder name="console" displayName="console" projectFiles="true">
               <itemPath>../src/config/wbz451_curiosity_pl460_freertos/system/console/src/sys_console_uart_definitions.h</itemPath>
               <itemPath>../src/config/wbz451_curiosity_pl460_freertos/system/console/src/sys_console_local.h</itemPath>
@@ -384,6 +390,9 @@
             <logicalFolder name="ports" displayName="ports" projectFiles="true">
               <itemPath>../src/config/wbz451_curiosity_pl460_freertos/system/ports/sys_ports_mapping.h</itemPath>
               <itemPath>../src/config/wbz451_curiosity_pl460_freertos/system/ports/sys_ports.h</itemPath>
+            </logicalFolder>
+            <logicalFolder name="reset" displayName="reset" projectFiles="true">
+              <itemPath>../src/config/wbz451_curiosity_pl460_freertos/system/reset/sys_reset.h</itemPath>
             </logicalFolder>
             <logicalFolder name="time" displayName="time" projectFiles="true">
               <itemPath>../src/config/wbz451_curiosity_pl460_freertos/system/time/sys_time.h</itemPath>
@@ -674,6 +683,7 @@
       <itemPath>../src/app_cycles.h</itemPath>
       <itemPath>../src/app_eap_server.h</itemPath>
       <itemPath>../src/app_tcpip_management.h</itemPath>
+      <itemPath>../src/app_interface.h</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
@@ -689,6 +699,9 @@
     <logicalFolder name="SourceFiles"
                    displayName="Source Files"
                    projectFiles="true">
+      <logicalFolder name="f1" displayName="common" projectFiles="true">
+        <itemPath>../src/common/common.c</itemPath>
+      </logicalFolder>
       <logicalFolder name="config" displayName="config" projectFiles="true">
         <logicalFolder name="wbz451_curiosity_pl460_freertos"
                        displayName="wbz451_curiosity_pl460_freertos"
@@ -887,6 +900,9 @@
             <logicalFolder name="cache" displayName="cache" projectFiles="true">
               <itemPath>../src/config/wbz451_curiosity_pl460_freertos/system/cache/sys_cache.c</itemPath>
             </logicalFolder>
+            <logicalFolder name="command" displayName="command" projectFiles="true">
+              <itemPath>../src/config/wbz451_curiosity_pl460_freertos/system/command/src/sys_command.c</itemPath>
+            </logicalFolder>
             <logicalFolder name="console" displayName="console" projectFiles="true">
               <itemPath>../src/config/wbz451_curiosity_pl460_freertos/system/console/src/sys_console.c</itemPath>
               <itemPath>../src/config/wbz451_curiosity_pl460_freertos/system/console/src/sys_console_uart.c</itemPath>
@@ -899,6 +915,9 @@
             </logicalFolder>
             <logicalFolder name="int" displayName="int" projectFiles="true">
               <itemPath>../src/config/wbz451_curiosity_pl460_freertos/system/int/src/sys_int.c</itemPath>
+            </logicalFolder>
+            <logicalFolder name="reset" displayName="reset" projectFiles="true">
+              <itemPath>../src/config/wbz451_curiosity_pl460_freertos/system/reset/sys_reset.c</itemPath>
             </logicalFolder>
             <logicalFolder name="time" displayName="time" projectFiles="true">
               <itemPath>../src/config/wbz451_curiosity_pl460_freertos/system/time/src/sys_time.c</itemPath>
@@ -1066,8 +1085,12 @@
       <itemPath>../src/app_cycles.c</itemPath>
       <itemPath>../src/app_eap_server.c</itemPath>
       <itemPath>../src/app_tcpip_management.c</itemPath>
+      <itemPath>../src/app_interface.c</itemPath>
     </logicalFolder>
   </logicalFolder>
+  <sourceRootList>
+    <Elem>../src</Elem>
+  </sourceRootList>
   <projectmakefile>Makefile</projectmakefile>
   <confs>
     <conf name="wbz451_curiosity_pl460_freertos" type="2">
@@ -1214,7 +1237,7 @@
         <property key="stack-guidance" value="false"/>
       </C32-CO>
       <C32-LD>
-        <property key="additional-options-use-response-files" value="false"/>
+        <property key="additional-options-use-response-files" value="true"/>
         <property key="additional-options-write-sla" value="false"/>
         <property key="allocate-dinit" value="false"/>
         <property key="code-dinit" value="false"/>
@@ -1401,6 +1424,8 @@
                   value="${memories.instruction.ram.ranges}"/>
         <property key="memories.programmemory" value="true"/>
         <property key="memories.programmemory.ranges" value="1000000-2001ffff"/>
+        <property key="programmerToGoFilePath"
+                  value="C:/0_CHRIS/Proyectos/03_MCHP_Harmony_3/BitBucket/smartenergy_g3_apps/apps/g3_apps/g3_coordinator_udp/firmware/wbz451_curiosity_pl460_freertos.X/debug/wbz451_curiosity_pl460_freertos/wbz451_curiosity_pl460_freertos_ptg"/>
         <property key="programoptions.donoteraseauxmem" value="false"/>
         <property key="programoptions.eraseb4program" value="true"/>
         <property key="programoptions.pgmentry.voltage" value="low"/>
