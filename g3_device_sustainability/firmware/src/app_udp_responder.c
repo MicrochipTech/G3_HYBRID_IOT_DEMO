@@ -87,6 +87,7 @@ void _APP_UDP_RESPONDER_UdpRxCallback(UDP_SOCKET hUDP, TCPIP_NET_HANDLE hNet, TC
 
     //SYS_DEBUG_PRINT(SYS_ERROR_DEBUG, "APP_UDP_RESPONDER: %u bytes received from %s\r\n",
     //        rxPayloadSize, remoteAddrString);
+    app_udp_responderData.dataReceived = true;
 
     /* Read first received byte (protocol) */
     TCPIP_UDP_Get(hUDP, &udpProtocol);

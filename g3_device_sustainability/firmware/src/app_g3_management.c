@@ -122,6 +122,7 @@ static const APP_G3_MANAGEMENT_CONSTANTS app_g3_managementConst = {
 // Section: Application Callback Functions
 // *****************************************************************************
 // *****************************************************************************
+static void _APP_G3_MANAGEMENT_TimeExpiredSetFlag(uintptr_t context);
 
 static void _ADP_DiscoveryConfirm(uint8_t status)
 {
@@ -248,6 +249,15 @@ static void _LBP_ADP_NetworkJoinConfirm(LBP_ADP_NETWORK_JOIN_CFM_PARAMS* pNetwor
         *((uint32_t*) &prefixData[7]) = 0x7FFFFFFF; // preferred lifetime
         memcpy(&prefixData[11], &networkPrefix, 16);
         ADP_SetRequestSync(ADP_IB_PREFIX_TABLE, 0, 27, (const uint8_t*) prefixData, &setConfirm);
+
+        if (app_g3_managementData.metworkAliveHandle == SYS_TIME_HANDLE_INVALID)
+        {
+            /* Register timer callback for network alive check */
+            app_g3_managementData.metworkAliveHandle = SYS_TIME_CallbackRegisterMS(
+                    _APP_G3_MANAGEMENT_TimeExpiredSetFlag,
+                    (uintptr_t) &app_g3_managementData.ntwAliveCheckExpired,
+                    APP_G3_MANAGEMENT_NTW_ALIVE_CHECK_PERIOD_MS, SYS_TIME_PERIODIC);
+        }
 
         SYS_DEBUG_PRINT(SYS_ERROR_INFO, "APP_G3_MANAGEMENT: Joined to the network. "
                 "PAN ID: 0x%04X, Short Address: 0x%04X\r\n", panId, shortAddress);
@@ -782,6 +792,51 @@ static void _APP_G3_MANAGEMENT_ShowVersions(void)
     }
 }
 
+static void _APP_G3_MANAGEMENT_Reboot(void)
+{
+    // Debug Command - Reset MCU BLE Application via Software Reset (SWR)
+    // This device does not provide a specific RESET instruction; however, 
+    // a hardware Reset can be performed in software (software Reset) by 
+    // executing a software Reset command sequence. The software Reset acts 
+    // like a MCLR Reset. The software Reset sequence requires the system 
+    // unlock sequence to be executed before the SWRST bit (RSWRST[0]) can 
+    // be written.
+    // A software Reset is performed as follows:
+    // 1. Write the system unlock sequence
+    CFG_REGS->CFG_SYSKEY = 0x00000000U;
+    CFG_REGS->CFG_SYSKEY = 0xAA996655U;
+    CFG_REGS->CFG_SYSKEY = 0x556699AAU;    
+    // 2. Set the SWRST bit (RSWRST[0]) = 1.
+    RCON_REGS->RCON_RSWRST |= RCON_RSWRST_SWRST_SWRST;
+    // 3. Read the RSWRST register;
+    uint8_t rswrst = RCON_REGS->RCON_RSWRST;
+    // Setting the SWRST bit (RSWRST[0]) will arm the software Reset. 
+    // The subsequent read of the RSWRST register triggers the software Reset, 
+    // which must occur on the next clock cycle following the read operation. 
+    // To ensure no other user code is executed before the Reset event occurs, 
+    // it is recommended that four NOP instructions or a while(1) statement 
+    // be placed after the READ instruction.    
+    while ( true );
+}
+
+static void _APP_G3_MANAGEMENT_NetworkAliveCheck(void)
+{
+    if(app_g3_managementData.ntwAliveCheckExpired)
+    {
+        app_g3_managementData.ntwAliveCheckExpired = false;
+        
+        if(app_udp_responderData.dataReceived)
+        {
+            app_udp_responderData.dataReceived = false;
+        }
+        else
+        {
+            // Network seems to be lost - reboot
+            _APP_G3_MANAGEMENT_Reboot();
+        }
+    }
+}
+
 // *****************************************************************************
 // *****************************************************************************
 // Section: Application Initialization and State Machine Functions
@@ -824,7 +879,9 @@ void APP_G3_MANAGEMENT_Initialize ( void )
 
     /* Initialize application variables */
     app_g3_managementData.timerLedHandle = SYS_TIME_HANDLE_INVALID;
+    app_g3_managementData.metworkAliveHandle = SYS_TIME_HANDLE_INVALID;
     app_g3_managementData.timerLedExpired = false;
+    app_g3_managementData.ntwAliveCheckExpired = false;
     app_g3_managementData.writeNonVolatileData = true;
     app_g3_managementData.configureParamsRF = false;
 
@@ -1113,6 +1170,7 @@ void APP_G3_MANAGEMENT_Tasks ( void )
             /* Nothing to do. The device is joined to the network unless
              * _LBP_ADP_NetworkLeaveIndication is called */
             RGB_LED_Handle();
+            _APP_G3_MANAGEMENT_NetworkAliveCheck();
             break;
         }
 
