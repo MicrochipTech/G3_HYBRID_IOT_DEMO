@@ -86,7 +86,7 @@ static PAL_RF_PHY_STATUS palRfPhyStatus[] = {
 // Transceiver Configuration
 #define CHANNEL_TRANSMIT_RECEIVE (12U)
 #define CHANNEL_PAGE_TRANSMIT_RECEIVE (0U)
-#define CCA_MODE (3U)
+#define CCA_MODE (3U) // very instable transmission with value 1, resulting in PAL_RF_PHY_CHANNEL_ACCESS_FAILURE
 #define PROMISCUOUS_MODE (true)
 #define AUTOACK_MODE (false)
 #define PDTLEVEL (8U)
@@ -537,15 +537,14 @@ PAL_RF_TX_HANDLE PAL_RF_TxRequest(PAL_RF_HANDLE handle, uint8_t *pData,
     palRfData.txBuffer[0] = (uint8_t)length;
     (void) memcpy(&palRfData.txBuffer[1], pData, (uint8_t)length);
 
-    // very instable transmission resulting in PAL_RF_PHY_CHANNEL_ACCESS_FAILURE
-    //if (txParameters->csmaEnable)
-    //{
-    //    palRfData.csmaMode = CSMA_UNSLOTTED;
-    //}
-    //else
-    //{
+    if (txParameters->csmaEnable)
+    {
+        palRfData.csmaMode = CSMA_UNSLOTTED;
+    }
+    else
+    {
         palRfData.csmaMode = NO_CSMA_NO_IFS;
-    //}
+    }
 
     /* Set Tx Power (Power value in dBm (-14dBm to 12dBm))*/
     pwrDbm = 12 - (int16_t)txParameters->txPowerAttenuation;
