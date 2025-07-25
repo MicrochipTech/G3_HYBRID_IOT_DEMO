@@ -70,8 +70,6 @@ void GPIO_Initialize ( void )
     GPIOB_REGS->GPIO_LAT = 0x2004U; /* Initial Latch Value */
     GPIOB_REGS->GPIO_TRISCLR = 0x2085U; /* Direction Control */
     GPIOB_REGS->GPIO_ANSELCLR = 0xbdU; /* Digital Mode Enable */
-    GPIOB_REGS->GPIO_CNPUSET = 0x10U; /* Pull-Up Enable */
-    GPIOB_REGS->GPIO_CNPDSET = 0x20U; /* Pull-Down Enable */
 
 
     /* PPS Input Remapping */
