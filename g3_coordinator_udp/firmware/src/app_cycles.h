@@ -55,20 +55,18 @@ extern "C" {
 //#define APP_CYCLES_METROLOGY_DATA_REQUEST
 
 /* Time to wait before start cycling in ms */
-#define APP_CYCLES_TIME_WAIT_CYCLE_MS 120000
-
-/* Time between device cycles in ms */
-#define APP_CYCLES_TIME_BTW_DEVICE_CYCLES_MS 1000
+#define APP_CYCLES_TIME_WAIT_CYCLE_MS 22000//120000
 
 /* Timeout in ms to consider reply not received */
-#define APP_CYCLES_TIMEOUT_MS 30000
+#define APP_CYCLES_TIMEOUT_MS 2000
+
+/* Timeout in ms to consider reply not received */
+#define APP_CYCLES_ALIVE_CHECK_TIME_MS 30000
+
+/* Time between sending packets in ms */
+#define APP_CYCLES_TIME_BTW_SENDING_MS 100
 
 #ifndef APP_CYCLES_METROLOGY_DATA_REQUEST
-    /* UDP packet size in bytes */
-    #define APP_CYCLES_PACKET_SIZE_1 64
-    #define APP_CYCLES_PACKET_SIZE_2 300
-    #define APP_CYCLES_PACKET_SIZE_3 1000
-
     /* UDP port for UDP responder (conformance) */
     #define APP_CYCLES_SOCKET_PORT   APP_UDP_SOCKET
 #else
@@ -105,16 +103,15 @@ typedef enum
     /* State to wait for first UDP cycle */
     APP_CYCLES_STATE_WAIT_FIRST_CYCLE,
 
-    /* Cycling state: Sending UDP requests to registered devices */
-    APP_CYCLES_STATE_CYCLING,
+    APP_CYCLES_STATE_READ_DEV_TYPE,
 
-    /* State to wait for the next device UDP cycle */
-    APP_CYCLES_STATE_WAIT_NEXT_DEVICE_CYCLE,
+    APP_CYCLES_STATE_READ_DEV_TYPE_ANSWER,
 
-#if SYS_CONSOLE_DEVICE_MAX_INSTANCES > 0U
-    /* State to show cycle report */
-    APP_CYCLES_STATE_SHOW_REPORT,
-#endif
+    APP_CYCLES_STATE_WAIT_FOR_TX_PREPARE,
+
+    APP_CYCLES_STATE_WAIT_FOR_TX,
+
+    APP_CYCLES_STATE_ALIVE_CHECK,
 
     /* Conformance state: Cycling disabled */
     APP_CYCLES_STATE_CONFORMANCE,
@@ -123,38 +120,6 @@ typedef enum
     APP_CYCLES_STATE_ERROR,
 
 } APP_CYCLES_STATES;
-
-// *****************************************************************************
-/* Cycles Statistics Entry
-
-  Summary:
-    Holds cycles statistics data for a specific device.
-
-  Description:
-    This structure holds the cycles statistics data for a specific device.
-
-  Remarks:
-    None.
- */
-
-typedef struct
-{
-    /* Total time count between UDP requests and replies */
-    uint64_t timeCountTotal;
-
-    /* Total number of cycles */
-    uint32_t numCycles;
-
-    /* Total number of UDP requests sent for this device */
-    uint32_t numUdpRequests;
-
-    /* Total number of UDP replies received for this device */
-    uint32_t numUdpReplies;
-
-    /* Short address of this device */
-    uint16_t shortAddress;
-
-} APP_CYCLES_STATISTICS_ENTRY;
 
 // *****************************************************************************
 /* Application Data
@@ -171,43 +136,39 @@ typedef struct
 
 typedef struct
 {
-    /* Total time count between UDP requests and replies */
-    uint64_t timeCountTotal;
-
-    /* Total time count between UDP requests and replies for the current cycle */
-    uint64_t timeCountTotalCycle;
-
-    /* Time counter corresponding to UDP request */
-    uint64_t timeCountUdpRequest;
-
     /* Handle for waiting time before first cycle and timeout */
     SYS_TIME_HANDLE timeHandle;
 
+    /* Handle for waiting time before next packet is send */
+    SYS_TIME_HANDLE sendHandle;
+
     /* UDP socket handle */
     UDP_SOCKET socket;
-
-    /* Pointer to current statistics entry */
-    APP_CYCLES_STATISTICS_ENTRY* pStatsEntry;
-
-    /* Total number of UDP requests sent */
-    uint32_t numUdpRequests;
-
-    /* Total number of UDP replies received */
-    uint32_t numUdpReplies;
 
     /* UDP cycle index */
     uint32_t cycleIndex;
 
     /* Device index to send ping to all connected devices */
     uint16_t deviceIndex;
+    
+    /* Device type of index */
+    uint8_t deviceType[APP_EAP_SERVER_MAX_DEVICES];
+    
+    /* Device type of index */
+    uint8_t deviceTimeout[APP_EAP_SERVER_MAX_DEVICES];
+
+    bool readDevTypeRequest;
+
+    uint16_t aliveCheckIndex;
+    
+    /* TX data */
+    uint8_t txData[10];
+
+    /* TX length */
+    uint8_t txLength;
 
     /* Number of devices joined to the network */
     uint16_t numDevicesJoined;
-
-#ifndef APP_CYCLES_METROLOGY_DATA_REQUEST
-    /* UDP packet size */
-    uint16_t packetSize;
-#endif
 
     /* The application's current state */
     APP_CYCLES_STATES state;
@@ -215,14 +176,15 @@ typedef struct
     /* Timer expired flag */
     bool timeExpired;
 
+    /* Send delay expired flag */
+    bool sendDelayExpired;
+
     /* Flag to indicate that ADP buffers are available */
     bool availableBuffers;
 
-    /* Flag to indicate that packet is pending to be sent because of buffer
-     * availability */
-    bool packetPending;
-
 } APP_CYCLES_DATA;
+
+extern APP_CYCLES_DATA app_cyclesData;
 
 #ifdef APP_CYCLES_METROLOGY_DATA_REQUEST
 // *****************************************************************************

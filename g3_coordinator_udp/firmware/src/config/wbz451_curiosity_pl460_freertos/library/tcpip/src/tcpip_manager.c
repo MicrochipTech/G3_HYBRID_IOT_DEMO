@@ -672,7 +672,7 @@ SYS_MODULE_OBJ TCPIP_STACK_Initialize(const SYS_MODULE_INDEX index, const SYS_MO
 
     memset(&tcpip_stack_ctrl_data, 0, sizeof(tcpip_stack_ctrl_data));
 
-    SYS_CONSOLE_MESSAGE(TCPIP_STACK_HDR_MESSAGE "Initialization Started \r\n");
+    SYS_ERROR_PRINT(SYS_ERROR_INFO, TCPIP_STACK_HDR_MESSAGE "Initialization Started \r\n");
 
     tcpip_stack_status = SYS_STATUS_BUSY;
     if((tcpip_stack_init_cb = ((TCPIP_STACK_INIT*)init)->initCback) == 0)
@@ -1834,7 +1834,7 @@ static bool _TCPIPStackIsRunState(void)
         if(ifUpMask == ((1 << netIx) - 1))
         {   // all interfaces up
             tcpip_stack_status = SYS_STATUS_READY;
-            SYS_CONSOLE_MESSAGE(TCPIP_STACK_HDR_MESSAGE "Initialization Ended - success \r\n");
+            SYS_ERROR_PRINT(SYS_ERROR_INFO, TCPIP_STACK_HDR_MESSAGE "Initialization Ended - success \r\n");
         }
         else
         {   // failed initializing all interfaces;

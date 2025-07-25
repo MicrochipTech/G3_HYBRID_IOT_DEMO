@@ -76,6 +76,9 @@ extern TaskHandle_t xAPP_CYCLES_Tasks;
 extern TaskHandle_t xAPP_TCPIP_MANAGEMENT_Tasks;
 
 
+/* Declaration of SYS_COMMAND task handle */
+extern TaskHandle_t xSYS_CMD_Tasks;
+
 
 
 #endif //SYS_TASKS_H

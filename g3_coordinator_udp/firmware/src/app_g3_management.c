@@ -498,7 +498,7 @@ static void _APP_G3_MANAGEMENT_ShowVersions(void)
     }
     else
     {
-        SYS_DEBUG_PRINT(SYS_ERROR_ERROR, "APP_G3_MANAGEMENT: PLC Interface available\r\n");
+        SYS_DEBUG_PRINT(SYS_ERROR_INFO, "APP_G3_MANAGEMENT: PLC Interface available\r\n");
 
         /* Get PLC MAC version */
         ADP_MacGetRequestSync(MAC_WRP_PIB_MANUF_MAC_INTERNAL_VERSION, 0, &getMacConfirm);
@@ -552,7 +552,7 @@ static void _APP_G3_MANAGEMENT_ShowVersions(void)
     }
     else
     {
-        SYS_DEBUG_PRINT(SYS_ERROR_ERROR, "APP_G3_MANAGEMENT: RF Interface available\r\n");
+        SYS_DEBUG_PRINT(SYS_ERROR_INFO, "APP_G3_MANAGEMENT: RF Interface available\r\n");
 
         /* Get RF MAC version */
         ADP_MacGetRequestSync(MAC_WRP_PIB_MANUF_MAC_INTERNAL_VERSION_RF, 0, &getMacConfirm);
@@ -612,7 +612,6 @@ void APP_G3_MANAGEMENT_Initialize ( void )
     adpMngNotifications.setConfirm = NULL;
     adpMngNotifications.getConfirm = NULL;
     adpMngNotifications.macSetConfirm = NULL;
-    adpMngNotifications.getConfirm = NULL;
     adpMngNotifications.macGetConfirm = NULL;
     adpMngNotifications.routeDiscoveryConfirm = NULL;
     adpMngNotifications.pathDiscoveryConfirm = NULL;
@@ -654,7 +653,7 @@ void APP_G3_MANAGEMENT_Tasks ( void )
     if (app_g3_managementData.timerLedExpired == true)
     {
         app_g3_managementData.timerLedExpired = false;
-        USER_BLINK_LED_Toggle();
+        USER_LED_Toggle();
     }
 
     /* Check the application's current state. */
@@ -704,7 +703,7 @@ void APP_G3_MANAGEMENT_Tasks ( void )
                 _APP_G3_MANAGEMENT_InitializeParameters();
 
                 /* Look for G3 networks in order to not repeat PAN ID */
-                ADP_DiscoveryRequest(5);//15);
+                ADP_DiscoveryRequest(8);//15);
                 app_g3_managementData.numNetworksFound = 0;
                 app_g3_managementData.state = APP_G3_MANAGEMENT_STATE_SCANNING;
 

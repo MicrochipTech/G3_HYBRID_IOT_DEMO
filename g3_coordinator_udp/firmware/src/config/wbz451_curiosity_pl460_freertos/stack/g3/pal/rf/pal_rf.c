@@ -86,7 +86,7 @@ static PAL_RF_PHY_STATUS palRfPhyStatus[] = {
 // Transceiver Configuration
 #define CHANNEL_TRANSMIT_RECEIVE (12U)
 #define CHANNEL_PAGE_TRANSMIT_RECEIVE (0U)
-#define CCA_MODE (1U)
+#define CCA_MODE (3U) // very instable transmission with value 1, resulting in PAL_RF_PHY_CHANNEL_ACCESS_FAILURE
 #define PROMISCUOUS_MODE (true)
 #define AUTOACK_MODE (false)
 #define PDTLEVEL (8U)
@@ -159,6 +159,7 @@ static void lPAL_RF_ReportResultTX(PAL_RF_PHY_STATUS status, uint64_t timeStamp,
             break;
     }
 
+    //SYS_DEBUG_PRINT(SYS_ERROR_INFO, "PAL_RF: TX status 0x%02X, bytes send %d\r\n", status, nBytesSent);
     if (status != PAL_RF_PHY_SUCCESS)
     {
         rfStats->txTotalErrors++;

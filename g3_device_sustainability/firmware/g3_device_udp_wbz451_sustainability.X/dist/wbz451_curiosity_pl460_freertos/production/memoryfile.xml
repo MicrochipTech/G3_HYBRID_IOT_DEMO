@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project>
+  <executable name="dist/wbz451_curiosity_pl460_freertos/production/g3_device_udp_wbz451_sustainability.X.production.elf">
+    <memory name="program">
+      <units>bytes</units>
+      <length>1032192</length>
+      <used>180416</used>
+      <free>851776</free>
+    </memory>
+    <memory name="data">
+      <units>bytes</units>
+      <length>131072</length>
+      <used>65967</used>
+      <free>65105</free>
+    </memory>
+  </executable>
+</project>
