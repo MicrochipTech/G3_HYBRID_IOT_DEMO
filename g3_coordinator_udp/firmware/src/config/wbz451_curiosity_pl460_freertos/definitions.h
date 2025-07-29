@@ -49,11 +49,15 @@
 #include <stddef.h>
 #include <stdbool.h>
 #include "service/pcoup/srv_pcoup.h"
+#include "stack/g3/pal/plc/pal_plc.h"
 #include "driver/plc/g3MacRt/drv_g3_macrt_definitions.h"
 #include "driver/plc/g3MacRt/drv_g3_macrt.h"
 #include "driver/plc/g3MacRt/drv_g3_macrt_comm.h"
 #include "stack/g3/mac/mac_common/mac_common.h"
 #include "stack/g3/mac/mac_common/mac_common_defs.h"
+#include "stack/g3/mac/mac_plc/mac_plc.h"
+#include "stack/g3/mac/mac_plc/mac_plc_defs.h"
+#include "stack/g3/mac/mac_plc/mac_plc_mib.h"
 #include "stack/g3/mac/mac_rf/mac_rf.h"
 #include "stack/g3/mac/mac_rf/mac_rf_defs.h"
 #include "stack/g3/mac/mac_rf/mac_rf_mib.h"

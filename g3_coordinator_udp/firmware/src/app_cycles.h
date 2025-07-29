@@ -61,7 +61,7 @@ extern "C" {
 #define APP_CYCLES_TIMEOUT_MS 2000
 
 /* Timeout in ms to consider reply not received */
-#define APP_CYCLES_ALIVE_CHECK_TIME_MS 30000
+#define APP_CYCLES_ALIVE_CHECK_TIME_MS 25000
 
 /* Time between sending packets in ms */
 #define APP_CYCLES_TIME_BTW_SENDING_MS 100

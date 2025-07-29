@@ -70,6 +70,10 @@
          <string>class com.microchip.mcc.harmony.HarmonyModule</string>
       </entry>
       <entry>
+         <string>g3PalPlc</string>
+         <string>class com.microchip.mcc.harmony.HarmonyModule</string>
+      </entry>
+      <entry>
          <string>g3PalRf</string>
          <string>class com.microchip.mcc.harmony.HarmonyModule</string>
       </entry>
@@ -4658,7 +4662,7 @@
          <key class="com.microchip.mcc.core.tokenManager.CustomKey" moduleName="core" name="!@#harmonyUserData"/>
          <value>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;UserData&gt;
   &lt;UserData dnOrder=&quot;0&quot;&gt;
-    &lt;GraphSettings canvasHeight=&quot;733&quot; canvasWidth=&quot;698&quot; dnOrder=&quot;0&quot;/&gt;
+    &lt;GraphSettings canvasHeight=&quot;480&quot; canvasWidth=&quot;642&quot; dnOrder=&quot;0&quot;/&gt;
     &lt;PowerProfiles dnOrder=&quot;1&quot;&gt;
       &lt;Profile dnOrder=&quot;0&quot; id=&quot;profile0&quot; name=&quot;Main&quot;/&gt;
     &lt;/PowerProfiles&gt;
@@ -4675,14 +4679,15 @@
     &lt;/ComponentGraph&gt;
     &lt;ComponentGraph dnOrder=&quot;4&quot; id=&quot;G3 STACK&quot;&gt;
       &lt;ElementPositions dnOrder=&quot;0&quot;&gt;
-        &lt;ElementPosition dnOrder=&quot;0&quot; id=&quot;g3PalRf&quot; x=&quot;230&quot; y=&quot;121&quot;/&gt;
-        &lt;ElementPosition dnOrder=&quot;1&quot; id=&quot;g3_config&quot; x=&quot;20&quot; y=&quot;20&quot;/&gt;
-        &lt;ElementPosition dnOrder=&quot;2&quot; id=&quot;lib_crypto&quot; x=&quot;226&quot; y=&quot;362&quot;/&gt;
-        &lt;ElementPosition dnOrder=&quot;3&quot; id=&quot;lib_wolfcrypt&quot; x=&quot;26&quot; y=&quot;318&quot;/&gt;
-        &lt;ElementPosition dnOrder=&quot;4&quot; id=&quot;srvLogReport&quot; x=&quot;480&quot; y=&quot;20&quot;/&gt;
-        &lt;ElementPosition dnOrder=&quot;5&quot; id=&quot;srvQueue&quot; x=&quot;410&quot; y=&quot;120&quot;/&gt;
-        &lt;ElementPosition dnOrder=&quot;6&quot; id=&quot;srvRandom&quot; x=&quot;160&quot; y=&quot;20&quot;/&gt;
-        &lt;ElementPosition dnOrder=&quot;7&quot; id=&quot;srvSecurity&quot; x=&quot;320&quot; y=&quot;20&quot;/&gt;
+        &lt;ElementPosition dnOrder=&quot;0&quot; id=&quot;g3PalPlc&quot; x=&quot;229&quot; y=&quot;217&quot;/&gt;
+        &lt;ElementPosition dnOrder=&quot;1&quot; id=&quot;g3PalRf&quot; x=&quot;230&quot; y=&quot;121&quot;/&gt;
+        &lt;ElementPosition dnOrder=&quot;2&quot; id=&quot;g3_config&quot; x=&quot;20&quot; y=&quot;20&quot;/&gt;
+        &lt;ElementPosition dnOrder=&quot;3&quot; id=&quot;lib_crypto&quot; x=&quot;226&quot; y=&quot;362&quot;/&gt;
+        &lt;ElementPosition dnOrder=&quot;4&quot; id=&quot;lib_wolfcrypt&quot; x=&quot;26&quot; y=&quot;318&quot;/&gt;
+        &lt;ElementPosition dnOrder=&quot;5&quot; id=&quot;srvLogReport&quot; x=&quot;480&quot; y=&quot;20&quot;/&gt;
+        &lt;ElementPosition dnOrder=&quot;6&quot; id=&quot;srvQueue&quot; x=&quot;410&quot; y=&quot;120&quot;/&gt;
+        &lt;ElementPosition dnOrder=&quot;7&quot; id=&quot;srvRandom&quot; x=&quot;160&quot; y=&quot;20&quot;/&gt;
+        &lt;ElementPosition dnOrder=&quot;8&quot; id=&quot;srvSecurity&quot; x=&quot;320&quot; y=&quot;20&quot;/&gt;
       &lt;/ElementPositions&gt;
     &lt;/ComponentGraph&gt;
     &lt;ComponentGraph dnOrder=&quot;5&quot; id=&quot;NETWORK LAYER&quot;&gt;
@@ -5990,7 +5995,7 @@
          <value>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;core&gt;
   &lt;core dnOrder=&quot;0&quot; id=&quot;EIC_INTERRUPT_ENABLE&quot;&gt;
     &lt;Values dnOrder=&quot;0&quot;&gt;
-      &lt;Dynamic dnOrder=&quot;0&quot; id=&quot;eic&quot; value=&quot;false&quot;/&gt;
+      &lt;Dynamic dnOrder=&quot;0&quot; id=&quot;eic&quot; value=&quot;true&quot;/&gt;
     &lt;/Values&gt;
   &lt;/core&gt;
 &lt;/core&gt;
@@ -6012,7 +6017,7 @@
          <value>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;core&gt;
   &lt;core dnOrder=&quot;0&quot; id=&quot;EIC_INTERRUPT_HANDLER&quot;&gt;
     &lt;Values dnOrder=&quot;0&quot;&gt;
-      &lt;Dynamic dnOrder=&quot;0&quot; id=&quot;eic&quot; value=&quot;EIC_Handler&quot;/&gt;
+      &lt;Dynamic dnOrder=&quot;0&quot; id=&quot;eic&quot; value=&quot;EIC_InterruptHandler&quot;/&gt;
     &lt;/Values&gt;
   &lt;/core&gt;
 &lt;/core&gt;
@@ -6023,7 +6028,7 @@
          <value>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;core&gt;
   &lt;core dnOrder=&quot;0&quot; id=&quot;EIC_INTERRUPT_HANDLER_LOCK&quot;&gt;
     &lt;Values dnOrder=&quot;0&quot;&gt;
-      &lt;Dynamic dnOrder=&quot;0&quot; id=&quot;eic&quot; value=&quot;false&quot;/&gt;
+      &lt;Dynamic dnOrder=&quot;0&quot; id=&quot;eic&quot; value=&quot;true&quot;/&gt;
     &lt;/Values&gt;
   &lt;/core&gt;
 &lt;/core&gt;
@@ -6441,7 +6446,7 @@
          <value>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;core&gt;
   &lt;core dnOrder=&quot;0&quot; id=&quot;NVIC_1_0_ENABLE&quot;&gt;
     &lt;Values dnOrder=&quot;0&quot;&gt;
-      &lt;Dynamic dnOrder=&quot;0&quot; id=&quot;core&quot; value=&quot;false&quot;/&gt;
+      &lt;Dynamic dnOrder=&quot;0&quot; id=&quot;core&quot; value=&quot;true&quot;/&gt;
       &lt;User dnOrder=&quot;1&quot; value=&quot;true&quot;/&gt;
     &lt;/Values&gt;
   &lt;/core&gt;
@@ -6453,7 +6458,7 @@
          <value>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;core&gt;
   &lt;core dnOrder=&quot;0&quot; id=&quot;NVIC_1_0_HANDLER&quot;&gt;
     &lt;Values dnOrder=&quot;0&quot;&gt;
-      &lt;Dynamic dnOrder=&quot;0&quot; id=&quot;core&quot; value=&quot;EIC_Handler&quot;/&gt;
+      &lt;Dynamic dnOrder=&quot;0&quot; id=&quot;core&quot; value=&quot;EIC_InterruptHandler&quot;/&gt;
     &lt;/Values&gt;
   &lt;/core&gt;
 &lt;/core&gt;
@@ -6464,7 +6469,7 @@
          <value>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;core&gt;
   &lt;core dnOrder=&quot;0&quot; id=&quot;NVIC_1_0_HANDLER_LOCK&quot;&gt;
     &lt;Values dnOrder=&quot;0&quot;&gt;
-      &lt;Dynamic dnOrder=&quot;0&quot; id=&quot;core&quot; value=&quot;false&quot;/&gt;
+      &lt;Dynamic dnOrder=&quot;0&quot; id=&quot;core&quot; value=&quot;true&quot;/&gt;
     &lt;/Values&gt;
   &lt;/core&gt;
 &lt;/core&gt;
@@ -8209,7 +8214,7 @@
          <value>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;eic&gt;
   &lt;eic dnOrder=&quot;0&quot; id=&quot;EIC_CHAN_0&quot;&gt;
     &lt;Values dnOrder=&quot;0&quot;&gt;
-      &lt;User dnOrder=&quot;0&quot; value=&quot;false&quot;/&gt;
+      &lt;User dnOrder=&quot;0&quot; value=&quot;true&quot;/&gt;
     &lt;/Values&gt;
   &lt;/eic&gt;
 &lt;/eic&gt;
@@ -8469,7 +8474,7 @@
          <value>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;eic&gt;
   &lt;eic dnOrder=&quot;0&quot; id=&quot;EIC_INT&quot;&gt;
     &lt;Values dnOrder=&quot;0&quot;&gt;
-      &lt;Dynamic dnOrder=&quot;0&quot; id=&quot;eic&quot; value=&quot;0&quot;/&gt;
+      &lt;Dynamic dnOrder=&quot;0&quot; id=&quot;eic&quot; value=&quot;1&quot;/&gt;
     &lt;/Values&gt;
   &lt;/eic&gt;
 &lt;/eic&gt;
@@ -8946,6 +8951,62 @@
 </value>
       </entry>
       <entry>
+         <key class="com.microchip.mcc.core.tokenManager.CustomKey" moduleName="g3PalPlc" name="!@#harmonyAttachmentState"/>
+         <value>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;g3PalPlc&gt;
+  &lt;g3PalPlc dnOrder=&quot;0&quot;/&gt;
+&lt;/g3PalPlc&gt;
+</value>
+      </entry>
+      <entry>
+         <key class="com.microchip.mcc.core.tokenManager.CustomKey" moduleName="g3PalPlc" name="#&amp;__MCC_Group_Parrent_id"/>
+         <value>G3 STACK</value>
+      </entry>
+      <entry>
+         <key class="com.microchip.mcc.core.tokenManager.CustomKey" moduleName="g3PalPlc" name="G3_PAL_PLC_DUMMY"/>
+         <value>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;g3PalPlc&gt;
+  &lt;g3PalPlc dnOrder=&quot;0&quot; id=&quot;G3_PAL_PLC_DUMMY&quot;&gt;
+    &lt;Values dnOrder=&quot;0&quot;/&gt;
+  &lt;/g3PalPlc&gt;
+&lt;/g3PalPlc&gt;
+</value>
+      </entry>
+      <entry>
+         <key class="com.microchip.mcc.core.tokenManager.CustomKey" moduleName="g3PalPlc" name="G3_PAL_PLC_MAC_SNIFFER_EN"/>
+         <value>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;g3PalPlc&gt;
+  &lt;g3PalPlc dnOrder=&quot;0&quot; id=&quot;G3_PAL_PLC_MAC_SNIFFER_EN&quot;&gt;
+    &lt;Values dnOrder=&quot;0&quot;/&gt;
+  &lt;/g3PalPlc&gt;
+&lt;/g3PalPlc&gt;
+</value>
+      </entry>
+      <entry>
+         <key class="com.microchip.mcc.core.tokenManager.CustomKey" moduleName="g3PalPlc" name="G3_PAL_PLC_PHY_SNIFFER_EN"/>
+         <value>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;g3PalPlc&gt;
+  &lt;g3PalPlc dnOrder=&quot;0&quot; id=&quot;G3_PAL_PLC_PHY_SNIFFER_EN&quot;&gt;
+    &lt;Values dnOrder=&quot;0&quot;/&gt;
+  &lt;/g3PalPlc&gt;
+&lt;/g3PalPlc&gt;
+</value>
+      </entry>
+      <entry>
+         <key class="com.microchip.mcc.core.tokenManager.CustomKey" moduleName="g3PalPlc" name="G3_PAL_PLC_PVDD_MONITOR"/>
+         <value>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;g3PalPlc&gt;
+  &lt;g3PalPlc dnOrder=&quot;0&quot; id=&quot;G3_PAL_PLC_PVDD_MONITOR&quot;&gt;
+    &lt;Values dnOrder=&quot;0&quot;/&gt;
+  &lt;/g3PalPlc&gt;
+&lt;/g3PalPlc&gt;
+</value>
+      </entry>
+      <entry>
+         <key class="com.microchip.mcc.core.tokenManager.CustomKey" moduleName="g3PalPlc" name="G3_PAL_PLC_USI_INSTANCE"/>
+         <value>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;g3PalPlc&gt;
+  &lt;g3PalPlc dnOrder=&quot;0&quot; id=&quot;G3_PAL_PLC_USI_INSTANCE&quot;&gt;
+    &lt;Values dnOrder=&quot;0&quot;/&gt;
+  &lt;/g3PalPlc&gt;
+&lt;/g3PalPlc&gt;
+</value>
+      </entry>
+      <entry>
          <key class="com.microchip.mcc.core.tokenManager.CustomKey" moduleName="g3PalRf" name="!@#harmonyAttachmentState"/>
          <value>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;g3PalRf&gt;
   &lt;g3PalRf dnOrder=&quot;0&quot;/&gt;
@@ -9231,7 +9292,7 @@
   &lt;g3_config dnOrder=&quot;0&quot; id=&quot;G3_MAC_PLC_LIBRARY&quot;&gt;
     &lt;Attributes dnOrder=&quot;0&quot;&gt;
       &lt;Boolean dnOrder=&quot;0&quot; id=&quot;enabled&quot;&gt;
-        &lt;Value dnOrder=&quot;0&quot;&gt;false&lt;/Value&gt;
+        &lt;Value dnOrder=&quot;0&quot;&gt;true&lt;/Value&gt;
       &lt;/Boolean&gt;
     &lt;/Attributes&gt;
   &lt;/g3_config&gt;
@@ -9243,7 +9304,7 @@
          <value>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;g3_config&gt;
   &lt;g3_config dnOrder=&quot;0&quot; id=&quot;G3_MODE&quot;&gt;
     &lt;Values dnOrder=&quot;0&quot;&gt;
-      &lt;User dnOrder=&quot;0&quot; value=&quot;G3 Stack (ADP + MAC) RF&quot;/&gt;
+      &lt;User dnOrder=&quot;0&quot; value=&quot;G3 Stack (ADP + MAC) Hybrid PLC &amp;amp; RF&quot;/&gt;
     &lt;/Values&gt;
   &lt;/g3_config&gt;
 &lt;/g3_config&gt;
@@ -9476,7 +9537,7 @@
   &lt;g3_config dnOrder=&quot;0&quot; id=&quot;MAC_PLC_DEFS_HEADER&quot;&gt;
     &lt;Attributes dnOrder=&quot;0&quot;&gt;
       &lt;Boolean dnOrder=&quot;0&quot; id=&quot;enabled&quot;&gt;
-        &lt;Value dnOrder=&quot;0&quot;&gt;false&lt;/Value&gt;
+        &lt;Value dnOrder=&quot;0&quot;&gt;true&lt;/Value&gt;
       &lt;/Boolean&gt;
     &lt;/Attributes&gt;
   &lt;/g3_config&gt;
@@ -9498,7 +9559,7 @@
   &lt;g3_config dnOrder=&quot;0&quot; id=&quot;MAC_PLC_HEADER&quot;&gt;
     &lt;Attributes dnOrder=&quot;0&quot;&gt;
       &lt;Boolean dnOrder=&quot;0&quot; id=&quot;enabled&quot;&gt;
-        &lt;Value dnOrder=&quot;0&quot;&gt;false&lt;/Value&gt;
+        &lt;Value dnOrder=&quot;0&quot;&gt;true&lt;/Value&gt;
       &lt;/Boolean&gt;
     &lt;/Attributes&gt;
   &lt;/g3_config&gt;
@@ -9511,7 +9572,7 @@
   &lt;g3_config dnOrder=&quot;0&quot; id=&quot;MAC_PLC_MIB_HEADER&quot;&gt;
     &lt;Attributes dnOrder=&quot;0&quot;&gt;
       &lt;Boolean dnOrder=&quot;0&quot; id=&quot;enabled&quot;&gt;
-        &lt;Value dnOrder=&quot;0&quot;&gt;false&lt;/Value&gt;
+        &lt;Value dnOrder=&quot;0&quot;&gt;true&lt;/Value&gt;
       &lt;/Boolean&gt;
     &lt;/Attributes&gt;
   &lt;/g3_config&gt;
@@ -9523,7 +9584,7 @@
          <value>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;g3_config&gt;
   &lt;g3_config dnOrder=&quot;0&quot; id=&quot;MAC_PLC_PRESENT&quot;&gt;
     &lt;Values dnOrder=&quot;0&quot;&gt;
-      &lt;Dynamic dnOrder=&quot;0&quot; id=&quot;g3_config&quot; value=&quot;false&quot;/&gt;
+      &lt;Dynamic dnOrder=&quot;0&quot; id=&quot;g3_config&quot; value=&quot;true&quot;/&gt;
     &lt;/Values&gt;
   &lt;/g3_config&gt;
 &lt;/g3_config&gt;
@@ -25978,7 +26039,7 @@
       </entry>
       <entry>
          <file>..\src\config\wbz451_curiosity_pl460_freertos\configuration.h</file>
-         <hash>9e29185b76d81751b98c75b6fb48b4e3d5b0c549b9ddd977cf59b45b29703f4c</hash>
+         <hash>89f811ed55bb24596c79946f205c80d6f8b9b7fcbeb9dbe95e49b749b471745a</hash>
       </entry>
       <entry>
          <file>..\src\config\wbz451_curiosity_pl460_freertos\crypto\common_crypto\MCHP_Crypto_Aead_Cipher.h</file>
@@ -26134,7 +26195,7 @@
       </entry>
       <entry>
          <file>..\src\config\wbz451_curiosity_pl460_freertos\definitions.h</file>
-         <hash>04f72f4e8b63e18950ffbd2cca22cb26c5aff69967da58b572f08678fd66a52f</hash>
+         <hash>cb2ef0aa8f8000309180532e85a64bf0801ec4e4c89f4bf8aeeae99cdc154415</hash>
       </entry>
       <entry>
          <file>..\src\config\wbz451_curiosity_pl460_freertos\device.h</file>
@@ -26162,7 +26223,7 @@
       </entry>
       <entry>
          <file>..\src\config\wbz451_curiosity_pl460_freertos\driver\IEEE_802154_PHY\phy\inc\phy.h</file>
-         <hash>e9fe74456b5f84955fe0e9ce2e7e037bba8e79c96160eadf0a663566e69429bc</hash>
+         <hash>d0351b9ca2ec074e73cdb5dbc409d18752e4e10b6a369300b61aa5e3097f1169</hash>
       </entry>
       <entry>
          <file>..\src\config\wbz451_curiosity_pl460_freertos\driver\IEEE_802154_PHY\phy\inc\phy_constants.h</file>
@@ -26318,11 +26379,11 @@
       </entry>
       <entry>
          <file>..\src\config\wbz451_curiosity_pl460_freertos\interrupts.c</file>
-         <hash>fe1b26857c8802caeb1c333c67a24871f02a6d4cbb5301b17aa0260e88129508</hash>
+         <hash>f7bed78750ad98cc98c2d6259ae5dfde7fa38a5b2ecd5d6fe81da2e46d08d574</hash>
       </entry>
       <entry>
          <file>..\src\config\wbz451_curiosity_pl460_freertos\interrupts.h</file>
-         <hash>41ee7886e89ed9ba2f0173bbe75152f45ccc3c4a9ba66e316a9e5d03c2cf5d5d</hash>
+         <hash>343dc012f67ff78709613c25e63ff5fc17bd6370d65b694d55aa167f30bded23</hash>
       </entry>
       <entry>
          <file>..\src\config\wbz451_curiosity_pl460_freertos\libc_syscalls.c</file>
@@ -26938,11 +26999,11 @@
       </entry>
       <entry>
          <file>..\src\config\wbz451_curiosity_pl460_freertos\peripheral\eic\plib_eic.c</file>
-         <hash>000215db4af3cf7bd4dbfde34facd65d2a78b936a2653c6e67b1ff1ccf45a183</hash>
+         <hash>aacc2dbdfc453dcb3aae2761007acd852f8b4a4708e591acc0cf7094acf7a5ce</hash>
       </entry>
       <entry>
          <file>..\src\config\wbz451_curiosity_pl460_freertos\peripheral\eic\plib_eic.h</file>
-         <hash>d17971298715529750020a5fdb1032f20cb1fa0a4bfb8b6ea12396bff1acb283</hash>
+         <hash>193fc7eb413a43c1d5619e35394ff34b1090f5eb37da34609c5425666a30ea2a</hash>
       </entry>
       <entry>
          <file>..\src\config\wbz451_curiosity_pl460_freertos\peripheral\evsys\plib_evsys.c</file>
@@ -27150,7 +27211,7 @@
       </entry>
       <entry>
          <file>..\src\config\wbz451_curiosity_pl460_freertos\stack\g3\mac\mac_common\mac_common.c</file>
-         <hash>ddf0bc5203dabd18a9f4b419fec62f56378e9e398799dd92b328fef45c9c8bc6</hash>
+         <hash>f37724056050209e539dd739a2a213c5cc88b8b0cffaea82b732117f441b9423</hash>
       </entry>
       <entry>
          <file>..\src\config\wbz451_curiosity_pl460_freertos\stack\g3\mac\mac_common\mac_common.h</file>
@@ -27159,6 +27220,22 @@
       <entry>
          <file>..\src\config\wbz451_curiosity_pl460_freertos\stack\g3\mac\mac_common\mac_common_defs.h</file>
          <hash>9735b926e1286eb1aefbbe82c7bb8691456945142502c825f312eccb99b4f543</hash>
+      </entry>
+      <entry>
+         <file>..\src\config\wbz451_curiosity_pl460_freertos\stack\g3\mac\mac_plc\g3_lib_mac_plc.a</file>
+         <hash>b82c5fdb8bc8281194e9c1ee25ca1e86fd03e6e1a84f8e30d4ce7c647a5b6c7f</hash>
+      </entry>
+      <entry>
+         <file>..\src\config\wbz451_curiosity_pl460_freertos\stack\g3\mac\mac_plc\mac_plc.h</file>
+         <hash>910ce91da40e802b5100ffa9ffee68a72b93ac454f0b15e4b8b389a657d28fc3</hash>
+      </entry>
+      <entry>
+         <file>..\src\config\wbz451_curiosity_pl460_freertos\stack\g3\mac\mac_plc\mac_plc_defs.h</file>
+         <hash>f05bb9c063a111ce61d159818b5316ba0745cd801fd88eba5d550eb9fe3958ff</hash>
+      </entry>
+      <entry>
+         <file>..\src\config\wbz451_curiosity_pl460_freertos\stack\g3\mac\mac_plc\mac_plc_mib.h</file>
+         <hash>6ae09a3da320f8983f47eeeae4a48447faf727bd684b9c6162af45f1d17cfbd7</hash>
       </entry>
       <entry>
          <file>..\src\config\wbz451_curiosity_pl460_freertos\stack\g3\mac\mac_rf\g3_lib_mac_rf.a</file>
@@ -27178,7 +27255,7 @@
       </entry>
       <entry>
          <file>..\src\config\wbz451_curiosity_pl460_freertos\stack\g3\mac\mac_wrapper\mac_wrapper.c</file>
-         <hash>8e9d42e2a67c299426c8af23f3eb2f6c68e7129a55e40c5bf3223d2798bf30d2</hash>
+         <hash>acf7332a521027197db3c5216bbe510c4113719ee31134f450f4084520ae5a5a</hash>
       </entry>
       <entry>
          <file>..\src\config\wbz451_curiosity_pl460_freertos\stack\g3\mac\mac_wrapper\mac_wrapper.h</file>
@@ -27199,6 +27276,18 @@
       <entry>
          <file>..\src\config\wbz451_curiosity_pl460_freertos\stack\g3\net\macg3adp\src\drv_mac_g3adp_local.h</file>
          <hash>a36979513b8fd0778b56c72201281fafa29367ded2e1f5ebfc22743941892382</hash>
+      </entry>
+      <entry>
+         <file>..\src\config\wbz451_curiosity_pl460_freertos\stack\g3\pal\plc\pal_plc.c</file>
+         <hash>80eaa330ba35e5aa02eb12efb24f4a02e79699ef53f80b21e529bc735d760c06</hash>
+      </entry>
+      <entry>
+         <file>..\src\config\wbz451_curiosity_pl460_freertos\stack\g3\pal\plc\pal_plc.h</file>
+         <hash>b539e3084b5fa170c6be7c3e483303e65211151e0852049787245cc1007cad09</hash>
+      </entry>
+      <entry>
+         <file>..\src\config\wbz451_curiosity_pl460_freertos\stack\g3\pal\plc\pal_plc_local.h</file>
+         <hash>fa5fcfb881514ec90cd9c3fd6b2267069afb379bb115a43844dd598353d8411c</hash>
       </entry>
       <entry>
          <file>..\src\config\wbz451_curiosity_pl460_freertos\stack\g3\pal\rf\pal_rf.c</file>

@@ -741,11 +741,11 @@ void SYS_Initialize ( void* data )
 
     EVSYS_Initialize();
 
-//ah    SERCOM0_SPI_Initialize();
+    SERCOM0_SPI_Initialize();
 
     DMAC_Initialize();
 
-//ah    EIC_Initialize();
+    EIC_Initialize();
 
 
 
@@ -756,8 +756,8 @@ void SYS_Initialize ( void* data )
 
 
     /* Initialize G3 MAC RT Driver Instance */
-//ah    sysObj.drvG3MacRt = DRV_G3_MACRT_Initialize(DRV_G3_MACRT_INDEX, (SYS_MODULE_INIT *)&drvG3MacRtInitData);
-//ah    EIC_CallbackRegister(DRV_PLC_EXT_INT_PIN, DRV_G3_MACRT_ExternalInterruptHandler, sysObj.drvG3MacRt);
+    sysObj.drvG3MacRt = DRV_G3_MACRT_Initialize(DRV_G3_MACRT_INDEX, (SYS_MODULE_INIT *)&drvG3MacRtInitData);
+    EIC_CallbackRegister(DRV_PLC_EXT_INT_PIN, DRV_G3_MACRT_ExternalInterruptHandler, sysObj.drvG3MacRt);
 
     // Initialize RF System
     SYS_Load_Cal(WSS_ENABLE_ZB);

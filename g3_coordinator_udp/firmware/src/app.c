@@ -123,7 +123,7 @@ void APP_Initialize ( void )
     appData.state = APP_STATE_INIT;
 
 
-    appData.appQueue = xQueueCreate( 64, sizeof(APP_Msg_T) );
+    appData.appQueue = xQueueCreate( 10, sizeof(APP_Msg_T) );
     /* TODO: Initialize your application's state machine and other
      * parameters.
      */

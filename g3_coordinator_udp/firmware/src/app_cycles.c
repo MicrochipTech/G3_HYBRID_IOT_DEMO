@@ -56,12 +56,6 @@
 
 APP_CYCLES_DATA app_cyclesData;
 
-//static APP_CYCLES_STATISTICS_ENTRY app_cyclesStatistics[APP_EAP_SERVER_MAX_DEVICES];
-
-//#ifndef APP_CYCLES_METROLOGY_DATA_REQUEST
-//static const uint8_t app_cyclesPayload[16] = {0x00, 0x11, 0x22, 0x33, 0x44, 0x55, \
-//        0x66, 0x77, 0x88, 0x99, 0xAA, 0xBB, 0xCC, 0xDD, 0xEE, 0xFF};
-//#endif
 
 // *****************************************************************************
 // *****************************************************************************
@@ -350,11 +344,23 @@ void APP_CYCLES_Tasks ( void )
 
         case APP_CYCLES_STATE_WAIT_FOR_TX:
         {
-            app_cyclesData.numDevicesJoined = APP_EAP_SERVER_GetNumDevicesJoined();
+            uint16_t numDevicesJoined = APP_EAP_SERVER_GetNumDevicesJoined();
+            if(numDevicesJoined != app_cyclesData.numDevicesJoined)
+            {
+                app_cyclesData.numDevicesJoined = numDevicesJoined;
+                for(uint16_t i = 0; i < app_cyclesData.numDevicesJoined; i++)
+                {
+                    // device list may have changed - reset device types and timeouts
+                    app_cyclesData.deviceType[i] = 0;
+                    app_cyclesData.deviceTimeout[i] = 0;
+                }
+            }
 
             if(app_cyclesData.readDevTypeRequest)
             {
+                SYS_TIME_TimerDestroy(app_cyclesData.timeHandle);
                 app_cyclesData.state = APP_CYCLES_STATE_READ_DEV_TYPE;
+                break;
             }
 
             // UART request (from app_interface) received -> send data

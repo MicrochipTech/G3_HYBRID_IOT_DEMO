@@ -336,6 +336,11 @@
                   <itemPath>../src/config/wbz451_curiosity_pl460_freertos/stack/g3/mac/mac_common/mac_common.h</itemPath>
                   <itemPath>../src/config/wbz451_curiosity_pl460_freertos/stack/g3/mac/mac_common/mac_common_defs.h</itemPath>
                 </logicalFolder>
+                <logicalFolder name="mac_plc" displayName="mac_plc" projectFiles="true">
+                  <itemPath>../src/config/wbz451_curiosity_pl460_freertos/stack/g3/mac/mac_plc/mac_plc.h</itemPath>
+                  <itemPath>../src/config/wbz451_curiosity_pl460_freertos/stack/g3/mac/mac_plc/mac_plc_defs.h</itemPath>
+                  <itemPath>../src/config/wbz451_curiosity_pl460_freertos/stack/g3/mac/mac_plc/mac_plc_mib.h</itemPath>
+                </logicalFolder>
                 <logicalFolder name="mac_rf" displayName="mac_rf" projectFiles="true">
                   <itemPath>../src/config/wbz451_curiosity_pl460_freertos/stack/g3/mac/mac_rf/mac_rf_defs.h</itemPath>
                   <itemPath>../src/config/wbz451_curiosity_pl460_freertos/stack/g3/mac/mac_rf/mac_rf.h</itemPath>
@@ -355,6 +360,10 @@
                 </logicalFolder>
               </logicalFolder>
               <logicalFolder name="pal" displayName="pal" projectFiles="true">
+                <logicalFolder name="plc" displayName="plc" projectFiles="true">
+                  <itemPath>../src/config/wbz451_curiosity_pl460_freertos/stack/g3/pal/plc/pal_plc.h</itemPath>
+                  <itemPath>../src/config/wbz451_curiosity_pl460_freertos/stack/g3/pal/plc/pal_plc_local.h</itemPath>
+                </logicalFolder>
                 <logicalFolder name="rf" displayName="rf" projectFiles="true">
                   <itemPath>../src/config/wbz451_curiosity_pl460_freertos/stack/g3/pal/rf/pal_rf_local.h</itemPath>
                   <itemPath>../src/config/wbz451_curiosity_pl460_freertos/stack/g3/pal/rf/pal_rf.h</itemPath>
@@ -887,6 +896,9 @@
                 </logicalFolder>
               </logicalFolder>
               <logicalFolder name="pal" displayName="pal" projectFiles="true">
+                <logicalFolder name="plc" displayName="plc" projectFiles="true">
+                  <itemPath>../src/config/wbz451_curiosity_pl460_freertos/stack/g3/pal/plc/pal_plc.c</itemPath>
+                </logicalFolder>
                 <logicalFolder name="rf" displayName="rf" projectFiles="true">
                   <itemPath>../src/config/wbz451_curiosity_pl460_freertos/stack/g3/pal/rf/pal_rf.c</itemPath>
                 </logicalFolder>
@@ -1105,8 +1117,8 @@
         <platform>3</platform>
       </toolsSet>
       <packs>
-        <pack name="PIC32CX-BZ_DFP" vendor="Microchip" version="1.2.230"/>
         <pack name="CMSIS" vendor="ARM" version="5.8.0"/>
+        <pack name="PIC32CX-BZ_DFP" vendor="Microchip" version="1.2.230"/>
       </packs>
       <ScriptingSettings>
       </ScriptingSettings>
@@ -1119,6 +1131,7 @@
             <linkerLibFileItem>../src/config/wbz451_curiosity_pl460_freertos/stack/g3/adaptation/g3_lib_loadng.a</linkerLibFileItem>
             <linkerLibFileItem>../src/config/wbz451_curiosity_pl460_freertos/driver/lib/lib-ieee802154_phy_pic32cxbz-v1.2.0.a</linkerLibFileItem>
             <linkerLibFileItem>../src/config/wbz451_curiosity_pl460_freertos/stack/g3/mac/mac_rf/g3_lib_mac_rf.a</linkerLibFileItem>
+            <linkerLibFileItem>../src/config/wbz451_curiosity_pl460_freertos/stack/g3/mac/mac_plc/g3_lib_mac_plc.a</linkerLibFileItem>
           </linkerLibItems>
         </linkerTool>
         <archiverTool>
@@ -1424,8 +1437,6 @@
                   value="${memories.instruction.ram.ranges}"/>
         <property key="memories.programmemory" value="true"/>
         <property key="memories.programmemory.ranges" value="1000000-2001ffff"/>
-        <property key="programmerToGoFilePath"
-                  value="C:/0_CHRIS/Proyectos/03_MCHP_Harmony_3/BitBucket/smartenergy_g3_apps/apps/g3_apps/g3_coordinator_udp/firmware/wbz451_curiosity_pl460_freertos.X/debug/wbz451_curiosity_pl460_freertos/wbz451_curiosity_pl460_freertos_ptg"/>
         <property key="programoptions.donoteraseauxmem" value="false"/>
         <property key="programoptions.eraseb4program" value="true"/>
         <property key="programoptions.pgmentry.voltage" value="low"/>
