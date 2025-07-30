@@ -33,9 +33,9 @@ extern "C" {
 // *****************************************************************************
 // *****************************************************************************
 
-#define USER_BLINK_LED_On()           RGB_LED_GREEN_On()
-#define USER_BLINK_LED_Off()          RGB_LED_GREEN_Off()
-#define USER_BLINK_LED_Toggle()       RGB_LED_GREEN_Toggle()
+#define USER_BLINK_LED_On()           USER_LED_Off()
+#define USER_BLINK_LED_Off()          USER_LED_On()
+#define USER_BLINK_LED_Toggle()       USER_LED_Toggle()
 
 #define CLEAR_WATCHDOG()              WDT_Clear()
     

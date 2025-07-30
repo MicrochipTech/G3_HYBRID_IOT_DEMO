@@ -186,7 +186,7 @@ void CLOCK_Initialize( void )
 
 
     /* Peripheral Clock Generators */
-    CFG_REGS->CFG_CFGPCLKGEN1 = 0x9009U;
+    CFG_REGS->CFG_CFGPCLKGEN1 = 0x9009009U;
     CFG_REGS->CFG_CFGPCLKGEN2 = 0x0U;
     CFG_REGS->CFG_CFGPCLKGEN3 = 0x9000000U;
 
@@ -194,7 +194,7 @@ void CLOCK_Initialize( void )
 
 
     CFG_REGS->CFG_PMD1 = 0x200101ceU;
-    CFG_REGS->CFG_PMD3 = 0x7ebcU;
+    CFG_REGS->CFG_PMD3 = 0x72bcU;
 
 
     /* Lock system since done with clock configuration */

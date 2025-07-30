@@ -93,6 +93,14 @@
 #define PLC_RST_OutputEnable()      (GPIOB_REGS->GPIO_TRISCLR = (1U<<2U))
 #define PLC_RST_InputEnable()       (GPIOB_REGS->GPIO_TRISSET = (1U<<2U))
 #define PLC_RST_PIN                  GPIO_PIN_RB2
+/*** Macros for LIGHT_CONTROL pin ***/
+#define LIGHT_CONTROL_Set()               (GPIOB_REGS->GPIO_LATSET = (1U<<1U))
+#define LIGHT_CONTROL_Clear()             (GPIOB_REGS->GPIO_LATCLR = (1U<<1U))
+#define LIGHT_CONTROL_Toggle()            (GPIOB_REGS->GPIO_LATINV= (1U<<1U))
+#define LIGHT_CONTROL_Get()               ((GPIOB_REGS->GPIO_PORT >> 1U) & 0x1U)
+#define LIGHT_CONTROL_OutputEnable()      (GPIOB_REGS->GPIO_TRISCLR = (1U<<1U))
+#define LIGHT_CONTROL_InputEnable()       (GPIOB_REGS->GPIO_TRISSET = (1U<<1U))
+#define LIGHT_CONTROL_PIN                  GPIO_PIN_RB1
 
 
 // *****************************************************************************

@@ -1,18 +1,23 @@
 /*******************************************************************************
-  Board Support Package Header File.
+  Timer/Counter(TC2) PLIB
 
-  Company:
+  Company
     Microchip Technology Inc.
 
-  File Name:
-    bsp.h
+  File Name
+    plib_tc2.h
 
-  Summary:
-    Board Support Package Header File 
+  Summary
+    TC2 PLIB Header File.
 
-  Description:
-    This file contains constants, macros, type definitions and function
-    declarations 
+  Description
+    This file defines the interface to the TC peripheral library. This
+    library provides access to and control of the associated peripheral
+    instance.
+
+  Remarks:
+    None.
+
 *******************************************************************************/
 
 // DOM-IGNORE-BEGIN
@@ -40,97 +45,79 @@
 *******************************************************************************/
 // DOM-IGNORE-END
 
-#ifndef BSP_H
-#define BSP_H
+#ifndef PLIB_TC2_H       // Guards against multiple inclusion
+#define PLIB_TC2_H
 
 // *****************************************************************************
 // *****************************************************************************
 // Section: Included Files
 // *****************************************************************************
 // *****************************************************************************
+/* This section lists the other files that are included in this file.
+*/
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdint.h>
-#include <stdbool.h>
 #include "device.h"
+#include "plib_tc_common.h"
+
+// DOM-IGNORE-BEGIN
+#ifdef __cplusplus // Provide C Compatibility
+
+    extern "C" {
+
+#endif
+// DOM-IGNORE-END
 
 // *****************************************************************************
 // *****************************************************************************
-// Section: BSP Macros
+// Section: Data Types
 // *****************************************************************************
 // *****************************************************************************
-#define wbz451_curiosity
-#define BSP_NAME             "wbz451_curiosity"
-
-/*** LED Macros for RGB_LED_RED ***/
-//#define RGB_LED_RED_Toggle() (GPIOB_REGS->GPIO_LATINV = (1UL<<0))
-//#define RGB_LED_RED_Get() ((GPIOB_REGS->GPIO_PORT >> 0) & 0x1U)
-//#define RGB_LED_RED_On() (GPIOB_REGS->GPIO_LATSET = (1UL<<0))
-//#define RGB_LED_RED_Off() (GPIOB_REGS->GPIO_LATCLR = (1UL<<0))
-///*** LED Macros for RGB_LED_GREEN ***/
-//#define RGB_LED_GREEN_Toggle() (GPIOB_REGS->GPIO_LATINV = (1UL<<3))
-//#define RGB_LED_GREEN_Get() ((GPIOB_REGS->GPIO_PORT >> 3) & 0x1U)
-//#define RGB_LED_GREEN_On() (GPIOB_REGS->GPIO_LATSET = (1UL<<3))
-//#define RGB_LED_GREEN_Off() (GPIOB_REGS->GPIO_LATCLR = (1UL<<3))
-///*** LED Macros for RGB_LED_BLUE ***/
-//#define RGB_LED_BLUE_Toggle() (GPIOB_REGS->GPIO_LATINV = (1UL<<5))
-//#define RGB_LED_BLUE_Get() ((GPIOB_REGS->GPIO_PORT >> 5) & 0x1U)
-//#define RGB_LED_BLUE_On() (GPIOB_REGS->GPIO_LATSET = (1UL<<5))
-//#define RGB_LED_BLUE_Off() (GPIOB_REGS->GPIO_LATCLR = (1UL<<5))
-/*** LED Macros for USER_LED ***/
-#define USER_LED_Toggle() (GPIOB_REGS->GPIO_LATINV = (1UL<<7))
-#define USER_LED_Get() ((GPIOB_REGS->GPIO_PORT >> 7) & 0x1U)
-#define USER_LED_On() (GPIOB_REGS->GPIO_LATSET = (1UL<<7))
-#define USER_LED_Off() (GPIOB_REGS->GPIO_LATCLR = (1UL<<7))
-/*** SWITCH Macros for SWITCH ***/
-#define SWITCH_Get() ((GPIOB_REGS->GPIO_PORT >> 4) & 0x1U)
-#define SWITCH_STATE_PRESSED 0U
-#define SWITCH_STATE_RELEASED 1U
-
-
-
+/* The following data type definitions are used by the functions in this
+    interface and should be considered part it.
+*/
 
 // *****************************************************************************
 // *****************************************************************************
 // Section: Interface Routines
 // *****************************************************************************
 // *****************************************************************************
-
-// *****************************************************************************
-/* Function:
-    void BSP_Initialize(void)
-
-  Summary:
-    Performs the necessary actions to initialize a board
-
-  Description:
-    This function initializes the LED and Switch ports on the board.  This
-    function must be called by the user before using any APIs present on this
-    BSP.
-
-  Precondition:
-    None.
-
-  Parameters:
-    None
-
-  Returns:
-    None.
-
-  Example:
-    <code>
-    BSP_Initialize();
-    </code>
-
-  Remarks:
-    None
+/* The following functions make up the methods (set of possible operations) of
+   this interface.
 */
 
-void BSP_Initialize(void);
 
-#endif // BSP_H
+void TC2_CompareInitialize( void );
 
-/*******************************************************************************
- End of File
-*/
+void TC2_CompareStart( void );
+
+void TC2_CompareStop( void );
+
+uint32_t TC2_CompareFrequencyGet( void );
+
+
+uint16_t TC2_Compare16bitPeriodGet( void );
+
+uint16_t TC2_Compare16bitCounterGet( void );
+
+void TC2_Compare16bitCounterSet( uint16_t count );
+
+bool TC2_Compare16bitMatch0Set( uint16_t compareValue );
+
+bool TC2_Compare16bitMatch1Set( uint16_t compareValue );
+
+
+
+TC_COMPARE_STATUS TC2_CompareStatusGet( void );
+
+void TC2_CompareCommandSet(TC_COMMAND command);
+
+
+// DOM-IGNORE-BEGIN
+#ifdef __cplusplus  // Provide C++ Compatibility
+
+    }
+
+#endif
+// DOM-IGNORE-END
+
+#endif /* PLIB_TC2_H */
