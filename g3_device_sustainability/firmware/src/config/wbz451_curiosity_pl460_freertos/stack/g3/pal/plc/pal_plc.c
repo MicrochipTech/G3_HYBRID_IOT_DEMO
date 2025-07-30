@@ -606,26 +606,15 @@ PAL_PLC_PIB_RESULT PAL_PLC_SetMacRtPib(PAL_PLC_HANDLE handle, MAC_RT_PIB_OBJ *pi
     return result;
 }
 
-#include "stack/g3/adaptation/adp.h"
 void PAL_PLC_SetCoordinator(PAL_PLC_HANDLE handle)
 {
-    ADP_MAC_GET_CFM_PARAMS getMacConfirm;
-
     if (handle != (PAL_PLC_HANDLE)&palPlcData)
     {
         return;
     }
 
     /* Enable Coordinator capabilities */
-    ADP_MacGetRequestSync(/*MAC_WRP_PIB_MANUF_PLC_IFACE_AVAILABLE*/0x0800002C, 0, &getMacConfirm);
-    if((getMacConfirm.status != G3_SUCCESS) || (getMacConfirm.attributeValue[0] == 0))
-    {
-        // PLC Interface not available
-    }
-    else
-    {
-        DRV_G3_MACRT_SetCoordinator(palPlcData.drvG3MacRtHandle);
-    }
+    DRV_G3_MACRT_SetCoordinator(palPlcData.drvG3MacRtHandle);
     palPlcData.mibInitData.coordinator = true;
     palPlcData.coordinator = true;
 }
