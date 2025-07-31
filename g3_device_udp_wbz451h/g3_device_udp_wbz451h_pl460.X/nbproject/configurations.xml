@@ -1082,7 +1082,7 @@
       </toolsSet>
       <packs>
         <pack name="PIC32CX-BZ_DFP" vendor="Microchip" version="1.4.243"/>
-        <pack name="CMSIS" vendor="ARM" version="6.2.0"/>
+        <pack name="CMSIS" vendor="ARM" version="5.8.0"/>
       </packs>
       <ScriptingSettings>
       </ScriptingSettings>
@@ -1390,6 +1390,8 @@
                   value="${memories.instruction.ram.ranges}"/>
         <property key="memories.programmemory" value="true"/>
         <property key="memories.programmemory.ranges" value="1000000-4ffffff"/>
+        <property key="programmerToGoFilePath"
+                  value="C:/Data/M43561/projects/G3_HYBRID_IOT_DEMO/g3_device_udp_wbz451h/g3_device_udp_wbz451h_pl460.X/debug/default/g3_device_udp_wbz451h_pl460_ptg"/>
         <property key="programoptions.donoteraseauxmem" value="false"/>
         <property key="programoptions.eraseb4program" value="true"/>
         <property key="programoptions.pgmentry.voltage" value="low"/>

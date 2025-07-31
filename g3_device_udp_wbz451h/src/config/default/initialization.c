@@ -176,17 +176,17 @@
 /* pull up resistors are configured by default */
 void _on_reset(void)
 {
-    #warning Board not supported. Please, review Pin configuration to initialize the PL460-EK GPIOs (RESET, STBY and LDO_EN).
+    //#warning Board not supported. Please, review Pin configuration to initialize the PL460-EK GPIOs (RESET, STBY and LDO_EN).
     __asm volatile ("NOP");
     /* Enable Reset Pin */
-    SYS_PORT_PinOutputEnable(PLC_RST_PIN);
-    SYS_PORT_PinClear(PLC_RST_PIN);
+    //SYS_PORT_PinOutputEnable(PLC_RST_PIN);
+    //SYS_PORT_PinClear(PLC_RST_PIN);
     /* Disable STBY Pin */
-    SYS_PORT_PinOutputEnable(PLC_TX_ENABLE_PIN);
-    SYS_PORT_PinClear(PLC_TX_ENABLE_PIN);
+    //SYS_PORT_PinOutputEnable(PLC_TX_ENABLE_PIN);
+    //SYS_PORT_PinClear(PLC_TX_ENABLE_PIN);
     /* Disable LDO Pin */
-    SYS_PORT_PinOutputEnable(PLC_LDO_PIN);
-    SYS_PORT_PinClear(PLC_LDO_PIN);
+    //SYS_PORT_PinOutputEnable(PLC_LDO_PIN);
+    //SYS_PORT_PinClear(PLC_LDO_PIN);
 }
 
 /* MISRA C-2012 deviation block end */
