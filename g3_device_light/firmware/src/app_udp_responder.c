@@ -403,17 +403,29 @@ void _APP_UDP_RESPONDER_UdpRxCallback(UDP_SOCKET hUDP, TCPIP_NET_HANDLE hNet, TC
                     APP_TCPIP_MANAGEMENT_IPV6_MULTICAST_0_CONFORMANCE);
             break;
         }
+        case CMD_GET_METROLOGY_INFO: // GET_METROLOGY_INFO
+        {
+            // Use Case of 2-Phases Blue Pannel
+            SYS_DEBUG_MESSAGE(SYS_ERROR_INFO, "APP_UDP_RESPONDER: Get Metrology Information\r\n");
+            break;
+        }
+        case CMD_SHOW_METROLOGY_INFO: // SHOW_METROLOGY_INFO
+        {
+            // Use Case of In-Home Display BluePannel
+            SYS_DEBUG_MESSAGE(SYS_ERROR_INFO, "APP_UDP_RESPONDER: Show Metrology Information\r\n");
+            break;
+        }  
 
-        case 0xF4: // GET_DEVICE_INFO
+        case CMD_GET_DEVICE_INFO: // GET_DEVICE_INFO
         {
             SYS_DEBUG_PRINT(SYS_ERROR_DEBUG, "APP_UDP_RESPONDER: GET_DEVICE_INFO\r\n");
-            TCPIP_UDP_Put(hUDP, 0xF5); // GET_DEVICE_INFO_ANSWER
-            TCPIP_UDP_Put(hUDP, 0x10); // Lighting Device Indoor
+            TCPIP_UDP_Put(hUDP, CMD_GET_DEVICE_INFO_RESP); // GET_DEVICE_INFO_ANSWER
+            TCPIP_UDP_Put(hUDP, app_udp_responderData.device_type); // Lighting Device Indoor
             TCPIP_UDP_Flush(hUDP);
             break;
         }
         
-        case 0xF6: // SET_LED_RGB
+        case CMD_SET_LED_RGB: // SET_LED_RGB
         {
             SYS_DEBUG_PRINT(SYS_ERROR_DEBUG, "APP_UDP_RESPONDER: SET_LED_RGB\r\n");
             TCPIP_UDP_ArrayGet(hUDP, app_g3_rgbData.rgbValues, 3);
@@ -423,7 +435,7 @@ void _APP_UDP_RESPONDER_UdpRxCallback(UDP_SOCKET hUDP, TCPIP_NET_HANDLE hNet, TC
             break;
         }
 
-        case 0xF8: // SET_LED_RGB_BLINK
+        case CMD_SET_LED_RGB_EXT: // SET_LED_RGB_BLINK
         {
             SYS_DEBUG_PRINT(SYS_ERROR_DEBUG, "APP_UDP_RESPONDER: SET_LED_RGB_BLINK\r\n");
             TCPIP_UDP_ArrayGet(hUDP, app_g3_rgbData.rgbValues, 3);
@@ -433,14 +445,14 @@ void _APP_UDP_RESPONDER_UdpRxCallback(UDP_SOCKET hUDP, TCPIP_NET_HANDLE hNet, TC
             break;
         }
 
-        case 0xFA: // SET_PANEL_INFO
+        case CMD_SET_PANEL_LED: // SET_PANEL_INFO
         {
             // todo
             SYS_DEBUG_PRINT(SYS_ERROR_DEBUG, "APP_UDP_RESPONDER: SET_PANEL_INFO\r\n");
             break;
         }
 
-        case 0xFE: // SET_LIGHT
+        case CMD_SET_LIGHT: // SET_LIGHT
         {
             uint8_t onOffValue;
             SYS_DEBUG_PRINT(SYS_ERROR_DEBUG, "APP_UDP_RESPONDER: SET_LIGHT - ");//\r\n");
@@ -476,7 +488,7 @@ void _APP_UDP_RESPONDER_UdpRxCallback(UDP_SOCKET hUDP, TCPIP_NET_HANDLE hNet, TC
 // Section: Application Initialization and State Machine Functions
 // *****************************************************************************
 // *****************************************************************************
-
+#define DEVICE_TYPE_LIGHTING_INDOOR
 /*******************************************************************************
   Function:
     void APP_UDP_RESPONDER_Initialize ( void )
@@ -492,6 +504,37 @@ void APP_UDP_RESPONDER_Initialize ( void )
 
     /* Create semaphore. It is used to suspend task. */
     OSAL_SEM_Create(&app_udp_responderData.semaphoreID, OSAL_SEM_TYPE_BINARY, 0, 0);
+    
+    /* Depending on something - Device Type */
+#if defined(DEVICE_TYPE_LIGHTING_INDOOR)
+    app_udp_responderData.device_type = TYPE_LIGHTING_INDOOR;
+#elif defined(DEVICE_TYPE_LIGHTING_OUTDOOR)
+    app_udp_responderData.device_type = TYPE_LIGHTING_OUTDOOR;
+#elif  defined(DEVICE_TYPE_PANEL_LED)
+    app_udp_responderData.device_type = TYPE_PANEL_LED;
+#elif  defined(DEVICE_TYPE_BP_ELECTRICITY_METER)
+    app_udp_responderData.device_type = TYPE_BP_ELECTRICITY_METER;
+#elif  DEVICE_TYPE_BP_IHD
+    app_udp_responderData.device_type = TYPE_BP_IHD;
+#elif  DEVICE_TYPE_LEAK_DETECTOR
+    app_udp_responderData.device_type = TYPE_LEAK_DETECTOR;
+#elif  DEVICE_TYPE_SOLAR_INVERTER
+    app_udp_responderData.device_type = TYPE_SOLAR_INVERTER;
+#elif  DEVICE_TYPE_BATTERY_CHARGER
+    app_udp_responderData.device_type = TYPE_BATTERY_CHARGER;
+#elif  DEVICE_TYPE_ENERGY_STORAGE
+    app_udp_responderData.device_type = TYPE_ENERGY_STORAGE;
+#elif  DEVICE_TYPE_HEAT_PUMP
+    app_udp_responderData.device_type = TYPE_HEAT_PUMP;
+#elif  DEVICE_TYPE_EV_CHARGER
+    app_udp_responderData.device_type = TYPE_EV_CHARGER;
+#elif  DEVICE_TYPE_ELECTRICITY_METER
+    app_udp_responderData.device_type = TYPE_ELECTRICITY_METER;
+#elif  DEVICE_TYPE_EMERGENCY_BUTTON
+    app_udp_responderData.device_type = TYPE_EMERGENCY_BUTTON;
+#else
+    app_udp_responderData.device_type = TYPE_EMERGENCY_BUTTON;
+#endif
 }
 
 /******************************************************************************

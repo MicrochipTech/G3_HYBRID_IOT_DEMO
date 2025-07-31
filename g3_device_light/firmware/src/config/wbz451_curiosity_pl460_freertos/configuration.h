@@ -113,6 +113,9 @@ extern "C" {
 // Section: Driver Configuration
 // *****************************************************************************
 // *****************************************************************************
+/* PAL PLC Configuration Options */
+#define PAL_PLC_PHY_INDEX                     0U
+
 
 /* PLC MAC RT Configuration Options */
 #define DRV_PLC_SECURE                        false
@@ -138,7 +141,7 @@ extern "C" {
 
 /* PAL RF RTOS Configuration */
 #define PAL_RF_RTOS_STACK_SIZE                256U
-#define PAL_RF_RTOS_TASK_PRIORITY             2
+#define PAL_RF_RTOS_TASK_PRIORITY             5
 
 
 /*** Crypto Library Configuration ***/
@@ -163,6 +166,10 @@ extern "C" {
 /* MAC COMMON Identification */
 #define G3_MAC_COMMON_INDEX_0            0U
 #define G3_MAC_COMMON_INSTANCES_NUMBER   1U
+
+/* MAC PLC Identification */
+#define G3_MAC_PLC_INDEX_0               0U
+#define G3_MAC_PLC_INSTANCES_NUMBER      1U
 
 /* MAC RF Identification */
 #define G3_MAC_RF_INDEX_0                0U
@@ -326,7 +333,7 @@ extern "C" {
 
 
 /*** UDP Configuration ***/
-#define TCPIP_UDP_MAX_SOCKETS		                	1
+#define TCPIP_UDP_MAX_SOCKETS		                	2
 #define TCPIP_UDP_SOCKET_DEFAULT_TX_SIZE		    	1200
 #define TCPIP_UDP_SOCKET_DEFAULT_TX_QUEUE_LIMIT    	 	3
 #define TCPIP_UDP_SOCKET_DEFAULT_RX_QUEUE_LIMIT			3

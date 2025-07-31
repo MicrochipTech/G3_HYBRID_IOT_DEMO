@@ -85,6 +85,38 @@ typedef enum
 
 } APP_UDP_RESPONDER_STATES;
 
+typedef enum
+{
+    /* Device Type */
+    TYPE_BP_ELECTRICITY_METER = 0xAA,
+    TYPE_BP_IHD = 0x55,
+    TYPE_LIGHTING_INDOOR = 0x10,
+    TYPE_LIGHTING_OUTDOOR,
+    TYPE_PANEL_LED,
+    TYPE_LEAK_DETECTOR,
+    TYPE_SOLAR_INVERTER,
+    TYPE_BATTERY_CHARGER,
+    TYPE_ENERGY_STORAGE,
+    TYPE_HEAT_PUMP,
+    TYPE_EV_CHARGER,
+    TYPE_ELECTRICITY_METER,
+    TYPE_EMERGENCY_BUTTON
+} APP_UDP_RESPONDER_TYPE;
+
+typedef enum
+{
+    /* UDP Responder Commands */
+    CMD_GET_METROLOGY_INFO = 0xF0,
+    CMD_GET_METROLOGY_INFO_RESP = 0xF1,
+    CMD_SHOW_METROLOGY_INFO = 0xF2,
+    CMD_GET_DEVICE_INFO = 0xF4,
+    CMD_GET_DEVICE_INFO_RESP = 0xF5,
+    CMD_SET_LED_RGB = 0xF6,
+    CMD_SET_LED_RGB_EXT = 0xF8,
+    CMD_SET_PANEL_LED = 0xFA,
+    CMD_EMERGENCY = 0xFC,
+	CMD_SET_LIGHT = 0xFE
+} APP_UDP_RESPONDER_CMDS;
 
 // *****************************************************************************
 /* Application Data
@@ -106,6 +138,9 @@ typedef struct
 
     /* The application's current state */
     APP_UDP_RESPONDER_STATES state;
+
+    /* Application Device Type */
+	APP_UDP_RESPONDER_TYPE device_type;
 
     bool dataReceived;
 } APP_UDP_RESPONDER_DATA;
