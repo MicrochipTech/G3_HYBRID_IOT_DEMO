@@ -119,13 +119,13 @@ extern "C" {
 
 /* PLC MAC RT Configuration Options */
 #define DRV_PLC_SECURE                        false
-#define DRV_PLC_SPI_CS_PIN                    SYS_PORT_PIN_RB13
+#define DRV_PLC_SPI_CS_PIN                    SYS_PORT_PIN_RB6
 #define DRV_PLC_EXT_INT_SRC                   EIC_IRQn
-#define DRV_PLC_EXT_INT_PIO                   SYS_PORT_PIN_RA2
+#define DRV_PLC_EXT_INT_PIO                   SYS_PORT_PIN_RA3
 #define DRV_PLC_EXT_INT_PIN                   EIC_PIN_0
-#define DRV_PLC_RESET_PIN                     SYS_PORT_PIN_RB2
-#define DRV_PLC_LDO_EN_PIN                    SYS_PORT_PIN_RA7
-#define DRV_PLC_TX_ENABLE_PIN                 SYS_PORT_PIN_RA8
+#define DRV_PLC_RESET_PIN                     SYS_PORT_PIN_RA4
+#define DRV_PLC_LDO_EN_PIN                    SYS_PORT_PIN_RA1
+#define DRV_PLC_TX_ENABLE_PIN                 SYS_PORT_PIN_RA0
 #define DRV_PLC_SPI_CLK                       1000000
 
 /* PLC MAC RT Driver RTOS Configuration Options */
