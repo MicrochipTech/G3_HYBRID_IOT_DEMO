@@ -118,8 +118,12 @@ static void _APP_CYCLES_SendData(void)
     if (app_cyclesData.availableBuffers == false)
     {
         /* Full buffers, wait for availability to send the packet */
+        //SYS_DEBUG_MESSAGE(SYS_ERROR_ERROR, "APP_CYCLES: Full buffers, wait for availability to send the packet\r\n");
+        app_cyclesData.packetPending = true;
         return;
     }
+
+    app_cyclesData.packetPending = false;
 
     /* Get the number of bytes that can be written to the socket */
     availableTxBytes = TCPIP_UDP_PutIsReady(app_cyclesData.socket);
@@ -166,6 +170,7 @@ void APP_CYCLES_Initialize ( void )
     app_cyclesData.numDevicesJoined = 0;
     app_cyclesData.timeExpired = false;
     app_cyclesData.availableBuffers = true;
+    app_cyclesData.packetPending = false;
     app_cyclesData.sendDelayExpired = true;
 }
 
@@ -296,9 +301,15 @@ void APP_CYCLES_Tasks ( void )
                 }
                 break;
             }
+            else if(app_cyclesData.packetPending == true)
+            {
+                SYS_TIME_TimerReload(app_cyclesData.timeHandle, 0, SYS_TIME_MSToCount(APP_CYCLES_TIMEOUT_MS),
+                        APP_SYS_TIME_CallbackSetFlag, (uintptr_t) &app_cyclesData.timeExpired, SYS_TIME_SINGLE);
+                break;
+            }
+
             /* Get number of bytes received */
             rxPayloadSize = TCPIP_UDP_GetIsReady(app_cyclesData.socket);
-
             if (rxPayloadSize == 0)
             {
                 /* No data received */
@@ -442,11 +453,20 @@ void APP_CYCLES_Tasks ( void )
 
 void APP_CYCLES_AdpBufferIndication(ADP_BUFFER_IND_PARAMS* bufferInd)
 {
+    //SYS_DEBUG_PRINT(SYS_ERROR_ERROR, "APP_CYCLES: buff large %d medium %d small %d\r\n",
+    //        bufferInd->largeBuffersAvailable, bufferInd->mediumBuffersAvailable, bufferInd->smallBuffersAvailable);
     if ((bufferInd->largeBuffersAvailable == 1) && (bufferInd->mediumBuffersAvailable == 1) &&
             (bufferInd->smallBuffersAvailable == 1))
     {
         /* All buffers are available */
         app_cyclesData.availableBuffers = true;
+
+        if (app_cyclesData.packetPending == true)
+        {
+            /* Send pending packet */
+            //SYS_DEBUG_MESSAGE(SYS_ERROR_ERROR, "APP_CYCLES: send pending packet\r\n");
+            _APP_CYCLES_SendData();
+        }
     }
     else
     {

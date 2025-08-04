@@ -404,16 +404,16 @@ void _APP_UDP_RESPONDER_UdpRxCallback(UDP_SOCKET hUDP, TCPIP_NET_HANDLE hNet, TC
             break;
         }
 
-        case 0xF4: // GET_DEVICE_INFO
+        case CMD_GET_DEVICE_INFO:
         {
             SYS_DEBUG_PRINT(SYS_ERROR_DEBUG, "APP_UDP_RESPONDER: GET_DEVICE_INFO\r\n");
-            TCPIP_UDP_Put(hUDP, 0xF5); // GET_DEVICE_INFO_ANSWER
+            TCPIP_UDP_Put(hUDP, CMD_GET_DEVICE_INFO_RESP);
             TCPIP_UDP_Put(hUDP, APP_DEV_TYPE); // device type
             TCPIP_UDP_Flush(hUDP);
             break;
         }
         
-        case 0xF6: // SET_LED_RGB
+        case CMD_SET_LED_RGB:
         {
             SYS_DEBUG_PRINT(SYS_ERROR_DEBUG, "APP_UDP_RESPONDER: SET_LED_RGB\r\n");
             TCPIP_UDP_ArrayGet(hUDP, app_g3_rgbData.rgbValues, 3);
@@ -423,7 +423,7 @@ void _APP_UDP_RESPONDER_UdpRxCallback(UDP_SOCKET hUDP, TCPIP_NET_HANDLE hNet, TC
             break;
         }
 
-        case 0xF8: // SET_LED_RGB_BLINK
+        case CMD_SET_LED_RGB_EXT:
         {
             SYS_DEBUG_PRINT(SYS_ERROR_DEBUG, "APP_UDP_RESPONDER: SET_LED_RGB_BLINK\r\n");
             TCPIP_UDP_ArrayGet(hUDP, app_g3_rgbData.rgbValues, 3);
@@ -433,14 +433,14 @@ void _APP_UDP_RESPONDER_UdpRxCallback(UDP_SOCKET hUDP, TCPIP_NET_HANDLE hNet, TC
             break;
         }
 
-        case 0xFA: // SET_PANEL_INFO
+        case CMD_SET_PANEL_LED:
         {
             // todo
             SYS_DEBUG_PRINT(SYS_ERROR_DEBUG, "APP_UDP_RESPONDER: SET_PANEL_INFO\r\n");
             break;
         }
 
-        case 0xFE: // SET_LIGHT
+        case CMD_SET_LIGHT:
         {
             uint8_t onOffValue;
             SYS_DEBUG_PRINT(SYS_ERROR_DEBUG, "APP_UDP_RESPONDER: SET_LIGHT - ");//\r\n");

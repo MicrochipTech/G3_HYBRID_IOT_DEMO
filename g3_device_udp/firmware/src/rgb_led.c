@@ -269,8 +269,6 @@ static void RGB_LED_Init(void)
     PPS_REGS->PPS_RPB0G1R = 21U;
     PPS_REGS->PPS_RPB3G4R = 21U;
     PPS_REGS->PPS_RPB5G3R = 22U;
-
-    app_g3_rgbData.newData = false;
 }
 
 void RGB_LED_Handle(void)
@@ -315,10 +313,16 @@ void RGB_LED_Handle(void)
             
             app_g3_rgbData.timeExpired = false;
             app_g3_rgbData.freqExpired = false;
-            app_g3_rgbData.freqHandle = SYS_TIME_CallbackRegisterMS(RGB_LED_TimeExpiredSetFlag,
-                    (uintptr_t) &app_g3_rgbData.freqExpired, (uint32_t)app_g3_rgbData.blinkFreq, SYS_TIME_PERIODIC);
-            app_g3_rgbData.timeHandle = SYS_TIME_CallbackRegisterMS(RGB_LED_TimeExpiredSetFlag,
-                    (uintptr_t) &app_g3_rgbData.timeExpired, (uint32_t)app_g3_rgbData.blinkTime, SYS_TIME_SINGLE);
+            if(app_g3_rgbData.blinkFreq != 0) // 0 -> no blinking, static for blinkTime
+            {
+                app_g3_rgbData.freqHandle = SYS_TIME_CallbackRegisterMS(RGB_LED_TimeExpiredSetFlag,
+                        (uintptr_t) &app_g3_rgbData.freqExpired, (uint32_t)app_g3_rgbData.blinkFreq, SYS_TIME_PERIODIC);
+            }
+            if(app_g3_rgbData.blinkTime != 0xFFFF) // 0xFFFF -> wait forever
+            {
+                app_g3_rgbData.timeHandle = SYS_TIME_CallbackRegisterMS(RGB_LED_TimeExpiredSetFlag,
+                        (uintptr_t) &app_g3_rgbData.timeExpired, (uint32_t)app_g3_rgbData.blinkTime, SYS_TIME_SINGLE);
+            }
             app_g3_rgbData.state = APP_G3_RGB_STATE_WAIT_BLINK_FINISH;
             break;
         }

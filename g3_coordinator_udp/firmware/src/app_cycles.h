@@ -182,6 +182,10 @@ typedef struct
     /* Flag to indicate that ADP buffers are available */
     bool availableBuffers;
 
+    /* Flag to indicate that packet is pending to be sent because of buffer
+     * availability */
+    bool packetPending;
+
 } APP_CYCLES_DATA;
 
 extern APP_CYCLES_DATA app_cyclesData;
