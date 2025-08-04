@@ -107,7 +107,10 @@ typedef struct
     /* The application's current state */
     APP_UDP_RESPONDER_STATES state;
 
+    bool dataReceived;
 } APP_UDP_RESPONDER_DATA;
+
+extern APP_UDP_RESPONDER_DATA app_udp_responderData;
 
 // *****************************************************************************
 // *****************************************************************************

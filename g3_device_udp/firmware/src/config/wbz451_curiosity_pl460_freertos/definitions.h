@@ -49,11 +49,15 @@
 #include <stddef.h>
 #include <stdbool.h>
 #include "service/pcoup/srv_pcoup.h"
+#include "stack/g3/pal/plc/pal_plc.h"
 #include "driver/plc/g3MacRt/drv_g3_macrt_definitions.h"
 #include "driver/plc/g3MacRt/drv_g3_macrt.h"
 #include "driver/plc/g3MacRt/drv_g3_macrt_comm.h"
 #include "stack/g3/mac/mac_common/mac_common.h"
 #include "stack/g3/mac/mac_common/mac_common_defs.h"
+#include "stack/g3/mac/mac_plc/mac_plc.h"
+#include "stack/g3/mac/mac_plc/mac_plc_defs.h"
+#include "stack/g3/mac/mac_plc/mac_plc_mib.h"
 #include "stack/g3/mac/mac_rf/mac_rf.h"
 #include "stack/g3/mac/mac_rf/mac_rf_defs.h"
 #include "stack/g3/mac/mac_rf/mac_rf_mib.h"
@@ -65,8 +69,10 @@
 #include "stack/g3/adaptation/lbp_defs.h"
 #include "stack/g3/adaptation/lbp_dev.h"
 #include "peripheral/tc/plib_tc0.h"
-#include "peripheral/nvm/plib_nvm.h"
+#include "peripheral/tc/plib_tc3.h"
+#include "peripheral/tc/plib_tc2.h"
 #include "system/time/sys_time.h"
+#include "peripheral/nvm/plib_nvm.h"
 #include "service/log_report/srv_log_report.h"
 #include "driver/IEEE_802154_PHY/phy/inc/phy.h"
 #include "driver/IEEE_802154_PHY/phy/inc/phy_tasks.h"
@@ -156,6 +162,7 @@
 #include "app_udp_responder.h"
 #include "app_storage_wbz451.h"
 #include "app_tcpip_management.h"
+#include "app.h"
 
 
 

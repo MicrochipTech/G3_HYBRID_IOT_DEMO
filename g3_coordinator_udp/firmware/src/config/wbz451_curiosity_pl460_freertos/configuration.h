@@ -123,6 +123,9 @@ extern "C" {
 // Section: Driver Configuration
 // *****************************************************************************
 // *****************************************************************************
+/* PAL PLC Configuration Options */
+#define PAL_PLC_PHY_INDEX                     0U
+
 
 /* PLC MAC RT Configuration Options */
 #define DRV_PLC_SECURE                        false
@@ -173,6 +176,10 @@ extern "C" {
 /* MAC COMMON Identification */
 #define G3_MAC_COMMON_INDEX_0            0U
 #define G3_MAC_COMMON_INSTANCES_NUMBER   1U
+
+/* MAC PLC Identification */
+#define G3_MAC_PLC_INDEX_0               0U
+#define G3_MAC_PLC_INSTANCES_NUMBER      1U
 
 /* MAC RF Identification */
 #define G3_MAC_RF_INDEX_0                0U

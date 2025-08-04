@@ -218,7 +218,6 @@ void SYS_Tasks ( void )
 {
     /* Maintain system services */
     
-
     (void) xTaskCreate( lSYS_CMD_Tasks,
         "SYS_CMD_TASKS",
         SYS_CMD_RTOS_STACK_SIZE,
@@ -228,17 +227,15 @@ void SYS_Tasks ( void )
     );
 
 
-
-
     /* Maintain Device Drivers */
     
-//ah    (void) xTaskCreate( lDRV_G3_MACRT_Tasks,
-//ah        "DRV_G3_MACRT_TASKS",
-//ah        DRV_PLC_RTOS_STACK_SIZE,
-//ah        (void*)NULL,
-//ah        DRV_PLC_RTOS_TASK_PRIORITY,
-//ah        (TaskHandle_t*)NULL
-//ah    );
+    (void) xTaskCreate( lDRV_G3_MACRT_Tasks,
+        "DRV_G3_MACRT_TASKS",
+        DRV_PLC_RTOS_STACK_SIZE,
+        (void*)NULL,
+        DRV_PLC_RTOS_TASK_PRIORITY,
+        (TaskHandle_t*)NULL
+    );
 
 
 
@@ -285,7 +282,7 @@ void SYS_Tasks ( void )
         /* Create OS Thread for APP_G3_MANAGEMENT_Tasks. */
     (void) xTaskCreate((TaskFunction_t) lAPP_G3_MANAGEMENT_Tasks,
                 "APP_G3_MANAGEMENT_Tasks",
-                1024,
+                896,
                 NULL,
                 1,
                 &xAPP_G3_MANAGEMENT_Tasks);
@@ -293,7 +290,7 @@ void SYS_Tasks ( void )
     /* Create OS Thread for APP_UDP_RESPONDER_Tasks. */
     (void) xTaskCreate((TaskFunction_t) lAPP_UDP_RESPONDER_Tasks,
                 "APP_UDP_RESPONDER_Tasks",
-                1024,
+                896,
                 NULL,
                 1,
                 &xAPP_UDP_RESPONDER_Tasks);
@@ -301,7 +298,7 @@ void SYS_Tasks ( void )
     /* Create OS Thread for APP_STORAGE_WBZ451_Tasks. */
     (void) xTaskCreate((TaskFunction_t) lAPP_STORAGE_WBZ451_Tasks,
                 "APP_STORAGE_WBZ451_Tasks",
-                1024,
+                896,
                 NULL,
                 1,
                 &xAPP_STORAGE_WBZ451_Tasks);
@@ -317,7 +314,7 @@ void SYS_Tasks ( void )
     /* Create OS Thread for APP_CYCLES_Tasks. */
     (void) xTaskCreate((TaskFunction_t) lAPP_CYCLES_Tasks,
                 "APP_CYCLES_Tasks",
-                1024,
+                896,
                 NULL,
                 1,
                 &xAPP_CYCLES_Tasks);

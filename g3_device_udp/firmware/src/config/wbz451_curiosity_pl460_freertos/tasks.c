@@ -189,13 +189,13 @@ void SYS_Tasks ( void )
 
     /* Maintain Device Drivers */
     
-//ah    (void) xTaskCreate( lDRV_G3_MACRT_Tasks,
-//ah        "DRV_G3_MACRT_TASKS",
-//ah        DRV_PLC_RTOS_STACK_SIZE,
-//ah        (void*)NULL,
-//ah        DRV_PLC_RTOS_TASK_PRIORITY,
-//ah        (TaskHandle_t*)NULL
-//ah    );
+    (void) xTaskCreate( lDRV_G3_MACRT_Tasks,
+        "DRV_G3_MACRT_TASKS",
+        DRV_PLC_RTOS_STACK_SIZE,
+        (void*)NULL,
+        DRV_PLC_RTOS_TASK_PRIORITY,
+        (TaskHandle_t*)NULL
+    );
 
 
 

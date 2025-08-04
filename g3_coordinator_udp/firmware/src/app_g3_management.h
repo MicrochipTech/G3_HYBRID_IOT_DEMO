@@ -55,7 +55,7 @@ extern "C" {
 //#define APP_G3_MANAGEMENT_CONFORMANCE_TEST
 
 /* PAN ID */
-#define APP_G3_MANAGEMENT_PAN_ID 0x781D
+#define APP_G3_MANAGEMENT_PAN_ID 0x782D // 0x781D is default for a G3 network
 
 /* Size of PAN ID list */
 #define APP_G3_MANAGEMENT_PAN_ID_LIST_SIZE 10
@@ -87,9 +87,9 @@ extern "C" {
 #define APP_G3_MANAGEMENT_MAX_HOPS_CONFORMANCE 8
 
 /* Duty Cycle Limit RF: 360 (10% out of 3600) */
-#define APP_G3_MANAGEMENT_DUTY_CYCLE_LIMIT_RF 360
+//#define APP_G3_MANAGEMENT_DUTY_CYCLE_LIMIT_RF 360
 /* Duty Cycle Limit RF: 3600 (100% out of 3600) */
-//#define APP_G3_MANAGEMENT_DUTY_CYCLE_LIMIT_RF 3600
+#define APP_G3_MANAGEMENT_DUTY_CYCLE_LIMIT_RF 3600
 
 /* Blacklist table entry TTL for Conformance: 2 minutes */
 #define APP_G3_MANAGEMENT_BLACKLIST_TABLE_ENTRY_TTL_CONFORMANCE 2

@@ -124,7 +124,9 @@ void APP_STORAGE_WBZ451_Initialize ( void )
     }
     else
     {
-        uint32_t randomValue;
+        //uint32_t randomValue;
+        bool extMacDevAddrValid;
+        uint8_t extMacDevAddr[8];
 
         /* Initialize Parameters */
         app_storage_wbz451Data.nonVolatileData.discoverSeqNumber = 0;
@@ -132,10 +134,22 @@ void APP_STORAGE_WBZ451_Initialize ( void )
         app_storage_wbz451Data.nonVolatileData.frameCounter = 0;
         app_storage_wbz451Data.nonVolatileData.frameCounterRF = 0;
 
-        randomValue = TRNG_ReadData();
-        *(uint32_t *)&app_storage_wbz451Data.eui64[0] = randomValue;
-        randomValue = TRNG_ReadData();
-        *(uint32_t *)&app_storage_wbz451Data.eui64[4] = randomValue;
+//        randomValue = TRNG_ReadData();
+//        *(uint32_t *)&app_storage_wbz451Data.eui64[0] = randomValue;
+//        randomValue = TRNG_ReadData();
+//        *(uint32_t *)&app_storage_wbz451Data.eui64[4] = randomValue;
+
+        extMacDevAddrValid = IB_GetMACAddr(&extMacDevAddr[0]);
+        if(extMacDevAddrValid)
+        {
+            memcpy(app_storage_wbz451Data.eui64, extMacDevAddr, sizeof(app_storage_wbz451Data.eui64));
+            *(uint8_t *)&app_storage_wbz451Data.eui64[7] = APP_DEV_TYPE;
+        }
+        else
+        {
+            *(uint32_t *)&app_storage_wbz451Data.eui64[0] = 0xFFA30402; // Bit 1: 1=local generated, Bit 0: 0=unicast
+            *(uint32_t *)&app_storage_wbz451Data.eui64[4] = (APP_DEV_TYPE << 24) | 0x1234FE;
+        }
 
         app_storage_wbz451Data.key = APP_STORAGE_DATA_KEY;
         app_storage_wbz451Data.writeMemConfirm = false;

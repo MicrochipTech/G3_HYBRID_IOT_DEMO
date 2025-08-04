@@ -84,8 +84,8 @@ void _APP_UDP_RESPONDER_UdpRxCallback(UDP_SOCKET hUDP, TCPIP_NET_HANDLE hNet, TC
         return;
     }
 
-    SYS_DEBUG_PRINT(SYS_ERROR_DEBUG, "APP_UDP_RESPONDER: %u bytes received from %s\r\n",
-            rxPayloadSize, remoteAddrString);
+    //SYS_DEBUG_PRINT(SYS_ERROR_DEBUG, "APP_UDP_RESPONDER: %u bytes received from %s\r\n",
+    //        rxPayloadSize, remoteAddrString);
 
     /* Read first received byte (protocol) */
     TCPIP_UDP_Get(hUDP, &udpProtocol);
@@ -399,6 +399,14 @@ void _APP_UDP_RESPONDER_UdpRxCallback(UDP_SOCKET hUDP, TCPIP_NET_HANDLE hNet, TC
             SYS_DEBUG_MESSAGE(SYS_ERROR_INFO, "APP_UDP_RESPONDER: Last Gasp activation request\r\n");
             SYS_DEBUG_PRINT(SYS_ERROR_DEBUG, "\tICMPv6 Echo Request sent to %s\r\n",
                     APP_TCPIP_MANAGEMENT_IPV6_MULTICAST_0_CONFORMANCE);
+            break;
+        }
+
+        case 0xFC:
+        {
+            uint16_t shortAddress;
+            shortAddress = (socketInfo.remoteIPaddress.v6Add.v[14] << 8) | socketInfo.remoteIPaddress.v6Add.v[15];
+            SYS_DEBUG_PRINT(SYS_ERROR_INFO, "APP_UDP_RESPONDER: EMERGENCY received from short address 0x%04X\r\n", shortAddress);
             break;
         }
 

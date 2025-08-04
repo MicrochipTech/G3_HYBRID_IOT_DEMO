@@ -29,6 +29,7 @@
 
 #include "definitions.h"
 #include "tcpip_manager_control.h"
+#include "rgb_led.h"
 
 // *****************************************************************************
 // *****************************************************************************
@@ -84,8 +85,9 @@ void _APP_UDP_RESPONDER_UdpRxCallback(UDP_SOCKET hUDP, TCPIP_NET_HANDLE hNet, TC
         return;
     }
 
-    SYS_DEBUG_PRINT(SYS_ERROR_DEBUG, "APP_UDP_RESPONDER: %u bytes received from %s\r\n",
-            rxPayloadSize, remoteAddrString);
+    //SYS_DEBUG_PRINT(SYS_ERROR_DEBUG, "APP_UDP_RESPONDER: %u bytes received from %s\r\n",
+    //        rxPayloadSize, remoteAddrString);
+    app_udp_responderData.dataReceived = true;
 
     /* Read first received byte (protocol) */
     TCPIP_UDP_Get(hUDP, &udpProtocol);
@@ -402,9 +404,65 @@ void _APP_UDP_RESPONDER_UdpRxCallback(UDP_SOCKET hUDP, TCPIP_NET_HANDLE hNet, TC
             break;
         }
 
+        case CMD_GET_DEVICE_INFO:
+        {
+            SYS_DEBUG_PRINT(SYS_ERROR_DEBUG, "APP_UDP_RESPONDER: GET_DEVICE_INFO\r\n");
+            TCPIP_UDP_Put(hUDP, CMD_GET_DEVICE_INFO_RESP);
+            TCPIP_UDP_Put(hUDP, APP_DEV_TYPE); // device type
+            TCPIP_UDP_Flush(hUDP);
+            break;
+        }
+        
+        case CMD_SET_LED_RGB:
+        {
+            SYS_DEBUG_PRINT(SYS_ERROR_DEBUG, "APP_UDP_RESPONDER: SET_LED_RGB\r\n");
+            TCPIP_UDP_ArrayGet(hUDP, app_g3_rgbData.rgbValues, 3);
+            app_g3_rgbData.blinkFreq = 0;
+            app_g3_rgbData.blinkTime = 0;
+            app_g3_rgbData.newData = true;
+            break;
+        }
+
+        case CMD_SET_LED_RGB_EXT:
+        {
+            SYS_DEBUG_PRINT(SYS_ERROR_DEBUG, "APP_UDP_RESPONDER: SET_LED_RGB_BLINK\r\n");
+            TCPIP_UDP_ArrayGet(hUDP, app_g3_rgbData.rgbValues, 3);
+            TCPIP_UDP_ArrayGet(hUDP, (uint8_t *)&app_g3_rgbData.blinkFreq, 2);
+            TCPIP_UDP_ArrayGet(hUDP, (uint8_t *)&app_g3_rgbData.blinkTime, 2);
+            app_g3_rgbData.newData = true;
+            break;
+        }
+
+        case CMD_SET_PANEL_LED:
+        {
+            // todo
+            SYS_DEBUG_PRINT(SYS_ERROR_DEBUG, "APP_UDP_RESPONDER: SET_PANEL_INFO\r\n");
+            break;
+        }
+
+        case CMD_SET_LIGHT:
+        {
+            uint8_t onOffValue;
+            SYS_DEBUG_PRINT(SYS_ERROR_DEBUG, "APP_UDP_RESPONDER: SET_LIGHT - ");//\r\n");
+            TCPIP_UDP_Get(hUDP, &onOffValue);
+            if(onOffValue == 0)
+            {
+                // GPIO off
+                SYS_DEBUG_PRINT(SYS_ERROR_DEBUG, "off\r\n");
+                LIGHT_CONTROL_Set();
+            }
+            else
+            {
+                // GPIO on
+                SYS_DEBUG_PRINT(SYS_ERROR_DEBUG, "on\r\n");
+                LIGHT_CONTROL_Clear();
+            }
+            break;
+        }
+
         default:
         {
-            SYS_DEBUG_MESSAGE(SYS_ERROR_INFO, "APP_UDP_RESPONDER: Drop UDP message\r\n");
+            SYS_DEBUG_PRINT(SYS_ERROR_ERROR, "APP_UDP_RESPONDER: Drop UDP message (0x%02X)\r\n", udpProtocol);
             break;
         }
     }
@@ -483,6 +541,10 @@ void APP_UDP_RESPONDER_Tasks ( void )
                         _APP_UDP_RESPONDER_UdpRxCallback, NULL);
 
                 app_udp_responderData.state = APP_UDP_RESPONDER_STATE_SERVING_CONNECTION;
+            }
+            else
+            {
+                SYS_DEBUG_PRINT(SYS_ERROR_INFO, "APP_UDP_RESPONDER: invalid socket!\r\n");
             }
 
             break;

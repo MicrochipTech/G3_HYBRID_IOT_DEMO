@@ -385,11 +385,11 @@ static void _INTERFACE_GetDeviceList(SYS_CMD_DEVICE_NODE* pCmdIO, int argc, char
     SYS_DEBUG_PRINT(SYS_ERROR_DEBUG, "List of connected devices\r\n");
     if(app_cyclesData.numDevicesJoined)
     {
-        SYS_DEBUG_PRINT(SYS_ERROR_DEBUG, "index\t\tshortAddr\tdevType\r\n");
+        SYS_DEBUG_PRINT(SYS_ERROR_DEBUG, "index\t\tshortAddr\tdevType\ttimeout\r\n");
         for(uint16_t i = 0; i < app_cyclesData.numDevicesJoined; i++)
         {
             shortAddress = APP_EAP_SERVER_GetDeviceAddress(i, eui64);
-            SYS_DEBUG_PRINT(SYS_ERROR_DEBUG, "0x%04X\t\t0x%04X\t\t0x%02X\r\n", i, shortAddress, app_cyclesData.deviceType[i]);
+            SYS_DEBUG_PRINT(SYS_ERROR_DEBUG, "0x%04X\t\t0x%04X\t\t0x%02X\t0x%02X\r\n", i, shortAddress, app_cyclesData.deviceType[i], app_cyclesData.deviceTimeout[i]);
         }
     }
     else

@@ -109,6 +109,42 @@ typedef struct APP_Msg_T
     uint8_t msgData[256];
 } APP_Msg_T;
 
+typedef enum
+{
+    /* Device Type */
+    APP_DEV_TYPE_BP_ELECTRICITY_METER   = 0xAA,
+    APP_DEV_TYPE_BP_IHD                 = 0x55,
+    APP_DEV_TYPE_LIGHTING_INDOOR        = 0x10,
+    APP_DEV_TYPE_LIGHTING_OUTDOOR       = 0x11,
+    APP_DEV_TYPE_PANEL_LED              = 0x12,
+    APP_DEV_TYPE_LEAK_DETECTION         = 0x13,
+    APP_DEV_TYPE_SOLAR_INVERTER         = 0x14,
+    APP_DEV_TYPE_BATTERY_CHARGER        = 0x15,
+    APP_DEV_TYPE_ENERGY_STORAGE         = 0x16,
+    APP_DEV_TYPE_HEAT_PUMP              = 0x17,
+    APP_DEV_TYPE_EV_CHARGER             = 0x18,
+    APP_DEV_TYPE_ELECTRICITY_METER      = 0x19,
+    APP_DEV_TYPE_EMERGENCY_BUTTON       = 0x1A
+} APP_DeviceType_T;
+
+// define specific application device type here
+#define APP_DEV_TYPE    APP_DEV_TYPE_EMERGENCY_BUTTON
+
+typedef enum
+{
+    /* UDP Responder Commands */
+    CMD_GET_METROLOGY_INFO = 0xF0,
+    CMD_GET_METROLOGY_INFO_RESP = 0xF1,
+    CMD_SHOW_METROLOGY_INFO = 0xF2,
+    CMD_GET_DEVICE_INFO = 0xF4,
+    CMD_GET_DEVICE_INFO_RESP = 0xF5,
+    CMD_SET_LED_RGB = 0xF6,
+    CMD_SET_LED_RGB_EXT = 0xF8,
+    CMD_SET_PANEL_LED = 0xFA,
+    CMD_EMERGENCY = 0xFC,
+	CMD_SET_LIGHT = 0xFE
+} APP_UDP_RESPONDER_CMDS;
+
 // *****************************************************************************
 /* Application Data
 

@@ -159,12 +159,12 @@ static void lPAL_RF_ReportResultTX(PAL_RF_PHY_STATUS status, uint64_t timeStamp,
             break;
     }
 
-    //SYS_DEBUG_PRINT(SYS_ERROR_INFO, "PAL_RF: TX status 0x%02X, bytes send %d\r\n", status, nBytesSent);
     if (status != PAL_RF_PHY_SUCCESS)
     {
         rfStats->txTotalErrors++;
         palRfData.txTimeIniCount = timeStamp;
         palRfData.txTimeEndCount = timeStamp;
+        SYS_DEBUG_PRINT(SYS_ERROR_INFO, "PAL_RF: TX status 0x%02X, bytes send %d\r\n", status, nBytesSent);
     }
 
     // Report TX Result through TX CFM callback

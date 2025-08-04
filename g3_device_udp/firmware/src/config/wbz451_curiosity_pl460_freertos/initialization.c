@@ -551,9 +551,9 @@ static const SYS_TIME_PLIB_INTERFACE sysTimePlibAPI = {
     .timerStart = (SYS_TIME_PLIB_START)TC0_TimerStart,
     .timerStop = (SYS_TIME_PLIB_STOP)TC0_TimerStop,
     .timerFrequencyGet = (SYS_TIME_PLIB_FREQUENCY_GET)TC0_TimerFrequencyGet,
-    .timerPeriodSet = (SYS_TIME_PLIB_PERIOD_SET)TC0_Timer16bitPeriodSet,
-    .timerCompareSet = (SYS_TIME_PLIB_COMPARE_SET)TC0_Timer16bitCompareSet,
-    .timerCounterGet = (SYS_TIME_PLIB_COUNTER_GET)TC0_Timer16bitCounterGet,
+    .timerPeriodSet = (SYS_TIME_PLIB_PERIOD_SET)TC0_Timer32bitPeriodSet,
+    .timerCompareSet = (SYS_TIME_PLIB_COMPARE_SET)TC0_Timer32bitCompareSet,
+    .timerCounterGet = (SYS_TIME_PLIB_COUNTER_GET)TC0_Timer32bitCounterGet,
 };
 
 static const SYS_TIME_INIT sysTimeInitData =
@@ -724,6 +724,10 @@ void SYS_Initialize ( void* data )
 
     TC0_TimerInitialize();
 
+    TC3_CompareInitialize();
+
+    TC2_CompareInitialize();
+
     NVM_Initialize();
 
 	TRNG_Initialize();
@@ -733,11 +737,11 @@ void SYS_Initialize ( void* data )
 
     EVSYS_Initialize();
 
-//ah    SERCOM0_SPI_Initialize();
+    SERCOM0_SPI_Initialize();
 
     DMAC_Initialize();
 
-//ah    EIC_Initialize();
+    EIC_Initialize();
 
 
 
@@ -748,8 +752,8 @@ void SYS_Initialize ( void* data )
 
 
     /* Initialize G3 MAC RT Driver Instance */
-//ah    sysObj.drvG3MacRt = DRV_G3_MACRT_Initialize(DRV_G3_MACRT_INDEX, (SYS_MODULE_INIT *)&drvG3MacRtInitData);
-//ah    EIC_CallbackRegister(DRV_PLC_EXT_INT_PIN, DRV_G3_MACRT_ExternalInterruptHandler, sysObj.drvG3MacRt);
+    sysObj.drvG3MacRt = DRV_G3_MACRT_Initialize(DRV_G3_MACRT_INDEX, (SYS_MODULE_INIT *)&drvG3MacRtInitData);
+    EIC_CallbackRegister(DRV_PLC_EXT_INT_PIN, DRV_G3_MACRT_ExternalInterruptHandler, sysObj.drvG3MacRt);
 
     // Initialize RF System
     SYS_Load_Cal(WSS_ENABLE_ZB);

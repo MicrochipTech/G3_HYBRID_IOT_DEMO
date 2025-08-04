@@ -67,9 +67,9 @@ void GPIO_Initialize ( void )
     GPIOA_REGS->GPIO_TRISCLR = 0x6200U; /* Direction Control */
     GPIOA_REGS->GPIO_CNPDSET = 0x4U; /* Pull-Down Enable */
     /* PORTB Initialization */
-    GPIOB_REGS->GPIO_LAT = 0x4U; /* Initial Latch Value */
-    GPIOB_REGS->GPIO_TRISCLR = 0xadU; /* Direction Control */
-    GPIOB_REGS->GPIO_ANSELCLR = 0xbdU; /* Digital Mode Enable */
+    GPIOB_REGS->GPIO_LAT = 0x6U; /* Initial Latch Value */
+    GPIOB_REGS->GPIO_TRISCLR = 0x86U; /* Direction Control */
+    GPIOB_REGS->GPIO_ANSELCLR = 0xbfU; /* Digital Mode Enable */
     GPIOB_REGS->GPIO_CNPUSET = 0x10U; /* Pull-Up Enable */
 
 
@@ -82,6 +82,9 @@ void GPIO_Initialize ( void )
     PPS_REGS->PPS_RPA7G2R = 1U;
     PPS_REGS->PPS_RPA8G3R = 1U;
     PPS_REGS->PPS_RPA5G1R = 4U;
+    PPS_REGS->PPS_RPB0G1R = 21U; // TC2_WO0 -> PB0 (red)
+    PPS_REGS->PPS_RPB3G4R = 21U; // TC2_WO1 -> PB3 (green)
+    PPS_REGS->PPS_RPB5G3R = 22U; // TC3_WO0 -> PB5 (blue)
 
 
 }

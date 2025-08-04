@@ -82,8 +82,8 @@ extern "C" {
 /* TIME System Service Configuration Options */
 #define SYS_TIME_INDEX_0                            (0)
 #define SYS_TIME_MAX_TIMERS                         (25)
-#define SYS_TIME_HW_COUNTER_WIDTH                   (16)
-#define SYS_TIME_HW_COUNTER_PERIOD                  (0xFFFFU)
+#define SYS_TIME_HW_COUNTER_WIDTH                   (32)
+#define SYS_TIME_HW_COUNTER_PERIOD                  (4294967295U)
 #define SYS_TIME_HW_COUNTER_HALF_PERIOD             (SYS_TIME_HW_COUNTER_PERIOD>>1)
 #define SYS_TIME_CPU_CLOCK_FREQUENCY                (64000000)
 #define SYS_TIME_COMPARE_UPDATE_EXECUTION_CYCLES    (232)
@@ -113,6 +113,9 @@ extern "C" {
 // Section: Driver Configuration
 // *****************************************************************************
 // *****************************************************************************
+/* PAL PLC Configuration Options */
+#define PAL_PLC_PHY_INDEX                     0U
+
 
 /* PLC MAC RT Configuration Options */
 #define DRV_PLC_SECURE                        false
@@ -163,6 +166,10 @@ extern "C" {
 /* MAC COMMON Identification */
 #define G3_MAC_COMMON_INDEX_0            0U
 #define G3_MAC_COMMON_INSTANCES_NUMBER   1U
+
+/* MAC PLC Identification */
+#define G3_MAC_PLC_INDEX_0               0U
+#define G3_MAC_PLC_INSTANCES_NUMBER      1U
 
 /* MAC RF Identification */
 #define G3_MAC_RF_INDEX_0                0U
@@ -326,7 +333,7 @@ extern "C" {
 
 
 /*** UDP Configuration ***/
-#define TCPIP_UDP_MAX_SOCKETS		                	1
+#define TCPIP_UDP_MAX_SOCKETS		                	2
 #define TCPIP_UDP_SOCKET_DEFAULT_TX_SIZE		    	1200
 #define TCPIP_UDP_SOCKET_DEFAULT_TX_QUEUE_LIMIT    	 	3
 #define TCPIP_UDP_SOCKET_DEFAULT_RX_QUEUE_LIMIT			3

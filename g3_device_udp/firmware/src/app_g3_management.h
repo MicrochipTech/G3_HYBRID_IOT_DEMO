@@ -90,9 +90,9 @@ extern "C" {
 #define APP_G3_MANAGEMENT_DEFAULT_COORD_ROUTE_ENABLED 1
 
 /* Duty Cycle Limit RF: 90 (2.5% out of 3600) */
-#define APP_G3_MANAGEMENT_DUTY_CYCLE_LIMIT_RF 90
+//#define APP_G3_MANAGEMENT_DUTY_CYCLE_LIMIT_RF 90
 /* Duty Cycle Limit RF: 3600 (100% out of 3600) */
-//#define APP_G3_MANAGEMENT_DUTY_CYCLE_LIMIT_RF 3600
+#define APP_G3_MANAGEMENT_DUTY_CYCLE_LIMIT_RF 3600
 
 /* Blacklist table entry TTL for Conformance: 2 minutes */
 #define APP_G3_MANAGEMENT_BLACKLIST_TABLE_ENTRY_TTL_CONFORMANCE 2
@@ -209,6 +209,9 @@ extern "C" {
 /* Period to blink LED in milliseconds */
 #define APP_G3_MANAGEMENT_LED_BLINK_PERIOD_MS 500
 
+/* Period to check if network is alive */
+#define APP_G3_MANAGEMENT_NTW_ALIVE_CHECK_PERIOD_MS 180000 // 3 minutes
+
 /* String header to print after reset */
 #define APP_G3_MANAGEMENT_STRING_HEADER "\r\n-- MCHP G3 Device UDP Responder application --\r\n" \
 	"-- Compiled: "__DATE__" "__TIME__" --\r\n" \
@@ -289,6 +292,9 @@ typedef struct
     /* Timer handle for LED blinking */
     SYS_TIME_HANDLE timerLedHandle;
 
+    /* Timer handle for Network alive check */
+    SYS_TIME_HANDLE metworkAliveHandle;
+
     /* Upper bound of back-off window for network discovery or join */
     uint32_t backoffWindowHigh;
 
@@ -322,6 +328,9 @@ typedef struct
 
     /* Flag to indicate if LED blinking time has expired */
     bool timerLedExpired;
+
+    /* Flag to indicate if network alive check has expired */
+    bool ntwAliveCheckExpired;
 
     /* Flag to indicate if RF configuration has to be restored after kick */
     bool configureParamsRF;
