@@ -85,7 +85,7 @@ static void lG3_STACK_Tasks(  void *pvParameters  )
     }
 }
 
-#define PHY_RTOS_TASK_PRIORITY            1
+#define PHY_RTOS_TASK_PRIORITY            3
 
 /* Handle for the APP_Tasks. */
 TaskHandle_t xPHY_Tasks;

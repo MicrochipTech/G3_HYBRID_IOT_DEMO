@@ -81,7 +81,7 @@ extern "C" {
 // *****************************************************************************
 /* TIME System Service Configuration Options */
 #define SYS_TIME_INDEX_0                            (0)
-#define SYS_TIME_MAX_TIMERS                         (5)
+#define SYS_TIME_MAX_TIMERS                         (25)
 #define SYS_TIME_HW_COUNTER_WIDTH                   (16)
 #define SYS_TIME_HW_COUNTER_PERIOD                  (0xFFFFU)
 #define SYS_TIME_HW_COUNTER_HALF_PERIOD             (SYS_TIME_HW_COUNTER_PERIOD>>1)
@@ -126,7 +126,7 @@ extern "C" {
 #define DRV_PLC_RESET_PIN                     SYS_PORT_PIN_RA4
 #define DRV_PLC_LDO_EN_PIN                    SYS_PORT_PIN_RB9
 #define DRV_PLC_TX_ENABLE_PIN                 SYS_PORT_PIN_RA0
-#define DRV_PLC_SPI_CLK                       8000000
+#define DRV_PLC_SPI_CLK                       1000000
 
 /* PLC MAC RT Driver RTOS Configuration Options */
 #define DRV_PLC_RTOS_STACK_SIZE               320
