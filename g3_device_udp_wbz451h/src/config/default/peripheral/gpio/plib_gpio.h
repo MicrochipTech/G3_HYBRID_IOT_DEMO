@@ -69,6 +69,22 @@
 #define PLC_SPI_CS_OutputEnable()      (GPIOB_REGS->GPIO_TRISCLR = (1U<<6U))
 #define PLC_SPI_CS_InputEnable()       (GPIOB_REGS->GPIO_TRISSET = (1U<<6U))
 #define PLC_SPI_CS_PIN                  GPIO_PIN_RB6
+/*** Macros for USER_LED pin ***/
+#define USER_LED_Set()               (GPIOB_REGS->GPIO_LATSET = (1U<<7U))
+#define USER_LED_Clear()             (GPIOB_REGS->GPIO_LATCLR = (1U<<7U))
+#define USER_LED_Toggle()            (GPIOB_REGS->GPIO_LATINV= (1U<<7U))
+#define USER_LED_Get()               ((GPIOB_REGS->GPIO_PORT >> 7U) & 0x1U)
+#define USER_LED_OutputEnable()      (GPIOB_REGS->GPIO_TRISCLR = (1U<<7U))
+#define USER_LED_InputEnable()       (GPIOB_REGS->GPIO_TRISSET = (1U<<7U))
+#define USER_LED_PIN                  GPIO_PIN_RB7
+/*** Macros for PLC_ENABLE pin ***/
+#define PLC_ENABLE_Set()               (GPIOB_REGS->GPIO_LATSET = (1U<<9U))
+#define PLC_ENABLE_Clear()             (GPIOB_REGS->GPIO_LATCLR = (1U<<9U))
+#define PLC_ENABLE_Toggle()            (GPIOB_REGS->GPIO_LATINV= (1U<<9U))
+#define PLC_ENABLE_Get()               ((GPIOB_REGS->GPIO_PORT >> 9U) & 0x1U)
+#define PLC_ENABLE_OutputEnable()      (GPIOB_REGS->GPIO_TRISCLR = (1U<<9U))
+#define PLC_ENABLE_InputEnable()       (GPIOB_REGS->GPIO_TRISSET = (1U<<9U))
+#define PLC_ENABLE_PIN                  GPIO_PIN_RB9
 /*** Macros for PLC_RST pin ***/
 #define PLC_RST_Set()               (GPIOA_REGS->GPIO_LATSET = (1U<<4U))
 #define PLC_RST_Clear()             (GPIOA_REGS->GPIO_LATCLR = (1U<<4U))
