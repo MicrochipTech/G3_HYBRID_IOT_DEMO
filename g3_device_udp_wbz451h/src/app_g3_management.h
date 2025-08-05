@@ -54,6 +54,9 @@ extern "C" {
  * configured according to Conformance test */
 //#define APP_G3_MANAGEMENT_CONFORMANCE_TEST
 
+/* Protection to avoid other networks */    
+#define APP_G3_MANAGEMENT_PANID_MASK 0x7820   
+
 /* PSK / Network authentication Key (16 bytes) */
 #define APP_G3_MANAGEMENT_PSK_KEY {0xAB, 0x10, 0x34, 0x11, 0x45, 0x11, 0x1B, 0xC3, 0xC1, 0x2D, 0xE8, 0xFF, 0x11, 0x14, 0x22, 0x04}
 
@@ -90,9 +93,9 @@ extern "C" {
 #define APP_G3_MANAGEMENT_DEFAULT_COORD_ROUTE_ENABLED 1
 
 /* Duty Cycle Limit RF: 90 (2.5% out of 3600) */
-#define APP_G3_MANAGEMENT_DUTY_CYCLE_LIMIT_RF 90
+//#define APP_G3_MANAGEMENT_DUTY_CYCLE_LIMIT_RF 90
 /* Duty Cycle Limit RF: 3600 (100% out of 3600) */
-//#define APP_G3_MANAGEMENT_DUTY_CYCLE_LIMIT_RF 3600
+#define APP_G3_MANAGEMENT_DUTY_CYCLE_LIMIT_RF 3600
 
 /* Blacklist table entry TTL for Conformance: 2 minutes */
 #define APP_G3_MANAGEMENT_BLACKLIST_TABLE_ENTRY_TTL_CONFORMANCE 2
@@ -259,6 +262,9 @@ typedef enum
 
     /* Joined to the network */
     APP_G3_MANAGEMENT_STATE_JOINED,
+
+    /* Send Emergency Button Alarm */
+    APP_G3_MANAGEMENT_STATE_SEND_ALARM,            
 
     /* Error state */
     APP_G3_MANAGEMENT_STATE_ERROR,

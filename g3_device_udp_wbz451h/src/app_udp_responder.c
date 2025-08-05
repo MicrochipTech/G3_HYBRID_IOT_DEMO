@@ -35,6 +35,8 @@
 // Section: Global Data Definitions
 // *****************************************************************************
 // *****************************************************************************
+bool flag_received_panel_cmd = false;
+extern uint32_t timeoutTraffic;
 
 // *****************************************************************************
 /* Application Data
@@ -86,6 +88,12 @@ void _APP_UDP_RESPONDER_UdpRxCallback(UDP_SOCKET hUDP, TCPIP_NET_HANDLE hNet, TC
 
     SYS_DEBUG_PRINT(SYS_ERROR_DEBUG, "APP_UDP_RESPONDER: %u bytes received from %s\r\n",
             rxPayloadSize, remoteAddrString);
+
+    // Reload Timer waiting for traffic
+    timeoutTraffic = 0;
+    //SYS_TIME_TimerReload(app_udp_responderData.timeHandle, 0, SYS_TIME_MSToCount(APP_UDP_RESPONDER_TIME_WAIT_TRAFFIC_MS),
+    //                        _APP_UDP_RESPONDER_CallbackSetFlag, (uintptr_t) &app_udp_responderData.timeExpired, SYS_TIME_SINGLE);
+    
 
     /* Read first received byte (protocol) */
     TCPIP_UDP_Get(hUDP, &udpProtocol);
@@ -401,6 +409,51 @@ void _APP_UDP_RESPONDER_UdpRxCallback(UDP_SOCKET hUDP, TCPIP_NET_HANDLE hNet, TC
                     APP_TCPIP_MANAGEMENT_IPV6_MULTICAST_0_CONFORMANCE);
             break;
         }
+        case CMD_GET_METROLOGY_INFO: // GET_METROLOGY_INFO
+        {
+            // Use Case of 2-Phases Blue Pannel
+            SYS_DEBUG_MESSAGE(SYS_ERROR_INFO, "APP_UDP_RESPONDER: Get Metrology Information\r\n");
+            break;
+        }
+        case CMD_SHOW_METROLOGY_INFO: // SHOW_METROLOGY_INFO
+        {
+            // Use Case of In-Home Display BluePannel
+            SYS_DEBUG_MESSAGE(SYS_ERROR_INFO, "APP_UDP_RESPONDER: Show Metrology Information\r\n");
+            break;
+        }  
+                
+        case CMD_GET_DEVICE_INFO: // GET_DEVICE_INFO
+        {
+            // Request Device Info 
+            SYS_DEBUG_MESSAGE(SYS_ERROR_INFO, "APP_UDP_RESPONDER: Get Device Information\r\n");
+            // Answer to Request Device Info => GET_DEVICE_INFO_ANSWER
+            TCPIP_UDP_Put(hUDP, CMD_GET_DEVICE_INFO_RESP);
+            // Device Info: 
+            TCPIP_UDP_Put(hUDP, app_udp_responderData.device_type);
+            TCPIP_UDP_Flush(hUDP);
+            break;
+        }
+        case CMD_SET_PANEL_LED: // SET PANEL LED
+        {
+            uint8_t onOffValue;
+            // Request Device Info 
+            SYS_DEBUG_MESSAGE(SYS_ERROR_INFO, "APP_UDP_RESPONDER: SET_PANEL_LED ");
+            TCPIP_UDP_Get(hUDP, &onOffValue);
+            flag_received_panel_cmd = true;
+            if(onOffValue == 0)
+            {
+                // GPIO off
+                SYS_DEBUG_PRINT(SYS_ERROR_DEBUG, "Logo\r\n");
+                //PANEL_LED_refresh_Logo();
+            }
+            else
+            {
+                // GPIO on
+                SYS_DEBUG_PRINT(SYS_ERROR_DEBUG, "Alarm\r\n");
+                //PANEL_LED_refresh_Alarm();
+            }
+            break;
+        }      
 
         default:
         {
@@ -418,7 +471,7 @@ void _APP_UDP_RESPONDER_UdpRxCallback(UDP_SOCKET hUDP, TCPIP_NET_HANDLE hNet, TC
 // Section: Application Initialization and State Machine Functions
 // *****************************************************************************
 // *****************************************************************************
-
+#define DEVICE_TYPE_PANEL_LED
 /*******************************************************************************
   Function:
     void APP_UDP_RESPONDER_Initialize ( void )
@@ -434,6 +487,37 @@ void APP_UDP_RESPONDER_Initialize ( void )
 
     /* Create semaphore. It is used to suspend task. */
     OSAL_SEM_Create(&app_udp_responderData.semaphoreID, OSAL_SEM_TYPE_BINARY, 0, 0);
+    
+    /* Depending on something - Device Type */
+#if defined(DEVICE_TYPE_LIGHTING_INDOOR)
+    app_udp_responderData.device_type = TYPE_LIGHTING_INDOOR;
+#elif defined(DEVICE_TYPE_LIGHTING_OUTDOOR)
+    app_udp_responderData.device_type = TYPE_LIGHTING_OUTDOOR;
+#elif  defined(DEVICE_TYPE_PANEL_LED)
+    app_udp_responderData.device_type = TYPE_PANEL_LED;
+#elif  defined(DEVICE_TYPE_BP_ELECTRICITY_METER)
+    app_udp_responderData.device_type = TYPE_BP_ELECTRICITY_METER;
+#elif  defined(DEVICE_TYPE_BP_IHD)
+    app_udp_responderData.device_type = TYPE_BP_IHD;
+#elif  defined(DEVICE_TYPE_LEAK_DETECTOR)
+    app_udp_responderData.device_type = TYPE_LEAK_DETECTOR;
+#elif  defined(DEVICE_TYPE_SOLAR_INVERTER)
+    app_udp_responderData.device_type = TYPE_SOLAR_INVERTER;
+#elif  defined(DEVICE_TYPE_BATTERY_CHARGER)
+    app_udp_responderData.device_type = TYPE_BATTERY_CHARGER;
+#elif  defined(DEVICE_TYPE_ENERGY_STORAGE)
+    app_udp_responderData.device_type = TYPE_ENERGY_STORAGE;
+#elif  defined(DEVICE_TYPE_HEAT_PUMP)
+    app_udp_responderData.device_type = TYPE_HEAT_PUMP;
+#elif  defined(DEVICE_TYPE_EV_CHARGER)
+    app_udp_responderData.device_type = TYPE_EV_CHARGER;
+#elif  defined(DEVICE_TYPE_ELECTRICITY_METER)
+    app_udp_responderData.device_type = TYPE_ELECTRICITY_METER;
+#elif  defined(DEVICE_TYPE_EMERGENCY_BUTTON)
+    app_udp_responderData.device_type = TYPE_EMERGENCY_BUTTON;
+#else
+    app_udp_responderData.device_type = TYPE_EMERGENCY_BUTTON;
+#endif
 }
 
 /******************************************************************************
@@ -490,6 +574,14 @@ void APP_UDP_RESPONDER_Tasks ( void )
 
         /* Serving connection on UDP port */
         case APP_UDP_RESPONDER_STATE_SERVING_CONNECTION:
+        {
+            //if (app_udp_responderData.timeExpired)
+            //{
+                // No Traffic for a while - Reboot
+            //    _APP_UDP_RESPONDER_Reboot();
+            //}
+            break;
+        }
         /* Error state */
         case APP_UDP_RESPONDER_STATE_ERROR:
         /* The default state should never be executed. */

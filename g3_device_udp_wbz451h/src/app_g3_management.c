@@ -29,12 +29,22 @@
 
 #include "definitions.h"
 #include "service/random/srv_random.h"
+#include "app_udp_responder.h"
 
 // *****************************************************************************
 // *****************************************************************************
 // Section: Global Data Definitions
 // *****************************************************************************
 // *****************************************************************************
+
+/* UDP socket handle */
+UDP_SOCKET coord_socket = INVALID_SOCKET;    
+static int times = 0;
+int flag_send_alarm = false;
+int blink_rate_factor = 1;
+
+extern APP_UDP_RESPONDER_DATA app_udp_responderData;
+extern bool flag_received_panel_cmd;
 
 // *****************************************************************************
 /* Application Data
@@ -122,6 +132,43 @@ static const APP_G3_MANAGEMENT_CONSTANTS app_g3_managementConst = {
 // *****************************************************************************
 // *****************************************************************************
 
+static void _APP_G3_MANAGEMENT_TimeExpiredSetFlag(uintptr_t context)
+{
+    /* Context holds the flag's address */
+    *((bool *) context) = true;
+}
+
+static void _APP_G3_MANAGEMENT_Reboot(void)
+{
+    // Debug Command - Reset MCU BLE Application via Software Reset (SWR)
+    // This device does not provide a specific RESET instruction; however, 
+    // a hardware Reset can be performed in software (software Reset) by 
+    // executing a software Reset command sequence. The software Reset acts 
+    // like a MCLR Reset. The software Reset sequence requires the system 
+    // unlock sequence to be executed before the SWRST bit (RSWRST[0]) can 
+    // be written.
+    // A software Reset is performed as follows:
+    // 1. Write the system unlock sequence
+    CFG_REGS->CFG_SYSKEY = 0x00000000U;
+    CFG_REGS->CFG_SYSKEY = 0xAA996655U;
+    CFG_REGS->CFG_SYSKEY = 0x556699AAU;    
+    // 2. Set the SWRST bit (RSWRST[0]) = 1.
+    RCON_REGS->RCON_RSWRST |= RCON_RSWRST_SWRST_SWRST;
+    // 3. Read the RSWRST register;
+    uint8_t rswrst = RCON_REGS->RCON_RSWRST;
+    // Setting the SWRST bit (RSWRST[0]) will arm the software Reset. 
+    // The subsequent read of the RSWRST register triggers the software Reset, 
+    // which must occur on the next clock cycle following the read operation. 
+    // To ensure no other user code is executed before the Reset event occurs, 
+    // it is recommended that four NOP instructions or a while(1) statement 
+    // be placed after the READ instruction.    
+    while ( true );
+}
+
+uint32_t timeoutTraffic = 0;
+/* Time waiting for G3/UDP responder traffic before to reboot - Safety Mechanism */    
+#define TIMEOUT_WAIT_TRAFFIC_BLINK 1800  // 15 minutes sin traffic (tick is 500ms)
+
 static void _ADP_DiscoveryConfirm(uint8_t status)
 {
     if ((status == G3_SUCCESS) && (app_g3_managementData.bestNetwork.panId != 0xFFFF) &&
@@ -170,9 +217,9 @@ static void _ADP_DiscoveryIndication(ADP_PAN_DESCRIPTOR* pPanDescriptor)
     {
         /* Update best network if route cost to Coordinator is better or if it
          * is equal and Link Quality is better */
-        if ((pPanDescriptor->rcCoord < app_g3_managementData.bestNetwork.rcCoord) ||
+        if (((pPanDescriptor->rcCoord < app_g3_managementData.bestNetwork.rcCoord) ||
                 ((pPanDescriptor->rcCoord == app_g3_managementData.bestNetwork.rcCoord) &&
-                (pPanDescriptor->linkQuality > app_g3_managementData.bestNetwork.linkQuality)))
+                (pPanDescriptor->linkQuality > app_g3_managementData.bestNetwork.linkQuality))) && ((pPanDescriptor->panId & APP_G3_MANAGEMENT_PANID_MASK) == APP_G3_MANAGEMENT_PANID_MASK))
         {
             app_g3_managementData.bestNetwork = *pPanDescriptor;
         }
@@ -249,12 +296,26 @@ static void _LBP_ADP_NetworkJoinConfirm(LBP_ADP_NETWORK_JOIN_CFM_PARAMS* pNetwor
         ADP_SetRequestSync(ADP_IB_PREFIX_TABLE, 0, 27, (const uint8_t*) prefixData, &setConfirm);
 
         SYS_DEBUG_PRINT(SYS_ERROR_INFO, "APP_G3_MANAGEMENT: Joined to the network. "
-                "PAN ID: 0x%04X, Short Address: 0x%04X\r\n", panId, shortAddress);
+                "PAN ID: 0x%04X, Short Address: 0x%04X, Media: 0x%04X\r\n", panId, shortAddress, app_g3_managementData.bestNetwork.mediaType);
+        
+        /* Identify Registering Process */
+        RGB_LED_RED_On();
+        /* Reset Reboot Protection */
+        timeoutTraffic = 0;
+        
+        if ((app_g3_managementData.bestNetwork.mediaType == MAC_WRP_MEDIA_TYPE_REQ_PLC_BACKUP_RF) ||
+            (app_g3_managementData.bestNetwork.mediaType == MAC_WRP_MEDIA_TYPE_REQ_PLC_NO_BACKUP))
+        {
+            /* Reload timer callback to blink LED */
+            blink_rate_factor = 2;
+            SYS_TIME_TimerReload(app_g3_managementData.timerLedHandle, 0, SYS_TIME_MSToCount(APP_G3_MANAGEMENT_LED_BLINK_PERIOD_MS * 2),
+                            _APP_G3_MANAGEMENT_TimeExpiredSetFlag, (uintptr_t) &app_g3_managementData.timerLedExpired, SYS_TIME_PERIODIC);
+        }
     }
     else
     {
         /* Unsuccessful join. Try at maximum 3 times. */
-        if (++app_g3_managementData.joinRetries > 2)
+        if (++app_g3_managementData.joinRetries < 3)
         {
             /* Try another time */
             app_g3_managementData.state = APP_G3_MANAGEMENT_STATE_START_BACKOFF_JOIN;
@@ -284,12 +345,6 @@ static void _LBP_ADP_NetworkLeaveIndication(void)
     APP_TCPIP_MANAGEMENT_NetworkDisconnected();
 
     SYS_DEBUG_MESSAGE(SYS_ERROR_INFO, "APP_G3_MANAGEMENT: Kicked from network\r\n");
-}
-
-static void _APP_G3_MANAGEMENT_TimeExpiredSetFlag(uintptr_t context)
-{
-    /* Context holds the flag's address */
-    *((bool *) context) = true;
 }
 
 // *****************************************************************************
@@ -779,6 +834,51 @@ static void _APP_G3_MANAGEMENT_ShowVersions(void)
     }
 }
 
+/*******************************************************************************
+  Function:
+    void APP_G3_MANAGEMENT_Initialize ( void )
+
+  Remarks:
+    See prototype in app_g3_management.h.
+ */
+int APP_G3_MANAGEMENT_SendEmergency(uint8_t state)
+{
+    IPV6_ADDR targetAddress;
+    uint16_t shortAddress, panId;
+    char targetAddressString[50 + 1];
+
+    shortAddress = 0x0000; // Coordinator
+    panId=APP_G3_MANAGEMENT_GetPanId();
+    TCPIP_Helper_StringToIPv6Address(APP_TCPIP_MANAGEMENT_IPV6_LINK_LOCAL_ADDRESS_G3, &targetAddress);
+    targetAddress.v[8] = (uint8_t) (panId >> 8);
+    targetAddress.v[9] = (uint8_t) panId;
+    targetAddress.v[14] = (uint8_t) (shortAddress >> 8);
+    targetAddress.v[15] = (uint8_t) shortAddress;
+    TCPIP_Helper_IPv6AddressToString(&targetAddress, targetAddressString, sizeof(targetAddressString) - 1);
+
+    /* Close socket if already opened */
+    if (coord_socket != INVALID_SOCKET)
+    {
+        TCPIP_UDP_Close(coord_socket);
+    }
+
+    /* Open ADP Responder UDP Socket */
+    coord_socket = TCPIP_UDP_ClientOpen(IP_ADDRESS_TYPE_IPV6, 0xF0BF, (IP_MULTI_ADDRESS*) &targetAddress);
+
+    if (coord_socket != INVALID_SOCKET)
+    {
+        SYS_DEBUG_PRINT(SYS_ERROR_DEBUG, "APP_G3_MGNT: Sending Emergency %d to %s (Short Address: 0x%04X)\r\n" , state, targetAddressString, shortAddress);
+        // Send Command Emergency Alarm to the UDP Responder Server on Coordinator
+        TCPIP_UDP_Put(coord_socket, CMD_EMERGENCY);
+        // Maybe include some state
+        TCPIP_UDP_Flush(coord_socket);
+        return 0;
+    } 
+    
+    SYS_DEBUG_PRINT(SYS_ERROR_DEBUG, "APP_G3_MGNT: Wrong Socket\r\n");
+    return -1;
+}
+
 // *****************************************************************************
 // *****************************************************************************
 // Section: Application Initialization and State Machine Functions
@@ -826,6 +926,9 @@ void APP_G3_MANAGEMENT_Initialize ( void )
     app_g3_managementData.configureParamsRF = false;
 
     SYS_DEBUG_MESSAGE(SYS_ERROR_INFO, APP_G3_MANAGEMENT_STRING_HEADER);
+    
+    USER_LED_OutputEnable();
+    USER_LED_Set();
 }
 
 
@@ -841,12 +944,43 @@ void APP_G3_MANAGEMENT_Tasks ( void )
 {
     /* Refresh Watchdog */
     CLEAR_WATCHDOG();
+    
+#define NUMBER_BLINKS_PANEL_LED 10   // 5 seconds at least showing ALARM/Blink
+    if (flag_received_panel_cmd)
+    {
+        times = NUMBER_BLINKS_PANEL_LED;
+    }
 
     /* Signaling: LED Toggle */
     if (app_g3_managementData.timerLedExpired == true)
     {
         app_g3_managementData.timerLedExpired = false;
+        
+        /* Activity */
         USER_BLINK_LED_Toggle();
+        
+        /* Reboot protection */
+        timeoutTraffic++;
+        if (timeoutTraffic == (TIMEOUT_WAIT_TRAFFIC_BLINK >> (blink_rate_factor - 1)))
+        {
+            _APP_G3_MANAGEMENT_Reboot();
+        }
+        
+        // Make actions according with commands received or events        
+        if (app_g3_managementData.state < APP_G3_MANAGEMENT_STATE_JOINED)
+        {
+            /* Registering */
+            RGB_LED_RED_Toggle();
+        }        
+
+        if (app_g3_managementData.state >= APP_G3_MANAGEMENT_STATE_JOINED)
+        {           
+            if ((app_udp_responderData.device_type == TYPE_PANEL_LED) && times)                
+            {
+                RGB_LED_RED_Toggle();        
+                times--;
+            }
+        }
     }
 
     if ((app_g3_managementData.state > APP_G3_MANAGEMENT_STATE_WAIT_ADP_READY) &&
@@ -865,6 +999,10 @@ void APP_G3_MANAGEMENT_Tasks ( void )
             SRV_PLC_PCOUP_BRANCH plcBranch;
             ADP_BAND plcBand;
 
+            RGB_LED_RED_Off();
+            //RGB_LED_GREEN_Off();            
+            //RGB_LED_BLUE_Off();
+            
             /* Get configured PLC band */
             plcBranch = SRV_PCOUP_Get_Default_Branch();
             plcBand = SRV_PCOUP_Get_Phy_Band(plcBranch);
@@ -874,6 +1012,16 @@ void APP_G3_MANAGEMENT_Tasks ( void )
 
             /* Get Extended Address from storage application */
             APP_STORAGE_GetExtendedAddress(app_g3_managementData.eui64.value);
+            // FIX some parts of the MAC Address 
+            app_g3_managementData.eui64.value[7] = 0xCA;
+            app_g3_managementData.eui64.value[6] = 0xFE;
+            app_g3_managementData.eui64.value[5] = 0xCA;
+            app_g3_managementData.eui64.value[4] = 0xFE;
+            app_g3_managementData.eui64.value[3] = 0xCA;
+            app_g3_managementData.eui64.value[2] = 0xFE;
+            app_g3_managementData.eui64.value[1] = 0xCA;
+            app_g3_managementData.eui64.value[0] = app_udp_responderData.device_type;
+            SYS_DEBUG_PRINT(SYS_ERROR_INFO, "APP_G3_MANAGEMENT: Device Type: 0x%02X\r\n", app_udp_responderData.device_type);
 
 #ifdef APP_G3_MANAGEMENT_CONFORMANCE_TEST
             /* Conformance Test enabled at compilation time.
@@ -1109,13 +1257,26 @@ void APP_G3_MANAGEMENT_Tasks ( void )
         {
             /* Nothing to do. The device is joined to the network unless
              * _LBP_ADP_NetworkLeaveIndication is called */
+            //RGB_LED_Handle();
+            break;
+        }
+        
+        case APP_G3_MANAGEMENT_STATE_SEND_ALARM:
+        {
+            if (APP_G3_MANAGEMENT_SendEmergency(1) == 0)
+            {
+                app_g3_managementData.state = APP_G3_MANAGEMENT_STATE_JOINED;
+            } else {
+                app_g3_managementData.state = APP_G3_MANAGEMENT_STATE_ERROR;
+            }
             break;
         }
 
         /* Error state */
         case APP_G3_MANAGEMENT_STATE_ERROR:
         {
-            /* TODO: Handle error in application's state machine. */
+            /* TODO: Reopen the G3 Device Registering process */
+            app_g3_managementData.state = APP_G3_MANAGEMENT_STATE_ADP_OPEN;            
             break;
         }
 
