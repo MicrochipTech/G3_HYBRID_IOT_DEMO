@@ -84,7 +84,7 @@ static PAL_RF_PHY_STATUS palRfPhyStatus[] = {
 };
 
 // Transceiver Configuration
-#define CHANNEL_TRANSMIT_RECEIVE (20U)
+#define CHANNEL_TRANSMIT_RECEIVE (11U)
 #define CHANNEL_PAGE_TRANSMIT_RECEIVE (0U)
 #define CCA_MODE (1U)
 #define PROMISCUOUS_MODE (true)
