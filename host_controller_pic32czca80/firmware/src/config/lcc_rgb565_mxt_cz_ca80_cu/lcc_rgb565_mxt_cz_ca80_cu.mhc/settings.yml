@@ -1,0 +1,14 @@
+configName: lcc_rgb565_mxt_cz_ca80_cu
+folderName: le_qs_cz_ca80_cu_tm4301b
+format_version: v1.0
+frameworkPath: c:\harmony3_dev
+processor: PIC32CZ8110CA80208
+projectName: legato_quickstart_cz_ca80_cu_wqvga
+settings:
+  PackageFilter: audio;azure_rtos;bsp;core;csp;Devices;dev_packs;gfx;harmony-services;mbed_os_rtos;mbed_os_rtos_apps;mc_apps_pic32cm_mc;mc_apps_pic32mk;mc_apps_sam_c2x;mc_apps_sam_d5x_e5x;mc_apps_sam_e7x_s7x_v7x;mc_apps_sam_rh707;mc_apps_sam_rh71;motor_control;quick_docs;touch;usb;wireless_wifi;x2c
+  FORCE_OPTIMIZATION: 'false'
+  GENERATE_BACKUP: 'true'
+  TRUSTZONE: 'false'
+  CMSISPath: .\dev_packs\arm\CMSIS\5.8.0
+  MERGE_STRATEGY: USER_ALL
+  DFPPath: .\dev_packs\Microchip\PIC32CZ-CA80_DFP\1.0.17\CA80\atdf\PIC32CZ8110CA80208.atdf
