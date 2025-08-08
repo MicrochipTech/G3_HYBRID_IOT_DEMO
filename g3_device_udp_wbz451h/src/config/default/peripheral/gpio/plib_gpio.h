@@ -93,6 +93,14 @@
 #define PLC_RST_OutputEnable()      (GPIOA_REGS->GPIO_TRISCLR = (1U<<4U))
 #define PLC_RST_InputEnable()       (GPIOA_REGS->GPIO_TRISSET = (1U<<4U))
 #define PLC_RST_PIN                  GPIO_PIN_RA4
+/*** Macros for PANEL_C pin ***/
+#define PANEL_C_Set()               (GPIOB_REGS->GPIO_LATSET = (1U<<11U))
+#define PANEL_C_Clear()             (GPIOB_REGS->GPIO_LATCLR = (1U<<11U))
+#define PANEL_C_Toggle()            (GPIOB_REGS->GPIO_LATINV= (1U<<11U))
+#define PANEL_C_Get()               ((GPIOB_REGS->GPIO_PORT >> 11U) & 0x1U)
+#define PANEL_C_OutputEnable()      (GPIOB_REGS->GPIO_TRISCLR = (1U<<11U))
+#define PANEL_C_InputEnable()       (GPIOB_REGS->GPIO_TRISSET = (1U<<11U))
+#define PANEL_C_PIN                  GPIO_PIN_RB11
 /*** Macros for PLC_TX_ENABLE pin ***/
 #define PLC_TX_ENABLE_Set()               (GPIOA_REGS->GPIO_LATSET = (1U<<0U))
 #define PLC_TX_ENABLE_Clear()             (GPIOA_REGS->GPIO_LATCLR = (1U<<0U))
@@ -101,6 +109,70 @@
 #define PLC_TX_ENABLE_OutputEnable()      (GPIOA_REGS->GPIO_TRISCLR = (1U<<0U))
 #define PLC_TX_ENABLE_InputEnable()       (GPIOA_REGS->GPIO_TRISSET = (1U<<0U))
 #define PLC_TX_ENABLE_PIN                  GPIO_PIN_RA0
+/*** Macros for PANEL_LAT pin ***/
+#define PANEL_LAT_Set()               (GPIOA_REGS->GPIO_LATSET = (1U<<1U))
+#define PANEL_LAT_Clear()             (GPIOA_REGS->GPIO_LATCLR = (1U<<1U))
+#define PANEL_LAT_Toggle()            (GPIOA_REGS->GPIO_LATINV= (1U<<1U))
+#define PANEL_LAT_Get()               ((GPIOA_REGS->GPIO_PORT >> 1U) & 0x1U)
+#define PANEL_LAT_OutputEnable()      (GPIOA_REGS->GPIO_TRISCLR = (1U<<1U))
+#define PANEL_LAT_InputEnable()       (GPIOA_REGS->GPIO_TRISSET = (1U<<1U))
+#define PANEL_LAT_PIN                  GPIO_PIN_RA1
+/*** Macros for PANEL_OE pin ***/
+#define PANEL_OE_Set()               (GPIOB_REGS->GPIO_LATSET = (1U<<12U))
+#define PANEL_OE_Clear()             (GPIOB_REGS->GPIO_LATCLR = (1U<<12U))
+#define PANEL_OE_Toggle()            (GPIOB_REGS->GPIO_LATINV= (1U<<12U))
+#define PANEL_OE_Get()               ((GPIOB_REGS->GPIO_PORT >> 12U) & 0x1U)
+#define PANEL_OE_OutputEnable()      (GPIOB_REGS->GPIO_TRISCLR = (1U<<12U))
+#define PANEL_OE_InputEnable()       (GPIOB_REGS->GPIO_TRISSET = (1U<<12U))
+#define PANEL_OE_PIN                  GPIO_PIN_RB12
+/*** Macros for PANEL_B pin ***/
+#define PANEL_B_Set()               (GPIOB_REGS->GPIO_LATSET = (1U<<13U))
+#define PANEL_B_Clear()             (GPIOB_REGS->GPIO_LATCLR = (1U<<13U))
+#define PANEL_B_Toggle()            (GPIOB_REGS->GPIO_LATINV= (1U<<13U))
+#define PANEL_B_Get()               ((GPIOB_REGS->GPIO_PORT >> 13U) & 0x1U)
+#define PANEL_B_OutputEnable()      (GPIOB_REGS->GPIO_TRISCLR = (1U<<13U))
+#define PANEL_B_InputEnable()       (GPIOB_REGS->GPIO_TRISSET = (1U<<13U))
+#define PANEL_B_PIN                  GPIO_PIN_RB13
+/*** Macros for PANEL_D pin ***/
+#define PANEL_D_Set()               (GPIOA_REGS->GPIO_LATSET = (1U<<5U))
+#define PANEL_D_Clear()             (GPIOA_REGS->GPIO_LATCLR = (1U<<5U))
+#define PANEL_D_Toggle()            (GPIOA_REGS->GPIO_LATINV= (1U<<5U))
+#define PANEL_D_Get()               ((GPIOA_REGS->GPIO_PORT >> 5U) & 0x1U)
+#define PANEL_D_OutputEnable()      (GPIOA_REGS->GPIO_TRISCLR = (1U<<5U))
+#define PANEL_D_InputEnable()       (GPIOA_REGS->GPIO_TRISSET = (1U<<5U))
+#define PANEL_D_PIN                  GPIO_PIN_RA5
+/*** Macros for PANEL_R2 pin ***/
+#define PANEL_R2_Set()               (GPIOA_REGS->GPIO_LATSET = (1U<<6U))
+#define PANEL_R2_Clear()             (GPIOA_REGS->GPIO_LATCLR = (1U<<6U))
+#define PANEL_R2_Toggle()            (GPIOA_REGS->GPIO_LATINV= (1U<<6U))
+#define PANEL_R2_Get()               ((GPIOA_REGS->GPIO_PORT >> 6U) & 0x1U)
+#define PANEL_R2_OutputEnable()      (GPIOA_REGS->GPIO_TRISCLR = (1U<<6U))
+#define PANEL_R2_InputEnable()       (GPIOA_REGS->GPIO_TRISSET = (1U<<6U))
+#define PANEL_R2_PIN                  GPIO_PIN_RA6
+/*** Macros for PANEL_A pin ***/
+#define PANEL_A_Set()               (GPIOA_REGS->GPIO_LATSET = (1U<<8U))
+#define PANEL_A_Clear()             (GPIOA_REGS->GPIO_LATCLR = (1U<<8U))
+#define PANEL_A_Toggle()            (GPIOA_REGS->GPIO_LATINV= (1U<<8U))
+#define PANEL_A_Get()               ((GPIOA_REGS->GPIO_PORT >> 8U) & 0x1U)
+#define PANEL_A_OutputEnable()      (GPIOA_REGS->GPIO_TRISCLR = (1U<<8U))
+#define PANEL_A_InputEnable()       (GPIOA_REGS->GPIO_TRISSET = (1U<<8U))
+#define PANEL_A_PIN                  GPIO_PIN_RA8
+/*** Macros for PANEL_R1 pin ***/
+#define PANEL_R1_Set()               (GPIOA_REGS->GPIO_LATSET = (1U<<7U))
+#define PANEL_R1_Clear()             (GPIOA_REGS->GPIO_LATCLR = (1U<<7U))
+#define PANEL_R1_Toggle()            (GPIOA_REGS->GPIO_LATINV= (1U<<7U))
+#define PANEL_R1_Get()               ((GPIOA_REGS->GPIO_PORT >> 7U) & 0x1U)
+#define PANEL_R1_OutputEnable()      (GPIOA_REGS->GPIO_TRISCLR = (1U<<7U))
+#define PANEL_R1_InputEnable()       (GPIOA_REGS->GPIO_TRISSET = (1U<<7U))
+#define PANEL_R1_PIN                  GPIO_PIN_RA7
+/*** Macros for PANEL_CLK pin ***/
+#define PANEL_CLK_Set()               (GPIOB_REGS->GPIO_LATSET = (1U<<2U))
+#define PANEL_CLK_Clear()             (GPIOB_REGS->GPIO_LATCLR = (1U<<2U))
+#define PANEL_CLK_Toggle()            (GPIOB_REGS->GPIO_LATINV= (1U<<2U))
+#define PANEL_CLK_Get()               ((GPIOB_REGS->GPIO_PORT >> 2U) & 0x1U)
+#define PANEL_CLK_OutputEnable()      (GPIOB_REGS->GPIO_TRISCLR = (1U<<2U))
+#define PANEL_CLK_InputEnable()       (GPIOB_REGS->GPIO_TRISSET = (1U<<2U))
+#define PANEL_CLK_PIN                  GPIO_PIN_RB2
 
 
 // *****************************************************************************

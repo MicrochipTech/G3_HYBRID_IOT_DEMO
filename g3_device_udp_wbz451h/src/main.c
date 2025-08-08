@@ -60,21 +60,7 @@ int main ( void )
 {
     /* Initialize all modules */
     SYS_Initialize ( NULL );
-
-#if false
-    uint8_t buf[128];
-    uint8_t rx_buf[128] = {0};
-    for (int i=0;i<sizeof(buf);i++) {buf[i] = i;}
-
-    PLC_SPI_CS_Clear();
-    APPLICATION_DelayUs(50);
-    //SERCOM2_SPI_WriteRead(buf, sizeof(buf), rx_buf, sizeof(rx_buf));
-    //SERCOM2_SPI_WriteRead(buf, sizeof(buf), rx_buf, sizeof(rx_buf));
-    SERCOM2_SPI_Write(buf, sizeof(buf));
-    APPLICATION_DelayUs(100);
-    PLC_SPI_CS_Set();
-#endif
-    
+   
     while ( true )
     {
         /* Maintain state machines of all polled MPLAB Harmony modules. */

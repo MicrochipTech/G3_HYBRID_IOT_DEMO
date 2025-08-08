@@ -90,7 +90,7 @@ extern void EVSYS_0_3_Handler          ( void ) __attribute__((weak, alias("Dumm
 extern void EVSYS_4_11_Handler         ( void ) __attribute__((weak, alias("Dummy_Handler")));
 extern void PAC_Handler                ( void ) __attribute__((weak, alias("Dummy_Handler")));
 extern void RAMECC_Handler             ( void ) __attribute__((weak, alias("Dummy_Handler")));
-extern void SERCOM1_Handler            ( void ) __attribute__((weak, alias("Dummy_Handler")));
+extern void SERCOM0_Handler            ( void ) __attribute__((weak, alias("Dummy_Handler")));
 extern void SERCOM2_Handler            ( void ) __attribute__((weak, alias("Dummy_Handler")));
 extern void SERCOM3_Handler            ( void ) __attribute__((weak, alias("Dummy_Handler")));
 extern void TCC0_Handler               ( void ) __attribute__((weak, alias("Dummy_Handler")));
@@ -152,8 +152,8 @@ const H3DeviceVectors exception_table=
     .pfnEVSYS_4_11_Handler         = EVSYS_4_11_Handler,
     .pfnPAC_Handler                = PAC_Handler,
     .pfnRAMECC_Handler             = RAMECC_Handler,
-    .pfnSERCOM0_Handler            = SERCOM0_USART_InterruptHandler,
-    .pfnSERCOM1_Handler            = SERCOM1_Handler,
+    .pfnSERCOM0_Handler            = SERCOM0_Handler,
+    .pfnSERCOM1_Handler            = SERCOM1_USART_InterruptHandler,
     .pfnSERCOM2_Handler            = SERCOM2_Handler,
     .pfnSERCOM3_Handler            = SERCOM3_Handler,
     .pfnTCC0_Handler               = TCC0_Handler,

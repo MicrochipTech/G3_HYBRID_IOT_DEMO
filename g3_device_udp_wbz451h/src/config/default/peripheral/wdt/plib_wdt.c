@@ -1,22 +1,23 @@
 /*******************************************************************************
- System Interrupts File
+  WDT Peripheral Library
 
   Company:
     Microchip Technology Inc.
 
   File Name:
-    interrupt.h
+    plib_wdt.c
 
   Summary:
-    Interrupt vectors mapping
+    WDT Source File
 
   Description:
-    This file contains declarations of device vectors used by Harmony 3
- *******************************************************************************/
+    None
+
+*******************************************************************************/
 
 // DOM-IGNORE-BEGIN
 /*******************************************************************************
-* Copyright (C) 2018 Microchip Technology Inc. and its subsidiaries.
+* Copyright (C) 2019 Microchip Technology Inc. and its subsidiaries.
 *
 * Subject to your compliance with these terms, you may use Microchip software
 * and any derivatives exclusively with Microchip products. It is your
@@ -36,43 +37,63 @@
 * FULLEST EXTENT ALLOWED BY LAW, MICROCHIP'S TOTAL LIABILITY ON ALL CLAIMS IN
 * ANY WAY RELATED TO THIS SOFTWARE WILL NOT EXCEED THE AMOUNT OF FEES, IF ANY,
 * THAT YOU HAVE PAID DIRECTLY TO MICROCHIP FOR THIS SOFTWARE.
- *******************************************************************************/
+*******************************************************************************/
 // DOM-IGNORE-END
-
-#ifndef INTERRUPTS_H
-#define INTERRUPTS_H
 
 // *****************************************************************************
 // *****************************************************************************
 // Section: Included Files
 // *****************************************************************************
 // *****************************************************************************
-#include <stdint.h>
 
-
+#include "device.h"
+#include "plib_wdt.h"
 
 // *****************************************************************************
 // *****************************************************************************
-// Section: Handler Routines
+// Section: WDT Implementation
 // *****************************************************************************
 // *****************************************************************************
 
-void Reset_Handler (void);
-void NonMaskableInt_Handler (void);
-void HardFault_Handler (void);
-void MemoryManagement_Handler (void);
-void BusFault_Handler (void);
-void UsageFault_Handler (void);
-void vPortSVCHandler (void);
-void DebugMonitor_Handler (void);
-void xPortPendSVHandler (void);
-void xPortSysTickHandler (void);
-void EIC_InterruptHandler (void);
-void NVM_InterruptHandler (void);
-void DMAC_0_3_InterruptHandler (void);
-void SERCOM1_USART_InterruptHandler (void);
-void TC0_TimerInterruptHandler (void);
+void WDT_Enable( void )
+{
+    /* ON = 1 */
+    WDT_REGS->WDT_WDTCONSET = WDT_WDTCON_ON_Msk;
+}
 
+void WDT_Disable( void )
+{
+    /* ON = 0 */
+    WDT_REGS->WDT_WDTCONCLR = WDT_WDTCON_ON_Msk;
+}
 
+bool WDT_IsEnabled( void )
+{
+    return((WDT_REGS->WDT_WDTCON & WDT_WDTCON_ON_Msk) == WDT_WDTCON_ON_Msk ? true : false);
+}
 
-#endif // INTERRUPTS_H
+void WDT_WindowEnable( void )
+{
+    /* WDTWINEN = 1 */
+    WDT_REGS->WDT_WDTCONSET = WDT_WDTCON_WDTWINEN_Msk;
+}
+
+void WDT_WindowDisable( void )
+{
+    /* WDTWINEN = 0 */
+    WDT_REGS->WDT_WDTCONCLR = WDT_WDTCON_WDTWINEN_Msk;
+}
+
+bool WDT_IsWindowEnabled( void )
+{
+    return((WDT_REGS->WDT_WDTCON & WDT_WDTCON_WDTWINEN_Msk) == WDT_WDTCON_WDTWINEN_Msk ? true : false);
+}
+
+void WDT_Clear( void )
+{
+    /* Writing specific value to only upper 16 bits of WDTCON register clears WDT counter */
+    /* Only write to the upper 16 bits of the register when clearing. */
+    /* WDTCLRKEY = 0x5743 */
+    const uint32_t WDT_CLR_REG_ADDRESS = (WDT_BASE_ADDRESS + WDT_WDTCON_REG_OFST + 2U);
+    *((volatile uint16_t *)WDT_CLR_REG_ADDRESS) = 0x5743U;
+}

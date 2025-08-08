@@ -949,6 +949,7 @@ void APP_G3_MANAGEMENT_Tasks ( void )
     if (flag_received_panel_cmd)
     {
         times = NUMBER_BLINKS_PANEL_LED;
+        flag_received_panel_cmd = false;
     }
 
     /* Signaling: LED Toggle */

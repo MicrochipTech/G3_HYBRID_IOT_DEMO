@@ -29,6 +29,7 @@
 
 #include "definitions.h"
 #include "tcpip_manager_control.h"
+#include "app_matrix_led.h"
 
 // *****************************************************************************
 // *****************************************************************************
@@ -495,6 +496,7 @@ void APP_UDP_RESPONDER_Initialize ( void )
     app_udp_responderData.device_type = TYPE_LIGHTING_OUTDOOR;
 #elif  defined(DEVICE_TYPE_PANEL_LED)
     app_udp_responderData.device_type = TYPE_PANEL_LED;
+    APP_MATRIX_LED_Initialize();
 #elif  defined(DEVICE_TYPE_BP_ELECTRICITY_METER)
     app_udp_responderData.device_type = TYPE_BP_ELECTRICITY_METER;
 #elif  defined(DEVICE_TYPE_BP_IHD)
@@ -530,6 +532,9 @@ void APP_UDP_RESPONDER_Initialize ( void )
 
 void APP_UDP_RESPONDER_Tasks ( void )
 {
+    
+    APP_MATRIX_LED_Tasks();
+    
     /* Check the application's current state. */
     switch ( app_udp_responderData.state )
     {
