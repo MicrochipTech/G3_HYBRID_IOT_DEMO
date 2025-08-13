@@ -419,6 +419,7 @@ void _APP_UDP_RESPONDER_UdpRxCallback(UDP_SOCKET hUDP, TCPIP_NET_HANDLE hNet, TC
             TCPIP_UDP_ArrayGet(hUDP, app_g3_rgbData.rgbValues, 3);
             app_g3_rgbData.blinkFreq = 0;
             app_g3_rgbData.blinkTime = 0;
+            SYS_DEBUG_PRINT(SYS_ERROR_DEBUG, "APP_UDP_RESPONDER: H:%d, S:%d, V:%d, F:%d, T:%d\r\n",app_g3_rgbData.rgbValues[0], app_g3_rgbData.rgbValues[1], app_g3_rgbData.rgbValues[2]);
             app_g3_rgbData.newData = true;
             break;
         }
@@ -429,14 +430,28 @@ void _APP_UDP_RESPONDER_UdpRxCallback(UDP_SOCKET hUDP, TCPIP_NET_HANDLE hNet, TC
             TCPIP_UDP_ArrayGet(hUDP, app_g3_rgbData.rgbValues, 3);
             TCPIP_UDP_ArrayGet(hUDP, (uint8_t *)&app_g3_rgbData.blinkFreq, 2);
             TCPIP_UDP_ArrayGet(hUDP, (uint8_t *)&app_g3_rgbData.blinkTime, 2);
+            SYS_DEBUG_PRINT(SYS_ERROR_DEBUG, "APP_UDP_RESPONDER: H:%d, S:%d, V:%d, F:%d, T:%d\r\n",app_g3_rgbData.rgbValues[0], app_g3_rgbData.rgbValues[1], app_g3_rgbData.rgbValues[2], app_g3_rgbData.blinkFreq,app_g3_rgbData.blinkTime); 
             app_g3_rgbData.newData = true;
             break;
         }
-
-        case CMD_SET_PANEL_LED:
+        case CMD_SET_PANEL_LED: // SET PANEL LED
         {
-            // todo
-            SYS_DEBUG_PRINT(SYS_ERROR_DEBUG, "APP_UDP_RESPONDER: SET_PANEL_INFO\r\n");
+            uint8_t onOffValue;
+            // Request Device Info 
+            SYS_DEBUG_MESSAGE(SYS_ERROR_INFO, "APP_UDP_RESPONDER: SET_PANEL_LED ");
+            TCPIP_UDP_Get(hUDP, &onOffValue);
+            if(onOffValue == 0)
+            {
+                // GPIO off
+                SYS_DEBUG_PRINT(SYS_ERROR_DEBUG, "Logo\r\n");
+                //PANEL_LED_refresh_Logo();
+            }
+            else
+        {
+                // GPIO on
+                SYS_DEBUG_PRINT(SYS_ERROR_DEBUG, "Alarm\r\n");
+                //PANEL_LED_refresh_Alarm();
+            }
             break;
         }
 
@@ -552,6 +567,9 @@ void APP_UDP_RESPONDER_Tasks ( void )
 
         /* Serving connection on UDP port */
         case APP_UDP_RESPONDER_STATE_SERVING_CONNECTION:
+        {
+            break;
+        }
         /* Error state */
         case APP_UDP_RESPONDER_STATE_ERROR:
         /* The default state should never be executed. */

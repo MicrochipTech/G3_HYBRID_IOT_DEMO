@@ -82,8 +82,8 @@ extern "C" {
 /* TIME System Service Configuration Options */
 #define SYS_TIME_INDEX_0                            (0)
 #define SYS_TIME_MAX_TIMERS                         (25)
-#define SYS_TIME_HW_COUNTER_WIDTH                   (32)
-#define SYS_TIME_HW_COUNTER_PERIOD                  (4294967295U)
+#define SYS_TIME_HW_COUNTER_WIDTH                   (16)
+#define SYS_TIME_HW_COUNTER_PERIOD                  (65535U)
 #define SYS_TIME_HW_COUNTER_HALF_PERIOD             (SYS_TIME_HW_COUNTER_PERIOD>>1)
 #define SYS_TIME_CPU_CLOCK_FREQUENCY                (64000000)
 #define SYS_TIME_COMPARE_UPDATE_EXECUTION_CYCLES    (232)
@@ -141,7 +141,7 @@ extern "C" {
 
 /* PAL RF RTOS Configuration */
 #define PAL_RF_RTOS_STACK_SIZE                256U
-#define PAL_RF_RTOS_TASK_PRIORITY             2
+#define PAL_RF_RTOS_TASK_PRIORITY             5
 
 
 /*** Crypto Library Configuration ***/

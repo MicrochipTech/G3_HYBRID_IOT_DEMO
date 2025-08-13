@@ -269,6 +269,8 @@ static void RGB_LED_Init(void)
     PPS_REGS->PPS_RPB0G1R = 21U;
     PPS_REGS->PPS_RPB3G4R = 21U;
     PPS_REGS->PPS_RPB5G3R = 22U;
+
+    app_g3_rgbData.newData = false;
 }
 
 void RGB_LED_Handle(void)

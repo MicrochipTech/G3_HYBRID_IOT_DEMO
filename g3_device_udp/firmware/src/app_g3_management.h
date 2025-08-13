@@ -54,6 +54,9 @@ extern "C" {
  * configured according to Conformance test */
 //#define APP_G3_MANAGEMENT_CONFORMANCE_TEST
 
+/* Protection to avoid other networks */    
+#define APP_G3_MANAGEMENT_PANID_MASK 0x7820   
+
 /* PSK / Network authentication Key (16 bytes) */
 #define APP_G3_MANAGEMENT_PSK_KEY {0xAB, 0x10, 0x34, 0x11, 0x45, 0x11, 0x1B, 0xC3, 0xC1, 0x2D, 0xE8, 0xFF, 0x11, 0x14, 0x22, 0x04}
 

@@ -29,6 +29,7 @@
 
 #include "definitions.h"
 #include "service/random/srv_random.h"
+#include "app_udp_responder.h"
 #include "rgb_led.h"
 
 // *****************************************************************************
@@ -37,10 +38,12 @@
 // *****************************************************************************
 // *****************************************************************************
 
-#if APP_DEV_TYPE == APP_DEV_TYPE_EMERGENCY_BUTTON
 /* UDP socket handle */
 UDP_SOCKET coord_socket = INVALID_SOCKET;
-#endif
+int flag_send_alarm = false;
+int blink_rate_factor = 1;
+
+extern APP_UDP_RESPONDER_DATA app_udp_responderData;
 
 // *****************************************************************************
 /* Application Data
@@ -130,6 +133,10 @@ static const APP_G3_MANAGEMENT_CONSTANTS app_g3_managementConst = {
 static void _APP_G3_MANAGEMENT_TimeExpiredSetFlag(uintptr_t context);
 static void _APP_G3_MANAGEMENT_Reboot(void);
 
+uint32_t timeoutTraffic = 0;
+/* Time waiting for G3/UDP responder traffic before to reboot - Safety Mechanism */    
+#define TIMEOUT_WAIT_TRAFFIC_BLINK 600  // 5 minutes without traffic (tick is 500ms)
+
 static void _ADP_DiscoveryConfirm(uint8_t status)
 {
     if ((status == G3_SUCCESS) && (app_g3_managementData.bestNetwork.panId != 0xFFFF) &&
@@ -173,15 +180,14 @@ static void _ADP_DiscoveryIndication(ADP_PAN_DESCRIPTOR* pPanDescriptor)
     }
 
     /* Check minimum Link Quality and maximum route cost to Coordinator */
-    if(   ((pPanDescriptor->panId & 0x00F0) == 0x0020) // for robustness in tradeshow environment to connect to own network
-       && (pPanDescriptor->linkQuality >= minLQI)
-       && (pPanDescriptor->rcCoord < APP_G3_MANAGEMENT_ROUTE_COST_COORD_MAX))
+    if ((pPanDescriptor->linkQuality >= minLQI) &&
+            (pPanDescriptor->rcCoord < APP_G3_MANAGEMENT_ROUTE_COST_COORD_MAX))
     {
         /* Update best network if route cost to Coordinator is better or if it
          * is equal and Link Quality is better */
-        if ((pPanDescriptor->rcCoord < app_g3_managementData.bestNetwork.rcCoord) ||
+        if (((pPanDescriptor->rcCoord < app_g3_managementData.bestNetwork.rcCoord) ||
                 ((pPanDescriptor->rcCoord == app_g3_managementData.bestNetwork.rcCoord) &&
-                (pPanDescriptor->linkQuality > app_g3_managementData.bestNetwork.linkQuality)))
+                (pPanDescriptor->linkQuality > app_g3_managementData.bestNetwork.linkQuality))) && ((pPanDescriptor->panId & APP_G3_MANAGEMENT_PANID_MASK) == APP_G3_MANAGEMENT_PANID_MASK))
         {
             app_g3_managementData.bestNetwork = *pPanDescriptor;
         }
@@ -257,21 +263,37 @@ static void _LBP_ADP_NetworkJoinConfirm(LBP_ADP_NETWORK_JOIN_CFM_PARAMS* pNetwor
         memcpy(&prefixData[11], &networkPrefix, 16);
         ADP_SetRequestSync(ADP_IB_PREFIX_TABLE, 0, 27, (const uint8_t*) prefixData, &setConfirm);
 
-        /* RGB - green for 10 seconds */
+        SYS_DEBUG_PRINT(SYS_ERROR_INFO, "APP_G3_MANAGEMENT: Joined to the network. "
+                "PAN ID: 0x%04X, Short Address: 0x%04X, Media: 0x%04X\r\n", panId, shortAddress, app_g3_managementData.bestNetwork.mediaType);
+        /* RGB - green for 30 seconds */
         app_g3_rgbData.rgbValues[0] = 0x55; // hue - green
         app_g3_rgbData.rgbValues[1] = 0xFF; // saturation
         app_g3_rgbData.rgbValues[2] = 0xFF; // value
         app_g3_rgbData.blinkFreq = 0;       // ms, no blinking
-        app_g3_rgbData.blinkTime = 10000;   // ms
+        app_g3_rgbData.blinkTime = 30000;   // ms
         app_g3_rgbData.newData = true;
 
-        if (app_g3_managementData.metworkAliveHandle == SYS_TIME_HANDLE_INVALID)
+        //if (app_g3_managementData.metworkAliveHandle == SYS_TIME_HANDLE_INVALID)
+        //{
+        //    /* Register timer callback for network alive check */
+        //    app_g3_managementData.metworkAliveHandle = SYS_TIME_CallbackRegisterMS(
+        //            _APP_G3_MANAGEMENT_TimeExpiredSetFlag,
+        //            (uintptr_t) &app_g3_managementData.ntwAliveCheckExpired,
+        //            APP_G3_MANAGEMENT_NTW_ALIVE_CHECK_PERIOD_MS, SYS_TIME_PERIODIC);
+        //}
+
+		/* Identify Registering Process */
+        //RGB_LED_GREEN_On();
+        /* Reset Reboot Protection */
+        timeoutTraffic = 0;
+        
+        if ((app_g3_managementData.bestNetwork.mediaType == MAC_WRP_MEDIA_TYPE_REQ_PLC_BACKUP_RF) ||
+            (app_g3_managementData.bestNetwork.mediaType == MAC_WRP_MEDIA_TYPE_REQ_PLC_NO_BACKUP))
         {
-            /* Register timer callback for network alive check */
-            app_g3_managementData.metworkAliveHandle = SYS_TIME_CallbackRegisterMS(
-                    _APP_G3_MANAGEMENT_TimeExpiredSetFlag,
-                    (uintptr_t) &app_g3_managementData.ntwAliveCheckExpired,
-                    APP_G3_MANAGEMENT_NTW_ALIVE_CHECK_PERIOD_MS, SYS_TIME_PERIODIC);
+            /* Reload timer callback to blink LED - Identifies RF or PLC */
+            blink_rate_factor = 2;
+            SYS_TIME_TimerReload(app_g3_managementData.timerLedHandle, 0, SYS_TIME_MSToCount(APP_G3_MANAGEMENT_LED_BLINK_PERIOD_MS * 2),
+                            _APP_G3_MANAGEMENT_TimeExpiredSetFlag, (uintptr_t) &app_g3_managementData.timerLedExpired, SYS_TIME_PERIODIC);
         }
 
         SYS_DEBUG_PRINT(SYS_ERROR_INFO, "APP_G3_MANAGEMENT: Joined to the network. "
@@ -282,7 +304,7 @@ static void _LBP_ADP_NetworkJoinConfirm(LBP_ADP_NETWORK_JOIN_CFM_PARAMS* pNetwor
         SYS_DEBUG_PRINT(SYS_ERROR_INFO, "APP_G3_MANAGEMENT: Unsuccessful join. "
                 "status: 0x%04X, retries %d\r\n", pNetworkJoinCfm->status, app_g3_managementData.joinRetries);
         /* Unsuccessful join. Try at maximum 3 times. */
-        if (++app_g3_managementData.joinRetries > 2)
+        if (++app_g3_managementData.joinRetries < 3)
         {
             /* Try another time */
             app_g3_managementData.state = APP_G3_MANAGEMENT_STATE_START_BACKOFF_JOIN;
@@ -871,6 +893,13 @@ static void _APP_G3_MANAGEMENT_NetworkAliveCheck(void)
 }
 
 #if APP_DEV_TYPE == APP_DEV_TYPE_EMERGENCY_BUTTON
+/*******************************************************************************
+  Function:
+    void APP_G3_MANAGEMENT_SendEmergency ( void )
+
+  Remarks:
+    See prototype in app_g3_management.h.
+ */
 static void _APP_G3_MANAGEMENT_SendEmergency(void)
 {
     IPV6_ADDR targetAddress;
@@ -897,7 +926,7 @@ static void _APP_G3_MANAGEMENT_SendEmergency(void)
 
     if (coord_socket != INVALID_SOCKET)
     {
-        SYS_DEBUG_PRINT(SYS_ERROR_DEBUG, "APP_G3_MANAGEMENT: Sending Emergency to Coordinator\r\n");
+        SYS_DEBUG_PRINT(SYS_ERROR_DEBUG, "APP_G3_MANAGEMENT: Sending Emergency to %s (Short Address: 0x%04X)\r\n" , targetAddressString, shortAddress);
         // Send Command Emergency Alarm to the UDP Responder Server on Coordinator
         TCPIP_UDP_Put(coord_socket, CMD_EMERGENCY);
         // Maybe include some state
@@ -911,7 +940,7 @@ static void _APP_G3_MANAGEMENT_SendEmergency(void)
 
 static void _APP_G3_MANAGEMENT_button_handle(void)
 {
-#define EMERGENCY_TIMEOUT 15
+#define EMERGENCY_TIMEOUT 4 /* => 2 seconds */
     static uint8_t pressTime = 0;
 
     if(SWITCH_Get() == SWITCH_STATE_PRESSED)
@@ -922,21 +951,27 @@ static void _APP_G3_MANAGEMENT_button_handle(void)
         }
         if(pressTime == EMERGENCY_TIMEOUT)
         {
+            /* Send messages while switch is pressed */
+            pressTime = 0;
+            
             /* RGB - red for 5 seconds */
             app_g3_rgbData.rgbValues[0] = 0x00; // hue - red
             app_g3_rgbData.rgbValues[1] = 0xFF; // saturation
             app_g3_rgbData.rgbValues[2] = 0xFF; // value
             app_g3_rgbData.blinkFreq = 0;       // ms, no blinking
-            app_g3_rgbData.blinkTime = 5000;    // ms
+            app_g3_rgbData.blinkTime = 2000;    // ms
             app_g3_rgbData.newData = true;
-
+            //RGB_LED_GREEN_Off();
+            //RGB_LED_RED_On();
             _APP_G3_MANAGEMENT_SendEmergency();
         }
     }
     else
     {
         pressTime = 0;
-    }
+    	//RGB_LED_RED_Off();
+    	//RGB_LED_GREEN_On();
+	}
 }
 #endif
 // *****************************************************************************
@@ -1008,7 +1043,38 @@ void APP_G3_MANAGEMENT_Tasks ( void )
     if (app_g3_managementData.timerLedExpired == true)
     {
         app_g3_managementData.timerLedExpired = false;
+        
+        /* Activity */
         USER_BLINK_LED_Toggle();
+        
+        /* Reboot protection */
+        if (app_udp_responderData.dataReceived)
+        {
+            app_udp_responderData.dataReceived = false;
+            timeoutTraffic = 0;
+        }else {
+        	timeoutTraffic++;
+        	if (timeoutTraffic == (TIMEOUT_WAIT_TRAFFIC_BLINK >> (blink_rate_factor - 1)))
+        	{
+            	// Leave and Reboot
+                app_g3_managementData.ntwAliveCheckExpired = true;
+        	}
+        }
+        
+        // Make actions according with commands received or events        
+        //if (app_g3_managementData.state < APP_G3_MANAGEMENT_STATE_JOINED)
+        //{
+        //    /* Registering */
+        //    RGB_LED_GREEN_Toggle();
+        //}
+        
+
+#if APP_DEV_TYPE == APP_DEV_TYPE_EMERGENCY_BUTTON
+        if (app_g3_managementData.state == APP_G3_MANAGEMENT_STATE_JOINED)
+        {           
+            _APP_G3_MANAGEMENT_button_handle();
+    	}
+#endif
     }
 
     /* RBG LED handling */
@@ -1030,6 +1096,10 @@ void APP_G3_MANAGEMENT_Tasks ( void )
             SRV_PLC_PCOUP_BRANCH plcBranch;
             ADP_BAND plcBand;
 
+            //RGB_LED_RED_Off();
+            //RGB_LED_GREEN_Off();            
+            //RGB_LED_BLUE_Off();
+            
             /* Get configured PLC band */
             plcBranch = SRV_PCOUP_Get_Default_Branch();
             plcBand = SRV_PCOUP_Get_Phy_Band(plcBranch);
@@ -1039,6 +1109,16 @@ void APP_G3_MANAGEMENT_Tasks ( void )
 
             /* Get Extended Address from storage application */
             APP_STORAGE_GetExtendedAddress(app_g3_managementData.eui64.value);
+            // FIX some parts of the MAC Address 
+            app_g3_managementData.eui64.value[7] = 0xCA;
+            app_g3_managementData.eui64.value[6] = 0xFE;
+            app_g3_managementData.eui64.value[5] = 0xCA;
+            app_g3_managementData.eui64.value[4] = 0xFE;
+            app_g3_managementData.eui64.value[3] = 0xCA;
+            app_g3_managementData.eui64.value[2] = 0xFE;
+            app_g3_managementData.eui64.value[1] = 0xCA;
+            app_g3_managementData.eui64.value[0] = APP_DEV_TYPE;
+            SYS_DEBUG_PRINT(SYS_ERROR_INFO, "APP_G3_MANAGEMENT: Device Type: 0x%02X\r\n", APP_DEV_TYPE);
 
 #ifdef APP_G3_MANAGEMENT_CONFORMANCE_TEST
             /* Conformance Test enabled at compilation time.
@@ -1283,7 +1363,7 @@ void APP_G3_MANAGEMENT_Tasks ( void )
             /* Nothing to do. The device is joined to the network unless
              * _LBP_ADP_NetworkLeaveIndication is called */
 #if APP_DEV_TYPE == APP_DEV_TYPE_EMERGENCY_BUTTON
-            _APP_G3_MANAGEMENT_button_handle();
+            //_APP_G3_MANAGEMENT_button_handle();
 #endif
             _APP_G3_MANAGEMENT_NetworkAliveCheck();
             break;
@@ -1292,7 +1372,8 @@ void APP_G3_MANAGEMENT_Tasks ( void )
         /* Error state */
         case APP_G3_MANAGEMENT_STATE_ERROR:
         {
-            /* TODO: Handle error in application's state machine. */
+            /* TODO: Reopen the G3 Device Registering process */
+            app_g3_managementData.state = APP_G3_MANAGEMENT_STATE_ADP_OPEN;            
             break;
         }
 

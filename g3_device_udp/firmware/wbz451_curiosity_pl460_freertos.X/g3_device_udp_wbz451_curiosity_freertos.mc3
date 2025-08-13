@@ -1,4 +1,4 @@
-<config configName="wbz451_curiosity_pl460_freertos" projectName="g3_device_udp_wbz451_curiosity_freertos" configVersion="1.1" device="WBZ451" deviceLibraryClass="com.microchip.mcc.harmony.Harmony3Library" coreVersion="5.7.1">
+<config configName="wbz451_curiosity_pl460_freertos" projectName="g3_device_udp_wbz451_curiosity_freertos" configVersion="1.1" device="WBZ451" deviceLibraryClass="com.microchip.mcc.harmony.Harmony3Library" coreVersion="5.7.0">
    <usedPackages class="java.util.ArrayList"/>
    <usedClasses class="java.util.TreeMap">
       <entry>
@@ -4562,7 +4562,7 @@
          <key class="com.microchip.mcc.core.tokenManager.CustomKey" moduleName="core" name="!@#harmonyUserData"/>
          <value>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;UserData&gt;
   &lt;UserData dnOrder=&quot;0&quot;&gt;
-    &lt;GraphSettings canvasHeight=&quot;480&quot; canvasWidth=&quot;642&quot; dnOrder=&quot;0&quot;/&gt;
+    &lt;GraphSettings canvasHeight=&quot;733&quot; canvasWidth=&quot;897&quot; dnOrder=&quot;0&quot;/&gt;
     &lt;PowerProfiles dnOrder=&quot;1&quot;&gt;
       &lt;Profile dnOrder=&quot;0&quot; id=&quot;profile0&quot; name=&quot;Main&quot;/&gt;
     &lt;/PowerProfiles&gt;
@@ -4579,7 +4579,7 @@
     &lt;/ComponentGraph&gt;
     &lt;ComponentGraph dnOrder=&quot;4&quot; id=&quot;G3 STACK&quot;&gt;
       &lt;ElementPositions dnOrder=&quot;0&quot;&gt;
-        &lt;ElementPosition dnOrder=&quot;0&quot; id=&quot;g3PalPlc&quot; x=&quot;232&quot; y=&quot;217&quot;/&gt;
+        &lt;ElementPosition dnOrder=&quot;0&quot; id=&quot;g3PalPlc&quot; x=&quot;227&quot; y=&quot;223&quot;/&gt;
         &lt;ElementPosition dnOrder=&quot;1&quot; id=&quot;g3PalRf&quot; x=&quot;230&quot; y=&quot;120&quot;/&gt;
         &lt;ElementPosition dnOrder=&quot;2&quot; id=&quot;g3_config&quot; x=&quot;20&quot; y=&quot;20&quot;/&gt;
         &lt;ElementPosition dnOrder=&quot;3&quot; id=&quot;lib_crypto&quot; x=&quot;226&quot; y=&quot;362&quot;/&gt;
@@ -4635,7 +4635,7 @@
         &lt;ElementPosition dnOrder=&quot;20&quot; id=&quot;sys_time&quot; x=&quot;589&quot; y=&quot;116&quot;/&gt;
         &lt;ElementPosition dnOrder=&quot;21&quot; id=&quot;tc0&quot; x=&quot;419&quot; y=&quot;162&quot;/&gt;
         &lt;ElementPosition dnOrder=&quot;22&quot; id=&quot;tc2&quot; x=&quot;760&quot; y=&quot;20&quot;/&gt;
-        &lt;ElementPosition dnOrder=&quot;23&quot; id=&quot;tc3&quot; x=&quot;761&quot; y=&quot;95&quot;/&gt;
+        &lt;ElementPosition dnOrder=&quot;23&quot; id=&quot;tc3&quot; x=&quot;770&quot; y=&quot;100&quot;/&gt;
         &lt;ElementPosition dnOrder=&quot;24&quot; id=&quot;trng&quot; x=&quot;30&quot; y=&quot;180&quot;/&gt;
       &lt;/ElementPositions&gt;
     &lt;/ComponentGraph&gt;
@@ -5423,7 +5423,7 @@
          <value>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;core&gt;
   &lt;core dnOrder=&quot;0&quot; id=&quot;CFGPCLKGEN3_REG&quot;&gt;
     &lt;Values dnOrder=&quot;0&quot;&gt;
-      &lt;Dynamic dnOrder=&quot;0&quot; id=&quot;core&quot; value=&quot;2566914048&quot;/&gt;
+      &lt;Dynamic dnOrder=&quot;0&quot; id=&quot;core&quot; value=&quot;150994944&quot;/&gt;
     &lt;/Values&gt;
   &lt;/core&gt;
 &lt;/core&gt;
@@ -6133,7 +6133,7 @@
          <value>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;core&gt;
   &lt;core dnOrder=&quot;0&quot; id=&quot;GCLK_ID_23_CHEN&quot;&gt;
     &lt;Values dnOrder=&quot;0&quot;&gt;
-      &lt;Dynamic dnOrder=&quot;0&quot; id=&quot;core&quot; value=&quot;true&quot;/&gt;
+      &lt;Dynamic dnOrder=&quot;0&quot; id=&quot;core&quot; value=&quot;false&quot;/&gt;
     &lt;/Values&gt;
   &lt;/core&gt;
 &lt;/core&gt;
@@ -6144,7 +6144,7 @@
          <value>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;core&gt;
   &lt;core dnOrder=&quot;0&quot; id=&quot;GCLK_ID_23_FREQ&quot;&gt;
     &lt;Values dnOrder=&quot;0&quot;&gt;
-      &lt;Dynamic dnOrder=&quot;0&quot; id=&quot;core&quot; value=&quot;64000000&quot;/&gt;
+      &lt;Dynamic dnOrder=&quot;0&quot; id=&quot;core&quot; value=&quot;0&quot;/&gt;
     &lt;/Values&gt;
   &lt;/core&gt;
 &lt;/core&gt;
@@ -6155,7 +6155,7 @@
          <value>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;core&gt;
   &lt;core dnOrder=&quot;0&quot; id=&quot;GCLK_ID_23_GENSEL&quot;&gt;
     &lt;Values dnOrder=&quot;0&quot;&gt;
-      &lt;Dynamic dnOrder=&quot;0&quot; id=&quot;core&quot; value=&quot;1&quot;/&gt;
+      &lt;Dynamic dnOrder=&quot;0&quot; id=&quot;core&quot; value=&quot;0&quot;/&gt;
     &lt;/Values&gt;
   &lt;/core&gt;
 &lt;/core&gt;
@@ -6705,7 +6705,7 @@
          <value>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;core&gt;
   &lt;core dnOrder=&quot;0&quot; id=&quot;PMD3_REG_VALUE&quot;&gt;
     &lt;Values dnOrder=&quot;0&quot;&gt;
-      &lt;Dynamic dnOrder=&quot;0&quot; id=&quot;core&quot; value=&quot;28860&quot;/&gt;
+      &lt;Dynamic dnOrder=&quot;0&quot; id=&quot;core&quot; value=&quot;29372&quot;/&gt;
     &lt;/Values&gt;
   &lt;/core&gt;
 &lt;/core&gt;
@@ -7788,7 +7788,7 @@
          <value>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;core&gt;
   &lt;core dnOrder=&quot;0&quot; id=&quot;TC1_CLOCK_ENABLE&quot;&gt;
     &lt;Values dnOrder=&quot;0&quot;&gt;
-      &lt;Dynamic dnOrder=&quot;0&quot; id=&quot;core&quot; value=&quot;true&quot;/&gt;
+      &lt;Dynamic dnOrder=&quot;0&quot; id=&quot;core&quot; value=&quot;false&quot;/&gt;
     &lt;/Values&gt;
   &lt;/core&gt;
 &lt;/core&gt;
@@ -7799,7 +7799,7 @@
          <value>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;core&gt;
   &lt;core dnOrder=&quot;0&quot; id=&quot;TC1_CLOCK_FREQUENCY&quot;&gt;
     &lt;Values dnOrder=&quot;0&quot;&gt;
-      &lt;Dynamic dnOrder=&quot;0&quot; id=&quot;core&quot; value=&quot;64000000&quot;/&gt;
+      &lt;Dynamic dnOrder=&quot;0&quot; id=&quot;core&quot; value=&quot;0&quot;/&gt;
     &lt;/Values&gt;
   &lt;/core&gt;
 &lt;/core&gt;
@@ -9656,19 +9656,6 @@
 </value>
       </entry>
       <entry>
-         <key class="com.microchip.mcc.core.tokenManager.CustomKey" moduleName="g3_config" name="G3_MAC_PLC_LIBRARY"/>
-         <value>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;g3_config&gt;
-  &lt;g3_config dnOrder=&quot;0&quot; id=&quot;G3_MAC_PLC_LIBRARY&quot;&gt;
-    &lt;Attributes dnOrder=&quot;0&quot;&gt;
-      &lt;Boolean dnOrder=&quot;0&quot; id=&quot;enabled&quot;&gt;
-        &lt;Value dnOrder=&quot;0&quot;&gt;true&lt;/Value&gt;
-      &lt;/Boolean&gt;
-    &lt;/Attributes&gt;
-  &lt;/g3_config&gt;
-&lt;/g3_config&gt;
-</value>
-      </entry>
-      <entry>
          <key class="com.microchip.mcc.core.tokenManager.CustomKey" moduleName="g3_config" name="G3_MODE"/>
          <value>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;g3_config&gt;
   &lt;g3_config dnOrder=&quot;0&quot; id=&quot;G3_MODE&quot;&gt;
@@ -9901,49 +9888,10 @@
 </value>
       </entry>
       <entry>
-         <key class="com.microchip.mcc.core.tokenManager.CustomKey" moduleName="g3_config" name="MAC_PLC_DEFS_HEADER"/>
-         <value>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;g3_config&gt;
-  &lt;g3_config dnOrder=&quot;0&quot; id=&quot;MAC_PLC_DEFS_HEADER&quot;&gt;
-    &lt;Attributes dnOrder=&quot;0&quot;&gt;
-      &lt;Boolean dnOrder=&quot;0&quot; id=&quot;enabled&quot;&gt;
-        &lt;Value dnOrder=&quot;0&quot;&gt;true&lt;/Value&gt;
-      &lt;/Boolean&gt;
-    &lt;/Attributes&gt;
-  &lt;/g3_config&gt;
-&lt;/g3_config&gt;
-</value>
-      </entry>
-      <entry>
          <key class="com.microchip.mcc.core.tokenManager.CustomKey" moduleName="g3_config" name="MAC_PLC_DEVICE_TABLE_SIZE"/>
          <value>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;g3_config&gt;
   &lt;g3_config dnOrder=&quot;0&quot; id=&quot;MAC_PLC_DEVICE_TABLE_SIZE&quot;&gt;
     &lt;Values dnOrder=&quot;0&quot;/&gt;
-  &lt;/g3_config&gt;
-&lt;/g3_config&gt;
-</value>
-      </entry>
-      <entry>
-         <key class="com.microchip.mcc.core.tokenManager.CustomKey" moduleName="g3_config" name="MAC_PLC_HEADER"/>
-         <value>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;g3_config&gt;
-  &lt;g3_config dnOrder=&quot;0&quot; id=&quot;MAC_PLC_HEADER&quot;&gt;
-    &lt;Attributes dnOrder=&quot;0&quot;&gt;
-      &lt;Boolean dnOrder=&quot;0&quot; id=&quot;enabled&quot;&gt;
-        &lt;Value dnOrder=&quot;0&quot;&gt;true&lt;/Value&gt;
-      &lt;/Boolean&gt;
-    &lt;/Attributes&gt;
-  &lt;/g3_config&gt;
-&lt;/g3_config&gt;
-</value>
-      </entry>
-      <entry>
-         <key class="com.microchip.mcc.core.tokenManager.CustomKey" moduleName="g3_config" name="MAC_PLC_MIB_HEADER"/>
-         <value>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;g3_config&gt;
-  &lt;g3_config dnOrder=&quot;0&quot; id=&quot;MAC_PLC_MIB_HEADER&quot;&gt;
-    &lt;Attributes dnOrder=&quot;0&quot;&gt;
-      &lt;Boolean dnOrder=&quot;0&quot; id=&quot;enabled&quot;&gt;
-        &lt;Value dnOrder=&quot;0&quot;&gt;true&lt;/Value&gt;
-      &lt;/Boolean&gt;
-    &lt;/Attributes&gt;
   &lt;/g3_config&gt;
 &lt;/g3_config&gt;
 </value>
@@ -10542,7 +10490,7 @@
          <value>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;pic32cx_bz2_devsupport&gt;
   &lt;pic32cx_bz2_devsupport dnOrder=&quot;0&quot; id=&quot;WSS_ENABLE_MODE&quot;&gt;
     &lt;Values dnOrder=&quot;0&quot;&gt;
-      &lt;Dynamic dnOrder=&quot;0&quot; id=&quot;pic32cx_bz2_devsupport&quot; value=&quot;WSS_ENABLE_NONE&quot;/&gt;
+      &lt;Dynamic dnOrder=&quot;0&quot; id=&quot;pic32cx_bz2_devsupport&quot; value=&quot;WSS_ENABLE_ZB&quot;/&gt;
     &lt;/Values&gt;
   &lt;/pic32cx_bz2_devsupport&gt;
 &lt;/pic32cx_bz2_devsupport&gt;
@@ -23203,7 +23151,9 @@
          <key class="com.microchip.mcc.core.tokenManager.CustomKey" moduleName="sys_time" name="SYS_TIME_ACHIEVABLE_TICK_RATE_HZ"/>
          <value>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;sys_time&gt;
   &lt;sys_time dnOrder=&quot;0&quot; id=&quot;SYS_TIME_ACHIEVABLE_TICK_RATE_HZ&quot;&gt;
-    &lt;Values dnOrder=&quot;0&quot;/&gt;
+    &lt;Values dnOrder=&quot;0&quot;&gt;
+      &lt;Dynamic dnOrder=&quot;0&quot; id=&quot;sys_time&quot; value=&quot;100001562&quot;/&gt;
+    &lt;/Values&gt;
   &lt;/sys_time&gt;
 &lt;/sys_time&gt;
 </value>
@@ -23223,7 +23173,14 @@
          <key class="com.microchip.mcc.core.tokenManager.CustomKey" moduleName="sys_time" name="SYS_TIME_OPERATING_MODE"/>
          <value>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;sys_time&gt;
   &lt;sys_time dnOrder=&quot;0&quot; id=&quot;SYS_TIME_OPERATING_MODE&quot;&gt;
-    &lt;Values dnOrder=&quot;0&quot;/&gt;
+    &lt;Attributes dnOrder=&quot;0&quot;&gt;
+      &lt;Boolean dnOrder=&quot;0&quot; id=&quot;visible&quot;&gt;
+        &lt;Value dnOrder=&quot;0&quot;&gt;true&lt;/Value&gt;
+      &lt;/Boolean&gt;
+    &lt;/Attributes&gt;
+    &lt;Values dnOrder=&quot;1&quot;&gt;
+      &lt;User dnOrder=&quot;0&quot; value=&quot;TICKLESS&quot;/&gt;
+    &lt;/Values&gt;
   &lt;/sys_time&gt;
 &lt;/sys_time&gt;
 </value>
@@ -23246,6 +23203,58 @@
     &lt;Values dnOrder=&quot;0&quot;&gt;
       &lt;Dynamic dnOrder=&quot;0&quot; id=&quot;sys_time&quot; value=&quot;tc0&quot;/&gt;
     &lt;/Values&gt;
+  &lt;/sys_time&gt;
+&lt;/sys_time&gt;
+</value>
+      </entry>
+      <entry>
+         <key class="com.microchip.mcc.core.tokenManager.CustomKey" moduleName="sys_time" name="SYS_TIME_TICKLESS_LOCAL"/>
+         <value>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;sys_time&gt;
+  &lt;sys_time dnOrder=&quot;0&quot; id=&quot;SYS_TIME_TICKLESS_LOCAL&quot;&gt;
+    &lt;Attributes dnOrder=&quot;0&quot;&gt;
+      &lt;Boolean dnOrder=&quot;0&quot; id=&quot;enabled&quot;&gt;
+        &lt;Value dnOrder=&quot;0&quot;&gt;true&lt;/Value&gt;
+      &lt;/Boolean&gt;
+    &lt;/Attributes&gt;
+  &lt;/sys_time&gt;
+&lt;/sys_time&gt;
+</value>
+      </entry>
+      <entry>
+         <key class="com.microchip.mcc.core.tokenManager.CustomKey" moduleName="sys_time" name="SYS_TIME_TICKLESS_SOURCE"/>
+         <value>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;sys_time&gt;
+  &lt;sys_time dnOrder=&quot;0&quot; id=&quot;SYS_TIME_TICKLESS_SOURCE&quot;&gt;
+    &lt;Attributes dnOrder=&quot;0&quot;&gt;
+      &lt;Boolean dnOrder=&quot;0&quot; id=&quot;enabled&quot;&gt;
+        &lt;Value dnOrder=&quot;0&quot;&gt;true&lt;/Value&gt;
+      &lt;/Boolean&gt;
+    &lt;/Attributes&gt;
+  &lt;/sys_time&gt;
+&lt;/sys_time&gt;
+</value>
+      </entry>
+      <entry>
+         <key class="com.microchip.mcc.core.tokenManager.CustomKey" moduleName="sys_time" name="SYS_TIME_TICK_BASED_LOCAL"/>
+         <value>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;sys_time&gt;
+  &lt;sys_time dnOrder=&quot;0&quot; id=&quot;SYS_TIME_TICK_BASED_LOCAL&quot;&gt;
+    &lt;Attributes dnOrder=&quot;0&quot;&gt;
+      &lt;Boolean dnOrder=&quot;0&quot; id=&quot;enabled&quot;&gt;
+        &lt;Value dnOrder=&quot;0&quot;&gt;false&lt;/Value&gt;
+      &lt;/Boolean&gt;
+    &lt;/Attributes&gt;
+  &lt;/sys_time&gt;
+&lt;/sys_time&gt;
+</value>
+      </entry>
+      <entry>
+         <key class="com.microchip.mcc.core.tokenManager.CustomKey" moduleName="sys_time" name="SYS_TIME_TICK_BASED_SOURCE"/>
+         <value>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;sys_time&gt;
+  &lt;sys_time dnOrder=&quot;0&quot; id=&quot;SYS_TIME_TICK_BASED_SOURCE&quot;&gt;
+    &lt;Attributes dnOrder=&quot;0&quot;&gt;
+      &lt;Boolean dnOrder=&quot;0&quot; id=&quot;enabled&quot;&gt;
+        &lt;Value dnOrder=&quot;0&quot;&gt;false&lt;/Value&gt;
+      &lt;/Boolean&gt;
+    &lt;/Attributes&gt;
   &lt;/sys_time&gt;
 &lt;/sys_time&gt;
 </value>
@@ -23315,7 +23324,7 @@
          <value>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;tc0&gt;
   &lt;tc0 dnOrder=&quot;0&quot; id=&quot;COMPARE_SET_API_NAME&quot;&gt;
     &lt;Values dnOrder=&quot;0&quot;&gt;
-      &lt;Dynamic dnOrder=&quot;0&quot; id=&quot;tc0&quot; value=&quot;TC0_Timer32bitCompareSet&quot;/&gt;
+      &lt;Dynamic dnOrder=&quot;0&quot; id=&quot;tc0&quot; value=&quot;TC0_Timer16bitCompareSet&quot;/&gt;
     &lt;/Values&gt;
   &lt;/tc0&gt;
 &lt;/tc0&gt;
@@ -23326,7 +23335,7 @@
          <value>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;tc0&gt;
   &lt;tc0 dnOrder=&quot;0&quot; id=&quot;COUNTER_GET_API_NAME&quot;&gt;
     &lt;Values dnOrder=&quot;0&quot;&gt;
-      &lt;Dynamic dnOrder=&quot;0&quot; id=&quot;tc0&quot; value=&quot;TC0_Timer32bitCounterGet&quot;/&gt;
+      &lt;Dynamic dnOrder=&quot;0&quot; id=&quot;tc0&quot; value=&quot;TC0_Timer16bitCounterGet&quot;/&gt;
     &lt;/Values&gt;
   &lt;/tc0&gt;
 &lt;/tc0&gt;
@@ -23355,7 +23364,7 @@
          <value>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;tc0&gt;
   &lt;tc0 dnOrder=&quot;0&quot; id=&quot;PERIOD_SET_API_NAME&quot;&gt;
     &lt;Values dnOrder=&quot;0&quot;&gt;
-      &lt;Dynamic dnOrder=&quot;0&quot; id=&quot;tc0&quot; value=&quot;TC0_Timer32bitPeriodSet&quot;/&gt;
+      &lt;Dynamic dnOrder=&quot;0&quot; id=&quot;tc0&quot; value=&quot;TC0_Timer16bitPeriodSet&quot;/&gt;
     &lt;/Values&gt;
   &lt;/tc0&gt;
 &lt;/tc0&gt;
@@ -23506,7 +23515,7 @@
   &lt;tc0 dnOrder=&quot;0&quot; id=&quot;TC_COMPARE_CC0&quot;&gt;
     &lt;Attributes dnOrder=&quot;0&quot;&gt;
       &lt;Long dnOrder=&quot;0&quot; id=&quot;max&quot;&gt;
-        &lt;Value dnOrder=&quot;0&quot;&gt;4294967295&lt;/Value&gt;
+        &lt;Value dnOrder=&quot;0&quot;&gt;65535&lt;/Value&gt;
       &lt;/Long&gt;
     &lt;/Attributes&gt;
     &lt;Values dnOrder=&quot;1&quot;/&gt;
@@ -23660,7 +23669,7 @@
   &lt;tc0 dnOrder=&quot;0&quot; id=&quot;TC_COMPARE_PERIOD&quot;&gt;
     &lt;Attributes dnOrder=&quot;0&quot;&gt;
       &lt;Long dnOrder=&quot;0&quot; id=&quot;max&quot;&gt;
-        &lt;Value dnOrder=&quot;0&quot;&gt;4294967295&lt;/Value&gt;
+        &lt;Value dnOrder=&quot;0&quot;&gt;65535&lt;/Value&gt;
       &lt;/Long&gt;
     &lt;/Attributes&gt;
     &lt;Values dnOrder=&quot;1&quot;/&gt;
@@ -23682,7 +23691,7 @@
          <value>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;tc0&gt;
   &lt;tc0 dnOrder=&quot;0&quot; id=&quot;TC_CTRLA_MODE&quot;&gt;
     &lt;Values dnOrder=&quot;0&quot;&gt;
-      &lt;User dnOrder=&quot;0&quot; value=&quot;2&quot;/&gt;
+      &lt;User dnOrder=&quot;0&quot; value=&quot;0&quot;/&gt;
     &lt;/Values&gt;
   &lt;/tc0&gt;
 &lt;/tc0&gt;
@@ -23701,9 +23710,7 @@
          <key class="com.microchip.mcc.core.tokenManager.CustomKey" moduleName="tc0" name="TC_CTRLA_PRESCALER"/>
          <value>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;tc0&gt;
   &lt;tc0 dnOrder=&quot;0&quot; id=&quot;TC_CTRLA_PRESCALER&quot;&gt;
-    &lt;Values dnOrder=&quot;0&quot;&gt;
-      &lt;User dnOrder=&quot;0&quot; value=&quot;3&quot;/&gt;
-    &lt;/Values&gt;
+    &lt;Values dnOrder=&quot;0&quot;/&gt;
   &lt;/tc0&gt;
 &lt;/tc0&gt;
 </value>
@@ -23731,7 +23738,7 @@
          <value>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;tc0&gt;
   &lt;tc0 dnOrder=&quot;0&quot; id=&quot;TC_FREQUENCY&quot;&gt;
     &lt;Values dnOrder=&quot;0&quot;&gt;
-      &lt;Dynamic dnOrder=&quot;0&quot; id=&quot;tc0&quot; value=&quot;8000000&quot;/&gt;
+      &lt;Dynamic dnOrder=&quot;0&quot; id=&quot;tc0&quot; value=&quot;64000000&quot;/&gt;
     &lt;/Values&gt;
   &lt;/tc0&gt;
 &lt;/tc0&gt;
@@ -23833,7 +23840,12 @@
          <key class="com.microchip.mcc.core.tokenManager.CustomKey" moduleName="tc0" name="TC_TIMER_INTENSET_MC1"/>
          <value>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;tc0&gt;
   &lt;tc0 dnOrder=&quot;0&quot; id=&quot;TC_TIMER_INTENSET_MC1&quot;&gt;
-    &lt;Values dnOrder=&quot;0&quot;&gt;
+    &lt;Attributes dnOrder=&quot;0&quot;&gt;
+      &lt;Boolean dnOrder=&quot;0&quot; id=&quot;visible&quot;&gt;
+        &lt;Value dnOrder=&quot;0&quot;&gt;false&lt;/Value&gt;
+      &lt;/Boolean&gt;
+    &lt;/Attributes&gt;
+    &lt;Values dnOrder=&quot;1&quot;&gt;
       &lt;Dynamic dnOrder=&quot;0&quot; id=&quot;tc0&quot; value=&quot;true&quot;/&gt;
     &lt;/Values&gt;
   &lt;/tc0&gt;
@@ -23857,11 +23869,11 @@
   &lt;tc0 dnOrder=&quot;0&quot; id=&quot;TC_TIMER_PERIOD&quot;&gt;
     &lt;Attributes dnOrder=&quot;0&quot;&gt;
       &lt;Long dnOrder=&quot;0&quot; id=&quot;max&quot;&gt;
-        &lt;Value dnOrder=&quot;0&quot;&gt;4294967295&lt;/Value&gt;
+        &lt;Value dnOrder=&quot;0&quot;&gt;65535&lt;/Value&gt;
       &lt;/Long&gt;
     &lt;/Attributes&gt;
     &lt;Values dnOrder=&quot;1&quot;&gt;
-      &lt;Dynamic dnOrder=&quot;0&quot; id=&quot;tc0&quot; value=&quot;7999&quot;/&gt;
+      &lt;Dynamic dnOrder=&quot;0&quot; id=&quot;tc0&quot; value=&quot;63999&quot;/&gt;
     &lt;/Values&gt;
   &lt;/tc0&gt;
 &lt;/tc0&gt;
@@ -23873,13 +23885,15 @@
   &lt;tc0 dnOrder=&quot;0&quot; id=&quot;TC_TIMER_TIME_MS&quot;&gt;
     &lt;Attributes dnOrder=&quot;0&quot;&gt;
       &lt;Float dnOrder=&quot;0&quot; id=&quot;max&quot;&gt;
-        &lt;Value dnOrder=&quot;0&quot;&gt;536870.94&lt;/Value&gt;
+        &lt;Value dnOrder=&quot;0&quot;&gt;1.024&lt;/Value&gt;
       &lt;/Float&gt;
       &lt;Boolean dnOrder=&quot;1&quot; id=&quot;visible&quot;&gt;
-        &lt;Value dnOrder=&quot;0&quot;&gt;false&lt;/Value&gt;
+        &lt;Value dnOrder=&quot;0&quot;&gt;true&lt;/Value&gt;
       &lt;/Boolean&gt;
     &lt;/Attributes&gt;
-    &lt;Values dnOrder=&quot;1&quot;/&gt;
+    &lt;Values dnOrder=&quot;1&quot;&gt;
+      &lt;Dynamic dnOrder=&quot;0&quot; id=&quot;tc0&quot; value=&quot;1.0&quot;/&gt;
+    &lt;/Values&gt;
   &lt;/tc0&gt;
 &lt;/tc0&gt;
 </value>
@@ -23898,7 +23912,7 @@
          <value>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;tc0&gt;
   &lt;tc0 dnOrder=&quot;0&quot; id=&quot;TIMER_PERIOD_MAX&quot;&gt;
     &lt;Values dnOrder=&quot;0&quot;&gt;
-      &lt;Dynamic dnOrder=&quot;0&quot; id=&quot;tc0&quot; value=&quot;4294967295&quot;/&gt;
+      &lt;Dynamic dnOrder=&quot;0&quot; id=&quot;tc0&quot; value=&quot;65535&quot;/&gt;
     &lt;/Values&gt;
   &lt;/tc0&gt;
 &lt;/tc0&gt;
@@ -23927,7 +23941,7 @@
          <value>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;tc0&gt;
   &lt;tc0 dnOrder=&quot;0&quot; id=&quot;TIMER_WIDTH&quot;&gt;
     &lt;Values dnOrder=&quot;0&quot;&gt;
-      &lt;Dynamic dnOrder=&quot;0&quot; id=&quot;tc0&quot; value=&quot;32&quot;/&gt;
+      &lt;Dynamic dnOrder=&quot;0&quot; id=&quot;tc0&quot; value=&quot;16&quot;/&gt;
     &lt;/Values&gt;
   &lt;/tc0&gt;
 &lt;/tc0&gt;
@@ -26901,7 +26915,7 @@
          <value>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;tcpipStack&gt;
   &lt;tcpipStack dnOrder=&quot;0&quot; id=&quot;TCPIP_STACK_HEAP_SIZE_RECOMMEND&quot;&gt;
     &lt;Values dnOrder=&quot;0&quot;&gt;
-      &lt;Dynamic dnOrder=&quot;0&quot; id=&quot;tcpipStack&quot; value=&quot;5&quot;/&gt;
+      &lt;Dynamic dnOrder=&quot;0&quot; id=&quot;tcpipStack&quot; value=&quot;8&quot;/&gt;
     &lt;/Values&gt;
   &lt;/tcpipStack&gt;
 &lt;/tcpipStack&gt;
@@ -27397,7 +27411,7 @@
       &lt;/Boolean&gt;
     &lt;/Attributes&gt;
     &lt;Values dnOrder=&quot;1&quot;&gt;
-      &lt;Dynamic dnOrder=&quot;0&quot; id=&quot;tcpipUdp&quot; value=&quot;3700&quot;/&gt;
+      &lt;Dynamic dnOrder=&quot;0&quot; id=&quot;tcpipUdp&quot; value=&quot;7400&quot;/&gt;
     &lt;/Values&gt;
   &lt;/tcpipUdp&gt;
 &lt;/tcpipUdp&gt;
@@ -27408,7 +27422,7 @@
          <value>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;tcpipUdp&gt;
   &lt;tcpipUdp dnOrder=&quot;0&quot; id=&quot;TCPIP_UDP_MAX_SOCKETS&quot;&gt;
     &lt;Values dnOrder=&quot;0&quot;&gt;
-      &lt;User dnOrder=&quot;0&quot; value=&quot;1&quot;/&gt;
+      &lt;User dnOrder=&quot;0&quot; value=&quot;2&quot;/&gt;
     &lt;/Values&gt;
   &lt;/tcpipUdp&gt;
 &lt;/tcpipUdp&gt;
@@ -27568,7 +27582,7 @@
       </entry>
       <entry>
          <file>..\src\app_idle_task.c</file>
-         <hash>f394bafc955ca651e6af302b06a74b986e711e1d79fe96ed66864483d2807e47</hash>
+         <hash>12d2399f87221fca9effd6b787f5714e466121a5351562d0e1ab69e2bb9ea38a</hash>
       </entry>
       <entry>
          <file>..\src\app_idle_task.h</file>
@@ -27620,7 +27634,7 @@
       </entry>
       <entry>
          <file>..\src\config\wbz451_curiosity_pl460_freertos\configuration.h</file>
-         <hash>29baa78a9de4b49dba28b715c494f329223d448a334eca4e787f0ce54b2b819f</hash>
+         <hash>e5383337a37bf95a27c182e3c39fc9e461e984d04b2fdd80a7c325acf365f2de</hash>
       </entry>
       <entry>
          <file>..\src\config\wbz451_curiosity_pl460_freertos\crypto\common_crypto\MCHP_Crypto_Aead_Cipher.h</file>
@@ -27776,7 +27790,7 @@
       </entry>
       <entry>
          <file>..\src\config\wbz451_curiosity_pl460_freertos\definitions.h</file>
-         <hash>2ea1b1397b002512a76799b79e4911f4b4f989295cabfb6e4bbb754be5ac25db</hash>
+         <hash>799ca6bf28bc4edbfeea6edfca867db7fe6a8d74e95c7d905b308212868f5a19</hash>
       </entry>
       <entry>
          <file>..\src\config\wbz451_curiosity_pl460_freertos\device.h</file>
@@ -27804,7 +27818,7 @@
       </entry>
       <entry>
          <file>..\src\config\wbz451_curiosity_pl460_freertos\driver\IEEE_802154_PHY\phy\inc\phy.h</file>
-         <hash>d0351b9ca2ec074e73cdb5dbc409d18752e4e10b6a369300b61aa5e3097f1169</hash>
+         <hash>e9fe74456b5f84955fe0e9ce2e7e037bba8e79c96160eadf0a663566e69429bc</hash>
       </entry>
       <entry>
          <file>..\src\config\wbz451_curiosity_pl460_freertos\driver\IEEE_802154_PHY\phy\inc\phy_constants.h</file>
@@ -27956,7 +27970,7 @@
       </entry>
       <entry>
          <file>..\src\config\wbz451_curiosity_pl460_freertos\initialization.c</file>
-         <hash>ea011bd4414e419d8e376517bb286dd41964c07c2588b4b2ca660a0e76f9067b</hash>
+         <hash>54993a4a851fd2d9950ad8b351e93ab8815f165d15e111f61930d1b4229412e9</hash>
       </entry>
       <entry>
          <file>..\src\config\wbz451_curiosity_pl460_freertos\interrupts.c</file>
@@ -28556,7 +28570,7 @@
       </entry>
       <entry>
          <file>..\src\config\wbz451_curiosity_pl460_freertos\peripheral\clk\plib_clk.c</file>
-         <hash>c27dce1a03754b24458cd10553b210bfca803272c149a26c87d7d0103038dbce</hash>
+         <hash>74621d10d26bbdab74244cc89425248b6109efb53d637d16a10f99df32c10a9e</hash>
       </entry>
       <entry>
          <file>..\src\config\wbz451_curiosity_pl460_freertos\peripheral\clk\plib_clk.h</file>
@@ -28644,11 +28658,11 @@
       </entry>
       <entry>
          <file>..\src\config\wbz451_curiosity_pl460_freertos\peripheral\tc\plib_tc0.c</file>
-         <hash>cb3c5a85d72ac99d89e77a9545a863c1231ddaab181f10a52e8ef3d7c7a72541</hash>
+         <hash>2fc5408192b52b60f89e43e0a03cc70344c5b4db823c5240e734cb5453ed5f9f</hash>
       </entry>
       <entry>
          <file>..\src\config\wbz451_curiosity_pl460_freertos\peripheral\tc\plib_tc0.h</file>
-         <hash>31f11578f46a39c877161066ed64376ee9c829c4ae3fb06a92488cea6d243ff2</hash>
+         <hash>c71eb1c99c9c3244b6d2a5030b97723a3d32d7a2c83c4ab2374c2e947e64b0c0</hash>
       </entry>
       <entry>
          <file>..\src\config\wbz451_curiosity_pl460_freertos\peripheral\tc\plib_tc2.c</file>
@@ -29016,7 +29030,7 @@
       </entry>
       <entry>
          <file>..\src\config\wbz451_curiosity_pl460_freertos\system\time\sys_time_definitions.h</file>
-         <hash>46537746b1d12ece6b682c9be1c8f3f219663c638c21a51a973762b7b393afe6</hash>
+         <hash>b8c332f36f8a6ed230dc25b1f9f7f2970699947567f80cb06534d405b7a0dd9d</hash>
       </entry>
       <entry>
          <file>..\src\config\wbz451_curiosity_pl460_freertos\system_config.h</file>
@@ -29548,7 +29562,7 @@
       </entry>
       <entry>
          <file>..\src\third_party\wolfssl\wolfcrypt\src\asn.c</file>
-         <hash>ab5a4ddb007d79ee58fe78e1f1d456a783fb4cba9a59eddfca88b54f4aacfd86</hash>
+         <hash>0cb30a9f5f023020fda15f1e888cb1fda62e7538616c1359cf9630b6232b412e</hash>
       </entry>
       <entry>
          <file>..\src\third_party\wolfssl\wolfcrypt\src\blake2b.c</file>
@@ -29572,7 +29586,7 @@
       </entry>
       <entry>
          <file>..\src\third_party\wolfssl\wolfcrypt\src\cmac.c</file>
-         <hash>76c3aefd63e4f44281ccb9d66248b31aee9800e0c79bce29606754ab486dcecd</hash>
+         <hash>c22fb9581f6bd365fcda9d64796ebabd03e9a0a6142b3723af1ad8ba562370fa</hash>
       </entry>
       <entry>
          <file>..\src\third_party\wolfssl\wolfcrypt\src\coding.c</file>
@@ -29616,7 +29630,7 @@
       </entry>
       <entry>
          <file>..\src\third_party\wolfssl\wolfcrypt\src\ecc.c</file>
-         <hash>bed9785549debbb1358817734b673d4b8f31ec059f77627e8db02ba2d917c0f1</hash>
+         <hash>43f0db72431dcd6279d746a4c86fd30eac9a25f431137692903450db1e1d93ab</hash>
       </entry>
       <entry>
          <file>..\src\third_party\wolfssl\wolfcrypt\src\ecc_fp.c</file>
@@ -29700,7 +29714,7 @@
       </entry>
       <entry>
          <file>..\src\third_party\wolfssl\wolfcrypt\src\logging.c</file>
-         <hash>661db25d999d6ea6c46f625db82d3a30c13f2c4a8d774db4b91e8dfd06231000</hash>
+         <hash>0c65c4747aa11c2043767ab3356c4321e12df6b08594f5f09abccaf97a2e20bb</hash>
       </entry>
       <entry>
          <file>..\src\third_party\wolfssl\wolfcrypt\src\md2.c</file>
@@ -29724,7 +29738,7 @@
       </entry>
       <entry>
          <file>..\src\third_party\wolfssl\wolfcrypt\src\pkcs7.c</file>
-         <hash>19a82f35a214fcff8ca680fef9354b60df91315de7904ff7f5cbfde413dbfae8</hash>
+         <hash>01e39fcfe772912091b7a6557d14d36cdf351034f539710aca6fed330343973e</hash>
       </entry>
       <entry>
          <file>..\src\third_party\wolfssl\wolfcrypt\src\poly1305.c</file>
@@ -29740,7 +29754,7 @@
       </entry>
       <entry>
          <file>..\src\third_party\wolfssl\wolfcrypt\src\random.c</file>
-         <hash>4718f49c8f7de7790f1b9c7879f91e6ff1d5a86d5dd62fa35d89e33611de7241</hash>
+         <hash>9c3c28ef5548b4c37baf1b3ab29ff2953cb9f48da07f7b06bcf6cb94137128d9</hash>
       </entry>
       <entry>
          <file>..\src\third_party\wolfssl\wolfcrypt\src\rc2.c</file>
@@ -29764,7 +29778,7 @@
       </entry>
       <entry>
          <file>..\src\third_party\wolfssl\wolfcrypt\src\sha256.c</file>
-         <hash>b192e3b9389c23ee0d4ff1037e897e8a84ca5a7936ebf31c965c388334c2f7a4</hash>
+         <hash>8c70d0538f277912b06d0abf5a4ae872dfb48aa1573edeeee1dc85ef2c03ac6f</hash>
       </entry>
       <entry>
          <file>..\src\third_party\wolfssl\wolfcrypt\src\sha3.c</file>
@@ -29772,7 +29786,7 @@
       </entry>
       <entry>
          <file>..\src\third_party\wolfssl\wolfcrypt\src\sha512.c</file>
-         <hash>f995e1a6952a04d7f824274ae647afe157e30b6e210a26ca92b8c71954468af0</hash>
+         <hash>8d7261e80888e4676187b900d1d7d97995174bd9b92153e7bd3c62d5510fff0d</hash>
       </entry>
       <entry>
          <file>..\src\third_party\wolfssl\wolfcrypt\src\signature.c</file>
@@ -29780,7 +29794,7 @@
       </entry>
       <entry>
          <file>..\src\third_party\wolfssl\wolfcrypt\src\siphash.c</file>
-         <hash>51787c4a9c5c08136943f6a844d370a04ca08178df991608b6646af80262a4e3</hash>
+         <hash>ecf2226b43788821403466084e27c62914fc8400376efb5d2dafd73faeb850f2</hash>
       </entry>
       <entry>
          <file>..\src\third_party\wolfssl\wolfcrypt\src\sm2.c</file>
@@ -29824,7 +29838,7 @@
       </entry>
       <entry>
          <file>..\src\third_party\wolfssl\wolfcrypt\src\sp_int.c</file>
-         <hash>7b017376a4d805595e42f00a72a7f0b5c2b766ee43deeb330eb2ddd2c4759d26</hash>
+         <hash>78d5adad7aff83913b5fe81c0e2a095399dcf208673cc45cb591726ef376bc03</hash>
       </entry>
       <entry>
          <file>..\src\third_party\wolfssl\wolfcrypt\src\sp_sm2_arm32.c</file>
@@ -29868,7 +29882,7 @@
       </entry>
       <entry>
          <file>..\src\third_party\wolfssl\wolfcrypt\src\tfm.c</file>
-         <hash>02d7b65d9743d37fe56b66f3d8c24fffa2c5b69073906ef9702a2fbba643b94f</hash>
+         <hash>80b77dfba7b4694d01add72555428d8d36f5f0e4f1ab991374a12dff11738b4c</hash>
       </entry>
       <entry>
          <file>..\src\third_party\wolfssl\wolfcrypt\src\wc_dsp.c</file>
@@ -29880,15 +29894,19 @@
       </entry>
       <entry>
          <file>..\src\third_party\wolfssl\wolfcrypt\src\wc_kyber.c</file>
-         <hash>2ed160aae4047c8ba7d5687518fad00fafaa9604653435e559e9223b3d006e1e</hash>
+         <hash>aba8babc99a85b1ea30ce1a77ce72dc14197c657687c23258f30488d210be590</hash>
       </entry>
       <entry>
          <file>..\src\third_party\wolfssl\wolfcrypt\src\wc_kyber_poly.c</file>
-         <hash>79fc3c37c4bb5084423a0dd2f5bd6983951394b9141a3be9e80b711140239b43</hash>
+         <hash>279858b45695976a7c27ee6eb112c3c285704c8f702f08e8bf631a16848d06a9</hash>
       </entry>
       <entry>
          <file>..\src\third_party\wolfssl\wolfcrypt\src\wc_lms.c</file>
-         <hash>69ed134152ee9d0e9807ba6b2619d719854179ef1e69817d03010e9fd14ca6fb</hash>
+         <hash>af959b5a34835e580ab8639a64fc49a087ff24e701e17135228bc6fce149b1c2</hash>
+      </entry>
+      <entry>
+         <file>..\src\third_party\wolfssl\wolfcrypt\src\wc_lms_impl.c</file>
+         <hash>388c4b0a366dc37c19f94390c4a5b80342fcf772464d3e4f2e969e9089236792</hash>
       </entry>
       <entry>
          <file>..\src\third_party\wolfssl\wolfcrypt\src\wc_pkcs11.c</file>
@@ -30088,7 +30106,7 @@
       </entry>
       <entry>
          <file>..\src\third_party\wolfssl\wolfssl\wolfcrypt\logging.h</file>
-         <hash>10aa5d15791b6fb946d34cd5c510fabab090eafaa243a6613e8d17ed29d25bac</hash>
+         <hash>98cd4539411129084f078cec62fafd7cd7e59f7581ec81d4e52a66eccc7f9552</hash>
       </entry>
       <entry>
          <file>..\src\third_party\wolfssl\wolfssl\wolfcrypt\md2.h</file>
@@ -30132,7 +30150,7 @@
       </entry>
       <entry>
          <file>..\src\third_party\wolfssl\wolfssl\wolfcrypt\pkcs7.h</file>
-         <hash>99a7ddfce35a8b7f27561f419005f0b2e19efba244e9e164008b2d208bd481a8</hash>
+         <hash>8cb36c02cd43f80d971bb0faed782e1f483293401ce76bbc55aae6f7e2e48d06</hash>
       </entry>
       <entry>
          <file>..\src\third_party\wolfssl\wolfssl\wolfcrypt\poly1305.h</file>
@@ -30172,7 +30190,7 @@
       </entry>
       <entry>
          <file>..\src\third_party\wolfssl\wolfssl\wolfcrypt\settings.h</file>
-         <hash>34294663b3622ad68cb71fd3f822c74c4d75b6a4e9c2b7c3dafbdc9bf67601ed</hash>
+         <hash>0f9ea44c62887e30c78767e09af04839199b7dc9891066e8aa0fdb51b81e3b64</hash>
       </entry>
       <entry>
          <file>..\src\third_party\wolfssl\wolfssl\wolfcrypt\sha.h</file>
@@ -30180,7 +30198,7 @@
       </entry>
       <entry>
          <file>..\src\third_party\wolfssl\wolfssl\wolfcrypt\sha256.h</file>
-         <hash>f990e05ba3e403709d5fa1ab0ddab7fad4a42938a436c694eb7b76524ebfcffc</hash>
+         <hash>e43af1f064c2ea91f969cacc1dbe10912693a69a0d5994766e57627c122df270</hash>
       </entry>
       <entry>
          <file>..\src\third_party\wolfssl\wolfssl\wolfcrypt\sha3.h</file>
@@ -30228,7 +30246,7 @@
       </entry>
       <entry>
          <file>..\src\third_party\wolfssl\wolfssl\wolfcrypt\src\misc.c</file>
-         <hash>995adc2db8c31354e1ca1f83b3b102cd871e129d5d01938c3eac97b64761ece5</hash>
+         <hash>5d2231c6758c46e6cc262759eacf5bcdb892456c4dbfacc1e66e2292fc921561</hash>
       </entry>
       <entry>
          <file>..\src\third_party\wolfssl\wolfssl\wolfcrypt\srp.h</file>
@@ -30236,11 +30254,11 @@
       </entry>
       <entry>
          <file>..\src\third_party\wolfssl\wolfssl\wolfcrypt\tfm.h</file>
-         <hash>8395c5a17f9d8fd525dfbba697a924dc7d77a747baae9e86b3396f843db0bf28</hash>
+         <hash>587e196ba488e16f855703d2ed217382bce7dd0454aa8e08652069d7ae505802</hash>
       </entry>
       <entry>
          <file>..\src\third_party\wolfssl\wolfssl\wolfcrypt\types.h</file>
-         <hash>2b7e6a40e60bdd9a92aa593622c3610c54fa44e5783d1c31c1edd6f2593aff5f</hash>
+         <hash>62f19a5509bd0f56051e34770b58ffadc4f746d6a9c3372fecb65176df0bffff</hash>
       </entry>
       <entry>
          <file>..\src\third_party\wolfssl\wolfssl\wolfcrypt\visibility.h</file>
@@ -30252,11 +30270,11 @@
       </entry>
       <entry>
          <file>..\src\third_party\wolfssl\wolfssl\wolfcrypt\wc_kyber.h</file>
-         <hash>82e81a80241490d14dd38ec63b47a332c7c23993b914e96aeb18e7bfbb749613</hash>
+         <hash>c4de7a675099591fbd5c45a45313511f49f44b52e18ad432d9b4bcc26eb6c4fc</hash>
       </entry>
       <entry>
          <file>..\src\third_party\wolfssl\wolfssl\wolfcrypt\wc_lms.h</file>
-         <hash>4cf1c34673d4499f7572d70057ffceed097fef7ff903ea3b5c2644c4bce883ae</hash>
+         <hash>a1f5eed8f7ee9494d5b96abb69f6d0e1e425d5ad7f291202410a1f5e7121788a</hash>
       </entry>
       <entry>
          <file>..\src\third_party\wolfssl\wolfssl\wolfcrypt\wc_pkcs11.h</file>
