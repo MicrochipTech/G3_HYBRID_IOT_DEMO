@@ -6,9 +6,11 @@
 #include "gfx/legato/generated/le_gen_scheme.h"
 #include "gfx/legato/generated/le_gen_assets.h"
 
+#include "gfx/legato/generated/screen/le_gen_screen_LightControlScreen.h"
 #include "gfx/legato/generated/screen/le_gen_screen_MainMenu.h"
-#include "gfx/legato/generated/screen/le_gen_screen_MultiLinkControlScreen.h"
 #include "gfx/legato/generated/screen/le_gen_screen_MultiLinkConnectScreen.h"
+#include "gfx/legato/generated/screen/le_gen_screen_SWallControlScreen.h"
+#include "gfx/legato/generated/screen/le_gen_screen_ControlScreen.h"
 
 // DOM-IGNORE-BEGIN
 #ifdef __cplusplus  // Provide C++ Compatibility
@@ -17,9 +19,11 @@ extern "C" {
 // DOM-IGNORE-END
 
 // screen IDs
-#define screenID_MainMenu    0
-#define screenID_MultiLinkControlScreen    1
+#define screenID_LightControlScreen    0
+#define screenID_MainMenu    1
 #define screenID_MultiLinkConnectScreen    2
+#define screenID_SWallControlScreen    3
+#define screenID_ControlScreen    4
 
 void legato_initializeScreenState(void);
 

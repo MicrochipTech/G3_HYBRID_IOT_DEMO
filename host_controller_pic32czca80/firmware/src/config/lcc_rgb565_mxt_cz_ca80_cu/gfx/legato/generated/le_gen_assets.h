@@ -470,7 +470,7 @@ extern leRasterFont NotoSans_Regular;
  * Baseline:     12
  * Style:        Antialias
  * Glyph Count:  95
- * Range Count:  15
+ * Range Count:  14
  * Glyph Ranges: 0x20-0x7E
 ***********************************/
 extern leRasterFont TitleFont;
@@ -530,7 +530,7 @@ extern leRasterFont DeviceNameFont;
  * Baseline:     15
  * Style:        Antialias
  * Glyph Count:  95
- * Range Count:  11
+ * Range Count:  15
  * Glyph Ranges: 0x20-0x7E
 ***********************************/
 extern leRasterFont NotifFont;
@@ -551,7 +551,7 @@ extern leRasterFont Tiny;
  * Legato String Table
  * Encoding        ASCII
  * Language Count: 1
- * String Count:   36
+ * String Count:   45
  *****************************************************************************/
 
 // language IDs
@@ -562,38 +562,47 @@ extern leRasterFont Tiny;
 #define stringID_DefaultTemp    1
 #define stringID_ConnectedString    2
 #define stringID_HomeString    3
-#define stringID_DeviceAString    4
-#define stringID_DeviceA    5
-#define stringID_WaitString    6
-#define stringID_InterfaceStr    7
-#define stringID_DeviceInfo    8
-#define stringID_ConnectingString    9
-#define stringID_DemoName    10
-#define stringID_IntfValueStr    11
-#define stringID_DeviceBString    12
-#define stringID_FailedString    13
-#define stringID_TempUnit    14
-#define stringID_DisconnectedString    15
-#define stringID_IPAddrStr    16
-#define stringID_DeviceB    17
-#define stringID_DevicesString    18
-#define stringID_SSIDStr    19
-#define stringID_NetWebURLValue    20
-#define stringID_IPAddrValueStr    21
-#define stringID_StartString    22
-#define stringID_ConnectString    23
-#define stringID_ControlString    24
-#define stringID_NetWebURLStr    25
-#define stringID_SSIDValueStr    26
-#define stringID_SelectDevice    27
-#define stringID_ColorChannels    28
-#define stringID_BLEDeviceInfo    29
-#define stringID_DeviceC    30
-#define stringID_ZeroValueStr    31
-#define stringID_WiFiDeviceInfo    32
-#define stringID_DisconnectString    33
-#define stringID_Connections    34
-#define stringID_AllString    35
+#define stringID_HeatPumpString    4
+#define stringID_DeviceAString    5
+#define stringID_DeviceA    6
+#define stringID_WaitString    7
+#define stringID_InterfaceStr    8
+#define stringID_DeviceInfo    9
+#define stringID_SignalingWallConnectionStatus    10
+#define stringID_ConnectingString    11
+#define stringID_DemoName    12
+#define stringID_IntfValueStr    13
+#define stringID_DeviceBString    14
+#define stringID_EVChargerString    15
+#define stringID_FailedString    16
+#define stringID_TempUnit    17
+#define stringID_LeakDetectorString    18
+#define stringID_EnergyStorageString    19
+#define stringID_DisconnectedString    20
+#define stringID_IPAddrStr    21
+#define stringID_DeviceB    22
+#define stringID_DevicesString    23
+#define stringID_SSIDStr    24
+#define stringID_NetWebURLValue    25
+#define stringID_IPAddrValueStr    26
+#define stringID_StartString    27
+#define stringID_SolarInvertedLabel    28
+#define stringID_LightingWallConnectionStatus    29
+#define stringID_ConnectString    30
+#define stringID_ControlString    31
+#define stringID_NetWebURLStr    32
+#define stringID_SSIDValueStr    33
+#define stringID_SelectDevice    34
+#define stringID_ColorChannels    35
+#define stringID_BLEDeviceInfo    36
+#define stringID_DeviceC    37
+#define stringID_BatteryChargerString    38
+#define stringID_SWallConnectionStatus    39
+#define stringID_ZeroValueStr    40
+#define stringID_WiFiDeviceInfo    41
+#define stringID_DisconnectString    42
+#define stringID_Connections    43
+#define stringID_AllString    44
 
 extern const leStringTable stringTable;
 
@@ -603,17 +612,22 @@ extern leTableString string_TempSensor;
 extern leTableString string_DefaultTemp;
 extern leTableString string_ConnectedString;
 extern leTableString string_HomeString;
+extern leTableString string_HeatPumpString;
 extern leTableString string_DeviceAString;
 extern leTableString string_DeviceA;
 extern leTableString string_WaitString;
 extern leTableString string_InterfaceStr;
 extern leTableString string_DeviceInfo;
+extern leTableString string_SignalingWallConnectionStatus;
 extern leTableString string_ConnectingString;
 extern leTableString string_DemoName;
 extern leTableString string_IntfValueStr;
 extern leTableString string_DeviceBString;
+extern leTableString string_EVChargerString;
 extern leTableString string_FailedString;
 extern leTableString string_TempUnit;
+extern leTableString string_LeakDetectorString;
+extern leTableString string_EnergyStorageString;
 extern leTableString string_DisconnectedString;
 extern leTableString string_IPAddrStr;
 extern leTableString string_DeviceB;
@@ -622,6 +636,8 @@ extern leTableString string_SSIDStr;
 extern leTableString string_NetWebURLValue;
 extern leTableString string_IPAddrValueStr;
 extern leTableString string_StartString;
+extern leTableString string_SolarInvertedLabel;
+extern leTableString string_LightingWallConnectionStatus;
 extern leTableString string_ConnectString;
 extern leTableString string_ControlString;
 extern leTableString string_NetWebURLStr;
@@ -630,6 +646,8 @@ extern leTableString string_SelectDevice;
 extern leTableString string_ColorChannels;
 extern leTableString string_BLEDeviceInfo;
 extern leTableString string_DeviceC;
+extern leTableString string_BatteryChargerString;
+extern leTableString string_SWallConnectionStatus;
 extern leTableString string_ZeroValueStr;
 extern leTableString string_WiFiDeviceInfo;
 extern leTableString string_DisconnectString;

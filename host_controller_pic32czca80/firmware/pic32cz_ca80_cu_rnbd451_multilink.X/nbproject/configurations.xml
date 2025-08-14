@@ -177,7 +177,9 @@
                 <logicalFolder name="screen" displayName="screen" projectFiles="true">
                   <itemPath>../src/config/lcc_rgb565_mxt_cz_ca80_cu/gfx/legato/generated/screen/le_gen_screen_MultiLinkConnectScreen.h</itemPath>
                   <itemPath>../src/config/lcc_rgb565_mxt_cz_ca80_cu/gfx/legato/generated/screen/le_gen_screen_MainMenu.h</itemPath>
-                  <itemPath>../src/config/lcc_rgb565_mxt_cz_ca80_cu/gfx/legato/generated/screen/le_gen_screen_MultiLinkControlScreen.h</itemPath>
+                  <itemPath>../src/config/lcc_rgb565_mxt_cz_ca80_cu/gfx/legato/generated/screen/le_gen_screen_LightControlScreen.h</itemPath>
+                  <itemPath>../src/config/lcc_rgb565_mxt_cz_ca80_cu/gfx/legato/generated/screen/le_gen_screen_ControlScreen.h</itemPath>
+                  <itemPath>../src/config/lcc_rgb565_mxt_cz_ca80_cu/gfx/legato/generated/screen/le_gen_screen_SWallControlScreen.h</itemPath>
                 </logicalFolder>
                 <itemPath>../src/config/lcc_rgb565_mxt_cz_ca80_cu/gfx/legato/generated/le_gen_assets.h</itemPath>
                 <itemPath>../src/config/lcc_rgb565_mxt_cz_ca80_cu/gfx/legato/generated/le_gen_harmony.h</itemPath>
@@ -597,6 +599,10 @@
             <logicalFolder name="f3" displayName="int" projectFiles="true">
               <itemPath>../src/config/lcc_rgb565_mxt_cz_ca80_cu/system/int/sys_int.h</itemPath>
               <itemPath>../src/config/lcc_rgb565_mxt_cz_ca80_cu/system/int/sys_int_mapping.h</itemPath>
+            </logicalFolder>
+            <logicalFolder name="ports" displayName="ports" projectFiles="true">
+              <itemPath>../src/config/lcc_rgb565_mxt_cz_ca80_cu/system/ports/sys_ports_mapping.h</itemPath>
+              <itemPath>../src/config/lcc_rgb565_mxt_cz_ca80_cu/system/ports/sys_ports.h</itemPath>
             </logicalFolder>
             <logicalFolder name="f6" displayName="reset" projectFiles="true">
               <itemPath>../src/config/lcc_rgb565_mxt_cz_ca80_cu/system/reset/sys_reset.h</itemPath>
@@ -1137,7 +1143,9 @@
                 <logicalFolder name="screen" displayName="screen" projectFiles="true">
                   <itemPath>../src/config/lcc_rgb565_mxt_cz_ca80_cu/gfx/legato/generated/screen/le_gen_screen_MultiLinkConnectScreen.c</itemPath>
                   <itemPath>../src/config/lcc_rgb565_mxt_cz_ca80_cu/gfx/legato/generated/screen/le_gen_screen_MainMenu.c</itemPath>
-                  <itemPath>../src/config/lcc_rgb565_mxt_cz_ca80_cu/gfx/legato/generated/screen/le_gen_screen_MultiLinkControlScreen.c</itemPath>
+                  <itemPath>../src/config/lcc_rgb565_mxt_cz_ca80_cu/gfx/legato/generated/screen/le_gen_screen_LightControlScreen.c</itemPath>
+                  <itemPath>../src/config/lcc_rgb565_mxt_cz_ca80_cu/gfx/legato/generated/screen/le_gen_screen_ControlScreen.c</itemPath>
+                  <itemPath>../src/config/lcc_rgb565_mxt_cz_ca80_cu/gfx/legato/generated/screen/le_gen_screen_SWallControlScreen.c</itemPath>
                 </logicalFolder>
                 <itemPath>../src/config/lcc_rgb565_mxt_cz_ca80_cu/gfx/legato/generated/le_gen_globalpalette.c</itemPath>
                 <itemPath>../src/config/lcc_rgb565_mxt_cz_ca80_cu/gfx/legato/generated/le_gen_harmony.c</itemPath>
@@ -1656,6 +1664,7 @@
       <itemPath>../src/app_wifi.c</itemPath>
       <itemPath>../src/app_http.c</itemPath>
       <itemPath>../src/app_coordinator.c</itemPath>
+      <itemPath>../src/app_screen_swall.c</itemPath>
     </logicalFolder>
   </logicalFolder>
   <sourceRootList>

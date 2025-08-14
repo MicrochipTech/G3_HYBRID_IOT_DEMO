@@ -14,6 +14,9 @@ leLabelWidget* MultiLinkConnectScreen_ConnectionStatusLabel;
 leButtonWidget* MultiLinkConnectScreen_HomeButton;
 leButtonWidget* MultiLinkConnectScreen_ControlButton;
 leLabelWidget* MultiLinkConnectScreen_LabelWidget_0;
+leLabelWidget* MultiLinkConnectScreen_SWallConnectionStatusLabel;
+leLabelWidget* MultiLinkConnectScreen_LightingWallConnectionStatusLabel;
+leLabelWidget* MultiLinkConnectScreen_SignalingWallConnectionStatusLabel;
 leLabelWidget* MultiLinkConnectScreen_LabelWidgetC;
 leImageWidget* MultiLinkConnectScreen_CheckImageC;
 leLabelWidget* MultiLinkConnectScreen_LabelWidgetB;
@@ -41,7 +44,7 @@ leResult screenShow_MultiLinkConnectScreen(void)
 
     // layer 0
     root0 = leWidget_New();
-    root0->fn->setSize(root0, 800, 480);
+    root0->fn->setSize(root0, LE_DEFAULT_SCREEN_WIDTH, LE_DEFAULT_SCREEN_HEIGHT);
     root0->fn->setBackgroundType(root0, LE_WIDGET_BACKGROUND_NONE);
     root0->fn->setMargins(root0, 0, 0, 0, 0);
     root0->flags |= LE_WIDGET_IGNOREEVENTS;
@@ -71,7 +74,7 @@ leResult screenShow_MultiLinkConnectScreen(void)
     root0->fn->addChild(root0, (leWidget*)MultiLinkConnectScreen_ImageWidget0);
 
     MultiLinkConnectScreen_ImageSequenceWidgetC = leImageSequenceWidget_New();
-    MultiLinkConnectScreen_ImageSequenceWidgetC->fn->setPosition(MultiLinkConnectScreen_ImageSequenceWidgetC, 440, 360);
+    MultiLinkConnectScreen_ImageSequenceWidgetC->fn->setPosition(MultiLinkConnectScreen_ImageSequenceWidgetC, 441, 361);
     MultiLinkConnectScreen_ImageSequenceWidgetC->fn->setSize(MultiLinkConnectScreen_ImageSequenceWidgetC, 65, 65);
     MultiLinkConnectScreen_ImageSequenceWidgetC->fn->setEnabled(MultiLinkConnectScreen_ImageSequenceWidgetC, LE_FALSE);
     MultiLinkConnectScreen_ImageSequenceWidgetC->fn->setBackgroundType(MultiLinkConnectScreen_ImageSequenceWidgetC, LE_WIDGET_BACKGROUND_NONE);
@@ -84,7 +87,7 @@ leResult screenShow_MultiLinkConnectScreen(void)
     root0->fn->addChild(root0, (leWidget*)MultiLinkConnectScreen_ImageSequenceWidgetC);
 
     MultiLinkConnectScreen_LabelWidgetC = leLabelWidget_New();
-    MultiLinkConnectScreen_LabelWidgetC->fn->setPosition(MultiLinkConnectScreen_LabelWidgetC, -1, -1);
+    MultiLinkConnectScreen_LabelWidgetC->fn->setPosition(MultiLinkConnectScreen_LabelWidgetC, 0, 0);
     MultiLinkConnectScreen_LabelWidgetC->fn->setSize(MultiLinkConnectScreen_LabelWidgetC, 25, 25);
     MultiLinkConnectScreen_LabelWidgetC->fn->setEnabled(MultiLinkConnectScreen_LabelWidgetC, LE_FALSE);
     MultiLinkConnectScreen_LabelWidgetC->fn->setScheme(MultiLinkConnectScreen_LabelWidgetC, &TextScheme);
@@ -94,7 +97,7 @@ leResult screenShow_MultiLinkConnectScreen(void)
     MultiLinkConnectScreen_ImageSequenceWidgetC->fn->addChild(MultiLinkConnectScreen_ImageSequenceWidgetC, (leWidget*)MultiLinkConnectScreen_LabelWidgetC);
 
     MultiLinkConnectScreen_CheckImageC = leImageWidget_New();
-    MultiLinkConnectScreen_CheckImageC->fn->setPosition(MultiLinkConnectScreen_CheckImageC, 18, 20);
+    MultiLinkConnectScreen_CheckImageC->fn->setPosition(MultiLinkConnectScreen_CheckImageC, 19, 21);
     MultiLinkConnectScreen_CheckImageC->fn->setSize(MultiLinkConnectScreen_CheckImageC, 30, 30);
     MultiLinkConnectScreen_CheckImageC->fn->setBackgroundType(MultiLinkConnectScreen_CheckImageC, LE_WIDGET_BACKGROUND_NONE);
     MultiLinkConnectScreen_CheckImageC->fn->setBorderType(MultiLinkConnectScreen_CheckImageC, LE_WIDGET_BORDER_NONE);
@@ -102,7 +105,7 @@ leResult screenShow_MultiLinkConnectScreen(void)
     MultiLinkConnectScreen_ImageSequenceWidgetC->fn->addChild(MultiLinkConnectScreen_ImageSequenceWidgetC, (leWidget*)MultiLinkConnectScreen_CheckImageC);
 
     MultiLinkConnectScreen_ImageSequenceWidgetB = leImageSequenceWidget_New();
-    MultiLinkConnectScreen_ImageSequenceWidgetB->fn->setPosition(MultiLinkConnectScreen_ImageSequenceWidgetB, 370, 240);
+    MultiLinkConnectScreen_ImageSequenceWidgetB->fn->setPosition(MultiLinkConnectScreen_ImageSequenceWidgetB, 371, 241);
     MultiLinkConnectScreen_ImageSequenceWidgetB->fn->setSize(MultiLinkConnectScreen_ImageSequenceWidgetB, 65, 65);
     MultiLinkConnectScreen_ImageSequenceWidgetB->fn->setEnabled(MultiLinkConnectScreen_ImageSequenceWidgetB, LE_FALSE);
     MultiLinkConnectScreen_ImageSequenceWidgetB->fn->setBackgroundType(MultiLinkConnectScreen_ImageSequenceWidgetB, LE_WIDGET_BACKGROUND_NONE);
@@ -115,7 +118,7 @@ leResult screenShow_MultiLinkConnectScreen(void)
     root0->fn->addChild(root0, (leWidget*)MultiLinkConnectScreen_ImageSequenceWidgetB);
 
     MultiLinkConnectScreen_LabelWidgetB = leLabelWidget_New();
-    MultiLinkConnectScreen_LabelWidgetB->fn->setPosition(MultiLinkConnectScreen_LabelWidgetB, -1, -2);
+    MultiLinkConnectScreen_LabelWidgetB->fn->setPosition(MultiLinkConnectScreen_LabelWidgetB, 0, -1);
     MultiLinkConnectScreen_LabelWidgetB->fn->setSize(MultiLinkConnectScreen_LabelWidgetB, 25, 25);
     MultiLinkConnectScreen_LabelWidgetB->fn->setEnabled(MultiLinkConnectScreen_LabelWidgetB, LE_FALSE);
     MultiLinkConnectScreen_LabelWidgetB->fn->setScheme(MultiLinkConnectScreen_LabelWidgetB, &TextScheme);
@@ -125,7 +128,7 @@ leResult screenShow_MultiLinkConnectScreen(void)
     MultiLinkConnectScreen_ImageSequenceWidgetB->fn->addChild(MultiLinkConnectScreen_ImageSequenceWidgetB, (leWidget*)MultiLinkConnectScreen_LabelWidgetB);
 
     MultiLinkConnectScreen_CheckImageB = leImageWidget_New();
-    MultiLinkConnectScreen_CheckImageB->fn->setPosition(MultiLinkConnectScreen_CheckImageB, 18, 20);
+    MultiLinkConnectScreen_CheckImageB->fn->setPosition(MultiLinkConnectScreen_CheckImageB, 19, 21);
     MultiLinkConnectScreen_CheckImageB->fn->setSize(MultiLinkConnectScreen_CheckImageB, 30, 30);
     MultiLinkConnectScreen_CheckImageB->fn->setBackgroundType(MultiLinkConnectScreen_CheckImageB, LE_WIDGET_BACKGROUND_NONE);
     MultiLinkConnectScreen_CheckImageB->fn->setBorderType(MultiLinkConnectScreen_CheckImageB, LE_WIDGET_BORDER_NONE);
@@ -133,7 +136,7 @@ leResult screenShow_MultiLinkConnectScreen(void)
     MultiLinkConnectScreen_ImageSequenceWidgetB->fn->addChild(MultiLinkConnectScreen_ImageSequenceWidgetB, (leWidget*)MultiLinkConnectScreen_CheckImageB);
 
     MultiLinkConnectScreen_ImageSequenceWidgetA = leImageSequenceWidget_New();
-    MultiLinkConnectScreen_ImageSequenceWidgetA->fn->setPosition(MultiLinkConnectScreen_ImageSequenceWidgetA, 440, 120);
+    MultiLinkConnectScreen_ImageSequenceWidgetA->fn->setPosition(MultiLinkConnectScreen_ImageSequenceWidgetA, 441, 121);
     MultiLinkConnectScreen_ImageSequenceWidgetA->fn->setSize(MultiLinkConnectScreen_ImageSequenceWidgetA, 65, 65);
     MultiLinkConnectScreen_ImageSequenceWidgetA->fn->setEnabled(MultiLinkConnectScreen_ImageSequenceWidgetA, LE_FALSE);
     MultiLinkConnectScreen_ImageSequenceWidgetA->fn->setBackgroundType(MultiLinkConnectScreen_ImageSequenceWidgetA, LE_WIDGET_BACKGROUND_NONE);
@@ -146,7 +149,7 @@ leResult screenShow_MultiLinkConnectScreen(void)
     root0->fn->addChild(root0, (leWidget*)MultiLinkConnectScreen_ImageSequenceWidgetA);
 
     MultiLinkConnectScreen_LabelWidgetA = leLabelWidget_New();
-    MultiLinkConnectScreen_LabelWidgetA->fn->setPosition(MultiLinkConnectScreen_LabelWidgetA, -1, -2);
+    MultiLinkConnectScreen_LabelWidgetA->fn->setPosition(MultiLinkConnectScreen_LabelWidgetA, 0, -1);
     MultiLinkConnectScreen_LabelWidgetA->fn->setSize(MultiLinkConnectScreen_LabelWidgetA, 25, 25);
     MultiLinkConnectScreen_LabelWidgetA->fn->setEnabled(MultiLinkConnectScreen_LabelWidgetA, LE_FALSE);
     MultiLinkConnectScreen_LabelWidgetA->fn->setScheme(MultiLinkConnectScreen_LabelWidgetA, &TextScheme);
@@ -156,7 +159,7 @@ leResult screenShow_MultiLinkConnectScreen(void)
     MultiLinkConnectScreen_ImageSequenceWidgetA->fn->addChild(MultiLinkConnectScreen_ImageSequenceWidgetA, (leWidget*)MultiLinkConnectScreen_LabelWidgetA);
 
     MultiLinkConnectScreen_CheckImageA = leImageWidget_New();
-    MultiLinkConnectScreen_CheckImageA->fn->setPosition(MultiLinkConnectScreen_CheckImageA, 18, 20);
+    MultiLinkConnectScreen_CheckImageA->fn->setPosition(MultiLinkConnectScreen_CheckImageA, 19, 21);
     MultiLinkConnectScreen_CheckImageA->fn->setSize(MultiLinkConnectScreen_CheckImageA, 30, 30);
     MultiLinkConnectScreen_CheckImageA->fn->setBackgroundType(MultiLinkConnectScreen_CheckImageA, LE_WIDGET_BACKGROUND_NONE);
     MultiLinkConnectScreen_CheckImageA->fn->setBorderType(MultiLinkConnectScreen_CheckImageA, LE_WIDGET_BORDER_NONE);
@@ -164,7 +167,7 @@ leResult screenShow_MultiLinkConnectScreen(void)
     MultiLinkConnectScreen_ImageSequenceWidgetA->fn->addChild(MultiLinkConnectScreen_ImageSequenceWidgetA, (leWidget*)MultiLinkConnectScreen_CheckImageA);
 
     MultiLinkConnectScreen_ProgressAnimSequence = leImageSequenceWidget_New();
-    MultiLinkConnectScreen_ProgressAnimSequence->fn->setPosition(MultiLinkConnectScreen_ProgressAnimSequence, 540, 265);
+    MultiLinkConnectScreen_ProgressAnimSequence->fn->setPosition(MultiLinkConnectScreen_ProgressAnimSequence, 541, 294);
     MultiLinkConnectScreen_ProgressAnimSequence->fn->setSize(MultiLinkConnectScreen_ProgressAnimSequence, 100, 20);
     MultiLinkConnectScreen_ProgressAnimSequence->fn->setBackgroundType(MultiLinkConnectScreen_ProgressAnimSequence, LE_WIDGET_BACKGROUND_NONE);
     MultiLinkConnectScreen_ProgressAnimSequence->fn->setRepeat(MultiLinkConnectScreen_ProgressAnimSequence, LE_TRUE);
@@ -180,8 +183,8 @@ leResult screenShow_MultiLinkConnectScreen(void)
     root0->fn->addChild(root0, (leWidget*)MultiLinkConnectScreen_ProgressAnimSequence);
 
     MultiLinkConnectScreen_ConnectionStatusLabel = leLabelWidget_New();
-    MultiLinkConnectScreen_ConnectionStatusLabel->fn->setPosition(MultiLinkConnectScreen_ConnectionStatusLabel, 514, 210);
-    MultiLinkConnectScreen_ConnectionStatusLabel->fn->setSize(MultiLinkConnectScreen_ConnectionStatusLabel, 154, 36);
+    MultiLinkConnectScreen_ConnectionStatusLabel->fn->setPosition(MultiLinkConnectScreen_ConnectionStatusLabel, 518, 236);
+    MultiLinkConnectScreen_ConnectionStatusLabel->fn->setSize(MultiLinkConnectScreen_ConnectionStatusLabel, 154, 38);
     MultiLinkConnectScreen_ConnectionStatusLabel->fn->setScheme(MultiLinkConnectScreen_ConnectionStatusLabel, &TextScheme);
     MultiLinkConnectScreen_ConnectionStatusLabel->fn->setBackgroundType(MultiLinkConnectScreen_ConnectionStatusLabel, LE_WIDGET_BACKGROUND_NONE);
     MultiLinkConnectScreen_ConnectionStatusLabel->fn->setHAlignment(MultiLinkConnectScreen_ConnectionStatusLabel, LE_HALIGN_CENTER);
@@ -220,6 +223,33 @@ leResult screenShow_MultiLinkConnectScreen(void)
     MultiLinkConnectScreen_LabelWidget_0->fn->setString(MultiLinkConnectScreen_LabelWidget_0, (leString*)&string_DemoName);
     root0->fn->addChild(root0, (leWidget*)MultiLinkConnectScreen_LabelWidget_0);
 
+    MultiLinkConnectScreen_SWallConnectionStatusLabel = leLabelWidget_New();
+    MultiLinkConnectScreen_SWallConnectionStatusLabel->fn->setPosition(MultiLinkConnectScreen_SWallConnectionStatusLabel, 190, 138);
+    MultiLinkConnectScreen_SWallConnectionStatusLabel->fn->setSize(MultiLinkConnectScreen_SWallConnectionStatusLabel, 232, 36);
+    MultiLinkConnectScreen_SWallConnectionStatusLabel->fn->setScheme(MultiLinkConnectScreen_SWallConnectionStatusLabel, &TextScheme);
+    MultiLinkConnectScreen_SWallConnectionStatusLabel->fn->setBackgroundType(MultiLinkConnectScreen_SWallConnectionStatusLabel, LE_WIDGET_BACKGROUND_NONE);
+    MultiLinkConnectScreen_SWallConnectionStatusLabel->fn->setHAlignment(MultiLinkConnectScreen_SWallConnectionStatusLabel, LE_HALIGN_CENTER);
+    MultiLinkConnectScreen_SWallConnectionStatusLabel->fn->setString(MultiLinkConnectScreen_SWallConnectionStatusLabel, (leString*)&string_SWallConnectionStatus);
+    root0->fn->addChild(root0, (leWidget*)MultiLinkConnectScreen_SWallConnectionStatusLabel);
+
+    MultiLinkConnectScreen_LightingWallConnectionStatusLabel = leLabelWidget_New();
+    MultiLinkConnectScreen_LightingWallConnectionStatusLabel->fn->setPosition(MultiLinkConnectScreen_LightingWallConnectionStatusLabel, 144, 256);
+    MultiLinkConnectScreen_LightingWallConnectionStatusLabel->fn->setSize(MultiLinkConnectScreen_LightingWallConnectionStatusLabel, 232, 36);
+    MultiLinkConnectScreen_LightingWallConnectionStatusLabel->fn->setScheme(MultiLinkConnectScreen_LightingWallConnectionStatusLabel, &TextScheme);
+    MultiLinkConnectScreen_LightingWallConnectionStatusLabel->fn->setBackgroundType(MultiLinkConnectScreen_LightingWallConnectionStatusLabel, LE_WIDGET_BACKGROUND_NONE);
+    MultiLinkConnectScreen_LightingWallConnectionStatusLabel->fn->setHAlignment(MultiLinkConnectScreen_LightingWallConnectionStatusLabel, LE_HALIGN_CENTER);
+    MultiLinkConnectScreen_LightingWallConnectionStatusLabel->fn->setString(MultiLinkConnectScreen_LightingWallConnectionStatusLabel, (leString*)&string_LightingWallConnectionStatus);
+    root0->fn->addChild(root0, (leWidget*)MultiLinkConnectScreen_LightingWallConnectionStatusLabel);
+
+    MultiLinkConnectScreen_SignalingWallConnectionStatusLabel = leLabelWidget_New();
+    MultiLinkConnectScreen_SignalingWallConnectionStatusLabel->fn->setPosition(MultiLinkConnectScreen_SignalingWallConnectionStatusLabel, 210, 378);
+    MultiLinkConnectScreen_SignalingWallConnectionStatusLabel->fn->setSize(MultiLinkConnectScreen_SignalingWallConnectionStatusLabel, 232, 36);
+    MultiLinkConnectScreen_SignalingWallConnectionStatusLabel->fn->setScheme(MultiLinkConnectScreen_SignalingWallConnectionStatusLabel, &TextScheme);
+    MultiLinkConnectScreen_SignalingWallConnectionStatusLabel->fn->setBackgroundType(MultiLinkConnectScreen_SignalingWallConnectionStatusLabel, LE_WIDGET_BACKGROUND_NONE);
+    MultiLinkConnectScreen_SignalingWallConnectionStatusLabel->fn->setHAlignment(MultiLinkConnectScreen_SignalingWallConnectionStatusLabel, LE_HALIGN_CENTER);
+    MultiLinkConnectScreen_SignalingWallConnectionStatusLabel->fn->setString(MultiLinkConnectScreen_SignalingWallConnectionStatusLabel, (leString*)&string_SignalingWallConnectionStatus);
+    root0->fn->addChild(root0, (leWidget*)MultiLinkConnectScreen_SignalingWallConnectionStatusLabel);
+
     leAddRootWidget(root0, 0);
     leSetLayerColorMode(0, LE_COLOR_MODE_RGB_565);
 
@@ -257,6 +287,9 @@ void screenHide_MultiLinkConnectScreen(void)
     MultiLinkConnectScreen_HomeButton = NULL;
     MultiLinkConnectScreen_ControlButton = NULL;
     MultiLinkConnectScreen_LabelWidget_0 = NULL;
+    MultiLinkConnectScreen_SWallConnectionStatusLabel = NULL;
+    MultiLinkConnectScreen_LightingWallConnectionStatusLabel = NULL;
+    MultiLinkConnectScreen_SignalingWallConnectionStatusLabel = NULL;
     MultiLinkConnectScreen_LabelWidgetC = NULL;
     MultiLinkConnectScreen_CheckImageC = NULL;
     MultiLinkConnectScreen_LabelWidgetB = NULL;

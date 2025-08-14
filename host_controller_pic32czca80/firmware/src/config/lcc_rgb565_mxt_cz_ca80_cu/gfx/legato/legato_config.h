@@ -66,6 +66,9 @@ extern "C" {
 #define LE_DEBUG                             0 // internal use only, do not change
 #define LE_DEBUG_RENDERER                    0 // internal use only, do not change
 
+#define LE_DEFAULT_SCREEN_WIDTH              800
+#define LE_DEFAULT_SCREEN_HEIGHT             480
+
 // image decoder configuration
 #define LE_ENABLE_RAW_DECODER                1
 #define LE_ENABLE_JPEG_DECODER               0
@@ -111,13 +114,13 @@ extern "C" {
 #define LE_LIST_WIDGET_ENABLED             0
 #define LE_LISTWHEEL_WIDGET_ENABLED        0
 #define LE_PIECHART_WIDGET_ENABLED         0
-#define LE_PROGRESSBAR_WIDGET_ENABLED      0
+#define LE_PROGRESSBAR_WIDGET_ENABLED      1
 #define LE_RADIALMENU_WIDGET_ENABLED       0
 #define LE_RADIOBUTTON_WIDGET_ENABLED      0
 #define LE_RECTANGLE_WIDGET_ENABLED        0
 #define LE_SCROLLBAR_WIDGET_ENABLED        0
 #define LE_SLIDER_WIDGET_ENABLED           0
-#define LE_TEXTFIELD_WIDGET_ENABLED        0
+#define LE_TEXTFIELD_WIDGET_ENABLED        1
 #define LE_TOUCHTEST_WIDGET_ENABLED        0
 #define LE_WINDOW_WIDGET_ENABLED           0
 
@@ -163,6 +166,7 @@ extern "C" {
 
 #define LE_MONOCHROME_ON                   1
 
+#define LE_WIDGET_BUFFER_ENABLE            0
 
 //DOM-IGNORE-BEGIN
 #ifdef __cplusplus

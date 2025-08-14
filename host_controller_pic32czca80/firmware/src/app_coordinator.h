@@ -126,12 +126,102 @@ typedef enum
     /* Application has received data from the device */
     APP_COORDINATOR_STATE_DATA_RECEIVED_FROM_DEVICE,
             
+    APP_COORDINATOR_STATE_USI_INIT,
+            
+    APP_COORDINATOR_STATE_USI_CONFIG,
+            
+    APP_COORDINATOR_STATE_USI_READY,        
+            
+    APP_COORDINATOR_STATE_USI_GET_DEVICES,
+            
+    APP_COORDINATOR_STATE_USI_GET_DEVICES_ANSWER,
+            
     APP_COORDINATOR_STATE_DELAY,
 
     /* Application is in error state */
     APP_COORDINATOR_STATE_ERROR
 
 } APP_COORDINATOR_STATES;
+
+typedef enum
+{
+    APP_COORDINATOR_TRANSFER_STATE_WAIT = 0,
+    APP_COORDINATOR_TRANSFER_STATE_SEND_DATA,
+    APP_COORDINATOR_TRANSFER_STATE_WAIT_DATA,
+
+} APP_COORDINATOR_TRANSFER_STATES;
+
+typedef enum
+{
+    APP_COORDINATOR_REMOTE_STATUS_INIT,
+    APP_COORDINATOR_REMOTE_STATUS_RESET,
+    APP_COORDINATOR_REMOTE_STATUS_READY
+}APP_COORDINATOR_REMOTE_STATUS;
+
+typedef enum
+{
+    /* Device Type */
+    TYPE_LIGHTING_INDOOR = 0x10,
+    TYPE_LIGHTING_OUTDOOR,
+    TYPE_PANEL_LED,
+    TYPE_LEAK_DETECTOR,
+    TYPE_SOLAR_INVERTER,
+    TYPE_BATTERY_CHARGER,
+    TYPE_ENERGY_STORAGE,
+    TYPE_HEAT_PUMP,
+    TYPE_EV_CHARGER,
+    TYPE_ELECTRICITY_METER,
+    TYPE_EMERGENCY_BUTTON,
+    TYPE_UNKNOWN = 0xFF
+} APP_COORDINATOR_DEVICE_TYPE;
+
+typedef enum
+{
+    /* Device Type */
+    INDEX_TYPE_LIGHTING_INDOOR,
+    INDEX_TYPE_LIGHTING_OUTDOOR,
+    INDEX_TYPE_PANEL_LED,
+    INDEX_TYPE_LEAK_DETECTOR,
+    INDEX_TYPE_SOLAR_INVERTER,
+    INDEX_TYPE_BATTERY_CHARGER,
+    INDEX_TYPE_ENERGY_STORAGE,
+    INDEX_TYPE_HEAT_PUMP,
+    INDEX_TYPE_EV_CHARGER,
+    INDEX_TYPE_ELECTRICITY_METER,
+    INDEX_TYPE_EMERGENCY_BUTTON
+} APP_COORDINATOR_DEVICE_TYPE_INDEX;
+
+typedef enum
+{
+    
+    /* Host Commands */
+    CMD_GET_DEVICES = 0xE0,
+    CMD_GET_DEVICES_ANSWER,
+    CMD_DEVICE_NOTIFICATION,
+    CMD_RESET_NOTIFICATION,
+    CMD_HEARTBEAT,
+            
+    /* Coordinator to Device Commands */
+    CMD_GET_METROLOGY_INFO = 0xF0,
+    CMD_SHOW_METROLOGY_INFO = 0xF2,
+    CMD_GET_DEVICE_INFO = 0xF4,
+    CMD_GET_DEVICE_INFO_RESP = 0xF5,
+    CMD_SET_LED_RGB = 0xF6,
+    CMD_SET_LED_RGB_BLINK = 0xF8,
+    CMD_SET_PANEL_LED = 0xFA,
+    CMD_EMERGENCY = 0xFC,
+    CMD_SET_LIGHT = 0xFE            
+            
+} APP_COORDINATOR_CMDS;
+
+#define INDEX_UNKNOWN 255
+
+typedef struct
+{
+    uint8_t index;
+    uint8_t type;
+    uint8_t alive;
+} APP_COORDINATOR_DEVICE_INFO;
 
 /******************************************************
  * The coherent attribute is not available on compilers
@@ -166,6 +256,39 @@ typedef struct
     /* The application's next state */
     APP_COORDINATOR_STATES nextState;
 
+    // RELATED TO TRANSFER
+    APP_COORDINATOR_TRANSFER_STATES transferState;
+    
+    /* Allow to transmit */
+    bool freetransferFlag;
+    
+    /* Transfer in progress */
+    bool transferFlag;
+    
+    /* Transfer length */
+    uint16_t transferLength;
+    
+    /* Transfer Buffer */
+    uint8_t transferBuffer[1024];
+    
+    /* Handle for waiting time UDP Data interchange answer */
+    SYS_TIME_HANDLE transferTimeHandle;
+    
+    /* Transfer Buffer */
+    bool transferAnswerFlag;
+    
+    /* Transfer Timeout flag */
+    bool transferTimeExpired;
+    
+    /* Answer OK flag */
+    bool transferAnswerOK;
+    
+    /* Transfer Timeout in ms */
+    uint32_t transferTimeout_ms;
+    
+    bool availableBuffers;
+
+    // RELATED TO USB HOST
     /* CDC Object */
     USB_HOST_CDC_OBJ cdcObj;
     
@@ -215,9 +338,19 @@ typedef struct
     uint8_t cdcWriteSize;
     
     SYS_TIME_HANDLE timer;
+    
+    uint32_t timerTimeout_ms;
+    
+    bool timerExpired;
+    
     uint32_t delayMs;
     
+    APP_COORDINATOR_REMOTE_STATUS remoteStatus;
+    
     COORDINATOR_CMD_CALLBACK pCoordinatorCmdCallback;
+
+    /* TODO: Define any additional data used by the application. */
+    SRV_USI_HANDLE srvUSIHandle;
 
 } APP_COORDINATOR_DATA;
 
@@ -324,6 +457,12 @@ void APP_COORDINATOR_Initialize ( void );
 
 void APP_COORDINATOR_Tasks( void );
 
+
+void APP_COORDINATOR_deviceInit ( void );
+bool APP_COORDINATOR_deviceGetAlive ( uint8_t type );
+uint8_t APP_COORDINATOR_deviceGetIndex ( uint8_t type );
+
+bool APP_COORDINATOR_Prepare2Send_Message(uint8_t index, uint8_t *buffer, uint16_t length, bool answerFlag);
 
 #endif /* _APP_H */
 /*******************************************************************************

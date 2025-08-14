@@ -41194,7 +41194,7 @@
       </entry>
       <entry>
          <file>..\src\config\lcc_rgb565_mxt_cz_ca80_cu\definitions.h</file>
-         <hash>54bb7d3fa2fa7a05b29b6f507a36bef3883b134365ea92b4d20d0f5ada2c76fd</hash>
+         <hash>5712df9eff9da624deeb1a2da534c62bbe8dcda4870e34cd80e7063e816069a0</hash>
       </entry>
       <entry>
          <file>..\src\config\lcc_rgb565_mxt_cz_ca80_cu\device.h</file>
@@ -41878,7 +41878,7 @@
       </entry>
       <entry>
          <file>..\src\config\lcc_rgb565_mxt_cz_ca80_cu\gfx\legato\generated\font\le_gen_fonts.c</file>
-         <hash>16ee834108a2f4ffce9da9696f7549fe747279c447b26b8fa97dc461c0f6bbbc</hash>
+         <hash>6bd6126856896524f5cd5ae533e84724cc5239a6fd93c1a4bb77f2fa3d96820a</hash>
       </entry>
       <entry>
          <file>..\src\config\lcc_rgb565_mxt_cz_ca80_cu\gfx\legato\generated\image\le_gen_images.c</file>
@@ -41886,7 +41886,7 @@
       </entry>
       <entry>
          <file>..\src\config\lcc_rgb565_mxt_cz_ca80_cu\gfx\legato\generated\le_gen_assets.h</file>
-         <hash>ba121d1502adfaab9d8cd02c9e7401e8b42e3a927ec350e1d9e2e6f8a2c5429c</hash>
+         <hash>c2b4a6496d01e3123f20b3dc64e59d07f905268b85c2408c22c7f71811150df3</hash>
       </entry>
       <entry>
          <file>..\src\config\lcc_rgb565_mxt_cz_ca80_cu\gfx\legato\generated\le_gen_globalpalette.c</file>
@@ -41894,7 +41894,7 @@
       </entry>
       <entry>
          <file>..\src\config\lcc_rgb565_mxt_cz_ca80_cu\gfx\legato\generated\le_gen_harmony.c</file>
-         <hash>d9760de919a7e528590804aa5a37e1f5d01e2e7883f90c999c605638b74491cb</hash>
+         <hash>36c31abc6bcd91d7c298d51d6b6e71eb8240659f35f5b6ddb74d5cc2c3a7b4c3</hash>
       </entry>
       <entry>
          <file>..\src\config\lcc_rgb565_mxt_cz_ca80_cu\gfx\legato\generated\le_gen_harmony.h</file>
@@ -41902,11 +41902,11 @@
       </entry>
       <entry>
          <file>..\src\config\lcc_rgb565_mxt_cz_ca80_cu\gfx\legato\generated\le_gen_init.c</file>
-         <hash>099f8b0e41f7737def098d9752a1b3898c8981a8daf4caf30d1b63cc3df7bbc6</hash>
+         <hash>69a3b346601819e9f1169a06deeef3b44242c0f2e7b6de19f3f27c905b058794</hash>
       </entry>
       <entry>
          <file>..\src\config\lcc_rgb565_mxt_cz_ca80_cu\gfx\legato\generated\le_gen_init.h</file>
-         <hash>879aae648b070f948a0f0d79a24afcc172a3ad0ce423edb629b7fc081f75cf0a</hash>
+         <hash>7ccde6b60b5a5ab7e88c9e3de82b0bbcb88c1b628bf14478edf3f706c83c68bc</hash>
       </entry>
       <entry>
          <file>..\src\config\lcc_rgb565_mxt_cz_ca80_cu\gfx\legato\generated\le_gen_scheme.c</file>
@@ -41918,11 +41918,27 @@
       </entry>
       <entry>
          <file>..\src\config\lcc_rgb565_mxt_cz_ca80_cu\gfx\legato\generated\le_gen_stringtable.c</file>
-         <hash>36e7bb6b03190bb083d81b6cbd21f02787e304f8e0824e4884a9facd06847fcc</hash>
+         <hash>22cd1cfa654f4b84e9d98d1e78855d5b032f0ef52a8087bddd0978440d0098bc</hash>
+      </entry>
+      <entry>
+         <file>..\src\config\lcc_rgb565_mxt_cz_ca80_cu\gfx\legato\generated\screen\le_gen_screen_ControlScreen.c</file>
+         <hash>fe6d5c24006b66fe6d191242cbbbea0ab454dafabacae6ad02fc1b5490faf72e</hash>
+      </entry>
+      <entry>
+         <file>..\src\config\lcc_rgb565_mxt_cz_ca80_cu\gfx\legato\generated\screen\le_gen_screen_ControlScreen.h</file>
+         <hash>c0018a4cdbf11386baac5ad9a5d1de64106d6531fe597bedbf4c74d313878eb7</hash>
+      </entry>
+      <entry>
+         <file>..\src\config\lcc_rgb565_mxt_cz_ca80_cu\gfx\legato\generated\screen\le_gen_screen_LightControlScreen.c</file>
+         <hash>ae3c979e7ed72288656a6c50047dc2724f8ae71918401a453e95e8d2529abe66</hash>
+      </entry>
+      <entry>
+         <file>..\src\config\lcc_rgb565_mxt_cz_ca80_cu\gfx\legato\generated\screen\le_gen_screen_LightControlScreen.h</file>
+         <hash>beffcd58a449aafe89544719f2b99c7bafff606e565a0d27985f3ebb9d50b2b1</hash>
       </entry>
       <entry>
          <file>..\src\config\lcc_rgb565_mxt_cz_ca80_cu\gfx\legato\generated\screen\le_gen_screen_MainMenu.c</file>
-         <hash>a41bce778b74c5359e9fcd421150cffd65ebbee2c71f634a8e8ab420c82153af</hash>
+         <hash>94970baac2b232449ac9aa6b678bd45086276d1d9b0e5160efe51759fa544f46</hash>
       </entry>
       <entry>
          <file>..\src\config\lcc_rgb565_mxt_cz_ca80_cu\gfx\legato\generated\screen\le_gen_screen_MainMenu.h</file>
@@ -41930,19 +41946,19 @@
       </entry>
       <entry>
          <file>..\src\config\lcc_rgb565_mxt_cz_ca80_cu\gfx\legato\generated\screen\le_gen_screen_MultiLinkConnectScreen.c</file>
-         <hash>0b177e9ff1bdba676ed31159afcbb4689786e5c65b7d4cc635180933b4b1de62</hash>
+         <hash>e5d3c38780671b42d179def8ef79fe3d40468cc02ef5d1ed7f3c926e7bf88ac1</hash>
       </entry>
       <entry>
          <file>..\src\config\lcc_rgb565_mxt_cz_ca80_cu\gfx\legato\generated\screen\le_gen_screen_MultiLinkConnectScreen.h</file>
-         <hash>a4d203a04fe86963efcc795a945206e2cfc32f4e323e5a076c2b4fb6d8b0968c</hash>
+         <hash>977057e5e0290719f2afd517d0008e21feab20efc3687570b793e1516f22f838</hash>
       </entry>
       <entry>
-         <file>..\src\config\lcc_rgb565_mxt_cz_ca80_cu\gfx\legato\generated\screen\le_gen_screen_MultiLinkControlScreen.c</file>
-         <hash>5f933178556463491017dab341916e0ea412553387366e182d906f175ce971f0</hash>
+         <file>..\src\config\lcc_rgb565_mxt_cz_ca80_cu\gfx\legato\generated\screen\le_gen_screen_SWallControlScreen.c</file>
+         <hash>8a2a502e99ca7a5a684c210469be45b147aeb522e213e230571845ff133183d4</hash>
       </entry>
       <entry>
-         <file>..\src\config\lcc_rgb565_mxt_cz_ca80_cu\gfx\legato\generated\screen\le_gen_screen_MultiLinkControlScreen.h</file>
-         <hash>780626efb0dccd34a5045fa010eb66c19f2d1ab6274555419012e071df0a248c</hash>
+         <file>..\src\config\lcc_rgb565_mxt_cz_ca80_cu\gfx\legato\generated\screen\le_gen_screen_SWallControlScreen.h</file>
+         <hash>bde5597831e3ec989c6d61738675940a8a8e07940fbfa55f9edd1d31b0e482ee</hash>
       </entry>
       <entry>
          <file>..\src\config\lcc_rgb565_mxt_cz_ca80_cu\gfx\legato\image\jpeg\jidctint.c</file>
@@ -42090,7 +42106,7 @@
       </entry>
       <entry>
          <file>..\src\config\lcc_rgb565_mxt_cz_ca80_cu\gfx\legato\legato_config.h</file>
-         <hash>506548b01e5816cf611ed0de64b2a25ff0fb5f863eebf2b32ee0d8c24a418f14</hash>
+         <hash>c13328fa3f1f930ebd45ce2c10940117db7745dcc46f934e991714ca4aab6195</hash>
       </entry>
       <entry>
          <file>..\src\config\lcc_rgb565_mxt_cz_ca80_cu\gfx\legato\memory\legato_fixedheap.c</file>
@@ -43739,6 +43755,14 @@
       <entry>
          <file>..\src\config\lcc_rgb565_mxt_cz_ca80_cu\system\int\sys_int_mapping.h</file>
          <hash>5abf8528dabc1b17378f5d137870597037214fddf33880fa40e9263352da3008</hash>
+      </entry>
+      <entry>
+         <file>..\src\config\lcc_rgb565_mxt_cz_ca80_cu\system\ports\sys_ports.h</file>
+         <hash>01ce15600ea4b42a629c67eab54fdc97e60aff46a66fc55236813a9da1f08a9a</hash>
+      </entry>
+      <entry>
+         <file>..\src\config\lcc_rgb565_mxt_cz_ca80_cu\system\ports\sys_ports_mapping.h</file>
+         <hash>8a3e7ed01aa847c87f76796b56665f7f91f591fddfe6cf2e4161a03332608c3e</hash>
       </entry>
       <entry>
          <file>..\src\config\lcc_rgb565_mxt_cz_ca80_cu\system\reset\sys_reset.c</file>

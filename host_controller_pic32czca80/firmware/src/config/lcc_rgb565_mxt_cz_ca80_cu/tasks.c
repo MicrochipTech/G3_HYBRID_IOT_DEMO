@@ -129,13 +129,13 @@ NET_PRES_Tasks(sysObj.netPres);
     APP_Tasks();
 
     /* Call Application task APP_BLE. */
-    APP_BLE_Tasks();
+    //APP_BLE_Tasks();
 
     /* Call Application task APP_HTTP. */
-    APP_HTTP_Tasks();
+    //APP_HTTP_Tasks();
 
     /* Call Application task APP_WIFI. */
-    APP_WIFI_Tasks();
+    //APP_WIFI_Tasks();
 
     /* Call Application task APP_COORDINATOR. */
     APP_COORDINATOR_Tasks();

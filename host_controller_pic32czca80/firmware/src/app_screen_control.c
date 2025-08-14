@@ -130,34 +130,34 @@ static const struct leScheme * lineGraphDeviceScheme[APP_BLE_DEVICE_MAX] =
 
 static ML_INFOGRAPH_ANIM_OBJ infoGraphShowAnimObjs[] = 
 {
-    {&MultiLinkControlScreen_SmartConSecLogoBlock, INFOGRAPH_ANIM_DELAY_FAST_MS},
-    {&MultiLinkControlScreen_MfgBlock, INFOGRAPH_ANIM_DELAY_SLOW_MS},
-    {&MultiLinkControlScreen_BldgBlock, INFOGRAPH_ANIM_DELAY_FAST_MS},
-    {&MultiLinkControlScreen_EnergyBlock, INFOGRAPH_ANIM_DELAY_FAST_MS},
-    {&MultiLinkControlScreen_EnvBlock, INFOGRAPH_ANIM_DELAY_FAST_MS},
-    {&MultiLinkControlScreen_AgriBlock, INFOGRAPH_ANIM_DELAY_FAST_MS},
-    {&MultiLinkControlScreen_LogiBlock, INFOGRAPH_ANIM_DELAY_FAST_MS},
-    {&MultiLinkControlScreen_HomeAutoBlock, INFOGRAPH_ANIM_DELAY_FAST_MS},
-    {&MultiLinkControlScreen_SmartCityBlock, INFOGRAPH_ANIM_DELAY_FAST_MS},
-    {&MultiLinkControlScreen_SmartBlock, INFOGRAPH_ANIM_DELAY_SLOW_MS},
-    {&MultiLinkControlScreen_ConnectedBlock, INFOGRAPH_ANIM_DELAY_SLOW_MS},
-    {&MultiLinkControlScreen_SecureBlock, INFOGRAPH_ANIM_DELAY_SLOW_MS},
+    {&LightControlScreen_SmartConSecLogoBlock, INFOGRAPH_ANIM_DELAY_FAST_MS},
+    {&LightControlScreen_MfgBlock, INFOGRAPH_ANIM_DELAY_SLOW_MS},
+    {&LightControlScreen_BldgBlock, INFOGRAPH_ANIM_DELAY_FAST_MS},
+    {&LightControlScreen_EnergyBlock, INFOGRAPH_ANIM_DELAY_FAST_MS},
+    {&LightControlScreen_EnvBlock, INFOGRAPH_ANIM_DELAY_FAST_MS},
+    {&LightControlScreen_AgriBlock, INFOGRAPH_ANIM_DELAY_FAST_MS},
+    {&LightControlScreen_LogiBlock, INFOGRAPH_ANIM_DELAY_FAST_MS},
+    {&LightControlScreen_HomeAutoBlock, INFOGRAPH_ANIM_DELAY_FAST_MS},
+    {&LightControlScreen_SmartCityBlock, INFOGRAPH_ANIM_DELAY_FAST_MS},
+    {&LightControlScreen_SmartBlock, INFOGRAPH_ANIM_DELAY_SLOW_MS},
+    {&LightControlScreen_ConnectedBlock, INFOGRAPH_ANIM_DELAY_SLOW_MS},
+    {&LightControlScreen_SecureBlock, INFOGRAPH_ANIM_DELAY_SLOW_MS},
 };
 
 static ML_INFOGRAPH_ANIM_OBJ infoGraphHideAnimObjs[] = 
 {
-    {&MultiLinkControlScreen_MfgBlock, INFOGRAPH_ANIM_DELAY_FAST_MS},
-    {&MultiLinkControlScreen_BldgBlock, INFOGRAPH_ANIM_DELAY_FAST_MS},
-    {&MultiLinkControlScreen_EnergyBlock, INFOGRAPH_ANIM_DELAY_FAST_MS},
-    {&MultiLinkControlScreen_EnvBlock, INFOGRAPH_ANIM_DELAY_FAST_MS},
-    {&MultiLinkControlScreen_AgriBlock, INFOGRAPH_ANIM_DELAY_FAST_MS},
-    {&MultiLinkControlScreen_LogiBlock, INFOGRAPH_ANIM_DELAY_FAST_MS},
-    {&MultiLinkControlScreen_HomeAutoBlock, INFOGRAPH_ANIM_DELAY_FAST_MS},
-    {&MultiLinkControlScreen_SmartCityBlock, INFOGRAPH_ANIM_DELAY_FAST_MS},
-    {&MultiLinkControlScreen_SmartBlock, 0},
-    {&MultiLinkControlScreen_ConnectedBlock, 0},
-    {&MultiLinkControlScreen_SecureBlock, 0},
-    {&MultiLinkControlScreen_SmartConSecLogoBlock, INFOGRAPH_ANIM_DELAY_MS},    
+    {&LightControlScreen_MfgBlock, INFOGRAPH_ANIM_DELAY_FAST_MS},
+    {&LightControlScreen_BldgBlock, INFOGRAPH_ANIM_DELAY_FAST_MS},
+    {&LightControlScreen_EnergyBlock, INFOGRAPH_ANIM_DELAY_FAST_MS},
+    {&LightControlScreen_EnvBlock, INFOGRAPH_ANIM_DELAY_FAST_MS},
+    {&LightControlScreen_AgriBlock, INFOGRAPH_ANIM_DELAY_FAST_MS},
+    {&LightControlScreen_LogiBlock, INFOGRAPH_ANIM_DELAY_FAST_MS},
+    {&LightControlScreen_HomeAutoBlock, INFOGRAPH_ANIM_DELAY_FAST_MS},
+    {&LightControlScreen_SmartCityBlock, INFOGRAPH_ANIM_DELAY_FAST_MS},
+    {&LightControlScreen_SmartBlock, 0},
+    {&LightControlScreen_ConnectedBlock, 0},
+    {&LightControlScreen_SecureBlock, 0},
+    {&LightControlScreen_SmartConSecLogoBlock, INFOGRAPH_ANIM_DELAY_MS},    
 };
 
 static ML_CONTROL_SCREEN_STATE appScreenMLControlState;
@@ -207,7 +207,7 @@ static void UpdateTempLineGraph(void)
     uint32_t series, device;
     APP_BLE_DEVICE * bleDevice;
 
-    MultiLinkControlScreen_LineGraphWidget_0->fn->clear(MultiLinkControlScreen_LineGraphWidget_0);
+    LightControlScreen_LineGraphWidget_0->fn->clear(LightControlScreen_LineGraphWidget_0);
     
     for (device = 0; device < APP_BLE_DEVICE_MAX; device++)
     {
@@ -215,14 +215,14 @@ static void UpdateTempLineGraph(void)
         
         if (bleDevice->connected)
         {
-            MultiLinkControlScreen_LineGraphWidget_0->fn->addSeries(MultiLinkControlScreen_LineGraphWidget_0);
-            MultiLinkControlScreen_LineGraphWidget_0->fn->setSeriesScheme(MultiLinkControlScreen_LineGraphWidget_0, device, lineGraphDeviceScheme[device]);
+            LightControlScreen_LineGraphWidget_0->fn->addSeries(LightControlScreen_LineGraphWidget_0);
+            LightControlScreen_LineGraphWidget_0->fn->setSeriesScheme(LightControlScreen_LineGraphWidget_0, device, lineGraphDeviceScheme[device]);
         }
     }
     
     for (series = 0; series < NUM_TEMP_GRAPH_ENTRIES; series++)
     {
-        MultiLinkControlScreen_LineGraphWidget_0->fn->addCategory(MultiLinkControlScreen_LineGraphWidget_0);    
+        LightControlScreen_LineGraphWidget_0->fn->addCategory(LightControlScreen_LineGraphWidget_0);    
     }    
     
     for (device = 0; device < APP_BLE_DEVICE_MAX; device++)
@@ -233,12 +233,12 @@ static void UpdateTempLineGraph(void)
         {
             for (series = 0; series < NUM_TEMP_GRAPH_ENTRIES; series++)
             {
-                MultiLinkControlScreen_LineGraphWidget_0->fn->addDataToSeries(MultiLinkControlScreen_LineGraphWidget_0, device, deviceTempRunValue[device][series]);
+                LightControlScreen_LineGraphWidget_0->fn->addDataToSeries(LightControlScreen_LineGraphWidget_0, device, deviceTempRunValue[device][series]);
             }
         }
     }
     
-    APP_LE_INVALIDATE(MultiLinkControlScreen_LineGraphWidget_0);
+    APP_LE_INVALIDATE(LightControlScreen_LineGraphWidget_0);
 }
 
 static void updateDeviceTempRunValue(uint32_t devId, uint32_t value)
@@ -293,43 +293,54 @@ static leColor rgb888_rgb565(leColor color)
     return red | green | blue;
 }
 
-void event_MultiLinkControlScreen_DisconnectButton_OnPressed(leButtonWidget* btn)
+void event_LightControlScreen_DisconnectButton_OnPressed(leButtonWidget* btn)
 {
     APP_UI_SendEvent(APP_EVENT_UI_START_DISCONNECT);
 }
 
-void event_MultiLinkControlScreen_DeviceAButton_OnPressed(leButtonWidget* btn)
+void event_LightControlScreen_DeviceAButton_OnPressed(leButtonWidget* btn)
 {
     MLControlSendEventParm(APP_EVENT_UI_SELECT_DEVICE, APP_BLE_DEVICE_A);
 }
 
-void event_MultiLinkControlScreen_DeviceBButton_OnPressed(leButtonWidget* btn)
+void event_LightControlScreen_DeviceBButton_OnPressed(leButtonWidget* btn)
 {
     MLControlSendEventParm(APP_EVENT_UI_SELECT_DEVICE, APP_BLE_DEVICE_B);
 }
 
-void event_MultiLinkControlScreen_DeviceCButton_OnPressed(leButtonWidget* btn)
+void event_LightControlScreen_DeviceCButton_OnPressed(leButtonWidget* btn)
 {
     MLControlSendEventParm(APP_EVENT_UI_SELECT_DEVICE, APP_BLE_DEVICE_C);
 }
 
-void event_MultiLinkControlScreen_AllDevicesButton_OnPressed(leButtonWidget* btn)
+void event_LightControlScreen_AllDevicesButton_OnPressed(leButtonWidget* btn)
 {
     APP_UI_SendEvent(APP_EVENT_UI_DEACTIVATE_ALL_DEVICES);
     APP_LE_SETSCHEME(btn, &TextInactiveScheme);
     
 }
 
-void event_MultiLinkControlScreen_AllDevicesButton_OnReleased(leButtonWidget* btn)
+void event_ControlScreen_AllDevicesButton_OnPressed(leButtonWidget* btn)
+{
+    
+}
+
+void event_LightControlScreen_AllDevicesButton_OnReleased(leButtonWidget* btn)
 {
     APP_UI_SendEvent(APP_EVENT_UI_ACTIVATE_ALL_DEVICES);
 }
 
-void event_MultiLinkControlScreen_DeviceInfoButton_OnPressed(leButtonWidget* btn)
+void event_ControlScreen_AllDevicesButton_OnReleased(leButtonWidget* btn)
 {
-    APP_LE_SETRELEASEDIMAGE(MultiLinkControlScreen_DeviceInfoButton, graphtab60);
-    APP_LE_SETRELEASEDIMAGE(MultiLinkControlScreen_WiFiInfoButton, WifiTab60);
-    APP_LE_SETRELEASEDIMAGE(MultiLinkControlScreen_BLEInfoButton, bleTab60);
+ 
+}
+
+
+void event_LightControlScreen_DeviceInfoButton_OnPressed(leButtonWidget* btn)
+{
+    APP_LE_SETRELEASEDIMAGE(LightControlScreen_DeviceInfoButton, graphtab60);
+    APP_LE_SETRELEASEDIMAGE(LightControlScreen_WiFiInfoButton, WifiTab60);
+    APP_LE_SETRELEASEDIMAGE(LightControlScreen_BLEInfoButton, bleTab60);
     
     switch(dataPanelState)
     {
@@ -344,7 +355,7 @@ void event_MultiLinkControlScreen_DeviceInfoButton_OnPressed(leButtonWidget* btn
             APP_UI_SendEvent(APP_EVENT_UI_HIDE_INFO);
             APP_UI_SendEvent(APP_EVENT_UI_HIDE_INFOGRAPHIC);
             APP_UI_SendEvent(APP_EVENT_UI_SHOW_INFO_GRAPH);
-            APP_LE_SETRELEASEDIMAGE(MultiLinkControlScreen_DeviceInfoButton, GraphTabA60);
+            APP_LE_SETRELEASEDIMAGE(LightControlScreen_DeviceInfoButton, GraphTabA60);
             
             break;
         }
@@ -352,17 +363,22 @@ void event_MultiLinkControlScreen_DeviceInfoButton_OnPressed(leButtonWidget* btn
         {
             APP_UI_SendEvent(APP_EVENT_UI_HIDE_INFO);
             APP_UI_SendEvent(APP_EVENT_UI_SHOW_INFO_GRAPH);
-            APP_LE_SETRELEASEDIMAGE(MultiLinkControlScreen_DeviceInfoButton, GraphTabA60);
+            APP_LE_SETRELEASEDIMAGE(LightControlScreen_DeviceInfoButton, GraphTabA60);
             break;
         }
     }
 }
 
-void event_MultiLinkControlScreen_BLEInfoButton_OnPressed(leButtonWidget* btn)
+void event_ControlScreen_DeviceInfoButton_OnPressed(leButtonWidget* btn)
 {
-    APP_LE_SETRELEASEDIMAGE(MultiLinkControlScreen_DeviceInfoButton, graphtab60);
-    APP_LE_SETRELEASEDIMAGE(MultiLinkControlScreen_WiFiInfoButton, WifiTab60);
-    APP_LE_SETRELEASEDIMAGE(MultiLinkControlScreen_BLEInfoButton, bleTab60);
+    
+}
+
+void event_LightControlScreen_BLEInfoButton_OnPressed(leButtonWidget* btn)
+{
+    APP_LE_SETRELEASEDIMAGE(LightControlScreen_DeviceInfoButton, graphtab60);
+    APP_LE_SETRELEASEDIMAGE(LightControlScreen_WiFiInfoButton, WifiTab60);
+    APP_LE_SETRELEASEDIMAGE(LightControlScreen_BLEInfoButton, bleTab60);
     
     switch(dataPanelState)
     {
@@ -377,7 +393,7 @@ void event_MultiLinkControlScreen_BLEInfoButton_OnPressed(leButtonWidget* btn)
             APP_UI_SendEvent(APP_EVENT_UI_HIDE_INFO);
             APP_UI_SendEvent(APP_EVENT_UI_HIDE_INFOGRAPHIC);
             APP_UI_SendEvent(APP_EVENT_UI_SHOW_INFO_BLE);
-            APP_LE_SETRELEASEDIMAGE(MultiLinkControlScreen_BLEInfoButton, bleTabA60);
+            APP_LE_SETRELEASEDIMAGE(LightControlScreen_BLEInfoButton, bleTabA60);
             
             break;
         }
@@ -385,17 +401,22 @@ void event_MultiLinkControlScreen_BLEInfoButton_OnPressed(leButtonWidget* btn)
         {
             APP_UI_SendEvent(APP_EVENT_UI_HIDE_INFO);
             APP_UI_SendEvent(APP_EVENT_UI_SHOW_INFO_BLE);
-            APP_LE_SETRELEASEDIMAGE(MultiLinkControlScreen_BLEInfoButton, bleTabA60);
+            APP_LE_SETRELEASEDIMAGE(LightControlScreen_BLEInfoButton, bleTabA60);
             break;
         }
     }
 }
 
-void event_MultiLinkControlScreen_WiFiInfoButton_OnPressed(leButtonWidget* btn)
+void event_ControlScreen_BLEInfoButton_OnPressed(leButtonWidget* btn)
 {
-    APP_LE_SETRELEASEDIMAGE(MultiLinkControlScreen_DeviceInfoButton, graphtab60);
-    APP_LE_SETRELEASEDIMAGE(MultiLinkControlScreen_WiFiInfoButton, WifiTab60);
-    APP_LE_SETRELEASEDIMAGE(MultiLinkControlScreen_BLEInfoButton, bleTab60);
+    
+}
+
+void event_LightControlScreen_WiFiInfoButton_OnPressed(leButtonWidget* btn)
+{
+    APP_LE_SETRELEASEDIMAGE(LightControlScreen_DeviceInfoButton, graphtab60);
+    APP_LE_SETRELEASEDIMAGE(LightControlScreen_WiFiInfoButton, WifiTab60);
+    APP_LE_SETRELEASEDIMAGE(LightControlScreen_BLEInfoButton, bleTab60);
     
     switch(dataPanelState)
     {
@@ -410,7 +431,7 @@ void event_MultiLinkControlScreen_WiFiInfoButton_OnPressed(leButtonWidget* btn)
             APP_UI_SendEvent(APP_EVENT_UI_HIDE_INFO);
             APP_UI_SendEvent(APP_EVENT_UI_HIDE_INFOGRAPHIC);
             APP_UI_SendEvent(APP_EVENT_UI_SHOW_INFO_WIFI);
-            APP_LE_SETRELEASEDIMAGE(MultiLinkControlScreen_WiFiInfoButton, WifiTabA60);
+            APP_LE_SETRELEASEDIMAGE(LightControlScreen_WiFiInfoButton, WifiTabA60);
             
             break;
         }
@@ -418,13 +439,19 @@ void event_MultiLinkControlScreen_WiFiInfoButton_OnPressed(leButtonWidget* btn)
         {
             APP_UI_SendEvent(APP_EVENT_UI_HIDE_INFO);
             APP_UI_SendEvent(APP_EVENT_UI_SHOW_INFO_WIFI);
-            APP_LE_SETRELEASEDIMAGE(MultiLinkControlScreen_WiFiInfoButton, WifiTabA60);
+            APP_LE_SETRELEASEDIMAGE(LightControlScreen_WiFiInfoButton, WifiTabA60);
             break;
         }
     }
 }
 
-void MultiLinkControlScreen_OnShow(void)
+void event_ControlScreen_WiFiInfoButton_OnPressed(leButtonWidget* btn)
+{
+    
+}
+
+
+void LightControlScreen_OnShow(void)
 {
     uint32_t i = 0;
     uint32_t temp;
@@ -435,18 +462,18 @@ void MultiLinkControlScreen_OnShow(void)
     
     MultiLink_InitDeviceControlTable();
     
-    APP_LE_SETEVENTFILTER(MultiLinkControlScreen_ColorPickerImage, ColorSelector_eventFilter);
-    APP_LE_SETEVENTFILTER(MultiLinkControlScreen_SliderControlPanel, BrightnessSlider_eventFilter);
+    APP_LE_SETEVENTFILTER(LightControlScreen_ColorPickerImage, ColorSelector_eventFilter);
+    APP_LE_SETEVENTFILTER(LightControlScreen_SliderControlPanel, BrightnessSlider_eventFilter);
     
-    APP_LE_SETY(MultiLinkControlScreen_ColorPickerImage, CONTROL_POSY_HIDE_BOTTOM);
-    APP_LE_SETX(MultiLinkControlScreen_SliderImageWidget, 800);
+    APP_LE_SETY(LightControlScreen_ColorPickerImage, CONTROL_POSY_HIDE_BOTTOM);
+    APP_LE_SETX(LightControlScreen_SliderImageWidget, 800);
 
-    APP_LE_SETVISIBLE(MultiLinkControlScreen_ScrollKnobImageWidget, LE_FALSE);
-    APP_LE_SETVISIBLE(MultiLinkControlScreen_AllDevicesButton, LE_FALSE);
+    APP_LE_SETVISIBLE(LightControlScreen_ScrollKnobImageWidget, LE_FALSE);
+    APP_LE_SETVISIBLE(LightControlScreen_AllDevicesButton, LE_FALSE);
     
-    APP_LE_SETVISIBLE(MultiLinkControlScreen_DeviceInfoButton, LE_FALSE);
-    APP_LE_SETVISIBLE(MultiLinkControlScreen_BLEInfoButton, LE_FALSE);
-    APP_LE_SETVISIBLE(MultiLinkControlScreen_WiFiInfoButton, LE_FALSE);
+    APP_LE_SETVISIBLE(LightControlScreen_DeviceInfoButton, LE_FALSE);
+    APP_LE_SETVISIBLE(LightControlScreen_BLEInfoButton, LE_FALSE);
+    APP_LE_SETVISIBLE(LightControlScreen_WiFiInfoButton, LE_FALSE);
     
     ledCfg.brightness = DEFAULT_LED_BRIGHTNESS_PCT;
     ledCfg.color888 = DEFAULT_LED_COLOR_RGB;
@@ -507,19 +534,19 @@ void MultiLinkControlScreen_OnShow(void)
                                                               0));
     snprintf(tempCharBuff, sizeof(tempCharBuff), "%lu", APP_WIFI_GetConnectedCount());
     numWifiConnStr.fn->setFromCStr(&numWifiConnStr, tempCharBuff);
-    APP_LE_SETLABELSTRING(MultiLinkControlScreen_NetConnInfo, numWifiConnStr);
+    APP_LE_SETLABELSTRING(LightControlScreen_NetConnInfo, numWifiConnStr);
     
     HideInfoWidgets();
     
-    APP_LE_SETVISIBLE(MultiLinkControlScreen_AnimImageWidget, LE_FALSE);
+    APP_LE_SETVISIBLE(LightControlScreen_AnimImageWidget, LE_FALSE);
     
-    APP_LE_SETHEIGHT(MultiLinkControlScreen_DeviceDataPanelA, INFO_PANEL_MIN_HEIGHT);
+    APP_LE_SETHEIGHT(LightControlScreen_DeviceDataPanelA, INFO_PANEL_MIN_HEIGHT);
 
-    APP_LE_SETVISIBLE(MultiLinkControlScreen_DisconnectButton, LE_FALSE);    
+    APP_LE_SETVISIBLE(LightControlScreen_DisconnectButton, LE_FALSE);    
     
 }
 
-void MultiLinkControlScreen_OnHide(void)
+void LightControlScreen_OnHide(void)
 {
     MultiLink_DestroyDeviceControlTable();
     
@@ -528,7 +555,7 @@ void MultiLinkControlScreen_OnHide(void)
     APP_HTTP_UnregisterStateNotification(httpCallbackIdx);
 }
 
-void MultiLinkControlScreen_OnUpdate(void)
+void LightControlScreen_OnUpdate(void)
 {
     switch(appScreenMLControlState)
     {
@@ -546,18 +573,18 @@ void MultiLinkControlScreen_OnUpdate(void)
             
             if (mlControlAnimTickCount != mlControlAnimTickPrev)
             {
-                int32_t ypos = APP_LE_GETY(MultiLinkControlScreen_ColorPickerImage);
+                int32_t ypos = APP_LE_GETY(LightControlScreen_ColorPickerImage);
                 int32_t deltaY = (ypos - COLOR_PICKER_YPOS) / CONTROL_ANIM_COEFF;
                 
                 if (deltaY > 0)
                 {
-                    APP_LE_SETY(MultiLinkControlScreen_ColorPickerImage, ypos - deltaY);
+                    APP_LE_SETY(LightControlScreen_ColorPickerImage, ypos - deltaY);
                 }
                 else
                 {
                     appScreenMLControlState = ML_CONTROL_ANIM1;
                     
-                    APP_LE_SETY(MultiLinkControlScreen_ColorPickerImage, COLOR_PICKER_YPOS);
+                    APP_LE_SETY(LightControlScreen_ColorPickerImage, COLOR_PICKER_YPOS);
                 }
                 
                 mlControlAnimTickPrev = mlControlAnimTickCount;
@@ -572,12 +599,12 @@ void MultiLinkControlScreen_OnUpdate(void)
             
             if (mlControlAnimTickCount != mlControlAnimTickPrev)
             {
-                int32_t xpos = APP_LE_GETX(MultiLinkControlScreen_SliderImageWidget);
+                int32_t xpos = APP_LE_GETX(LightControlScreen_SliderImageWidget);
                 int32_t deltaX = (xpos - SLIDER_X_SHOWPOS) / CONTROL_ANIM_COEFF;
                 
                 if (deltaX > 0)
                 {
-                    APP_LE_SETX(MultiLinkControlScreen_SliderImageWidget, xpos - deltaX);
+                    APP_LE_SETX(LightControlScreen_SliderImageWidget, xpos - deltaX);
                 }
                 else
                 {
@@ -585,7 +612,7 @@ void MultiLinkControlScreen_OnUpdate(void)
                     
                     appScreenMLControlState = ML_CONTROL_ANIM2;
                     
-                    APP_LE_SETX(MultiLinkControlScreen_SliderImageWidget, SLIDER_X_SHOWPOS);
+                    APP_LE_SETX(LightControlScreen_SliderImageWidget, SLIDER_X_SHOWPOS);
                 }
                 
                 mlControlAnimTickPrev = mlControlAnimTickCount;
@@ -595,15 +622,15 @@ void MultiLinkControlScreen_OnUpdate(void)
         }
         case ML_CONTROL_ANIM2:
         {
-            APP_LE_SETVISIBLE(MultiLinkControlScreen_ScrollKnobImageWidget, LE_TRUE);
-            APP_LE_SETVISIBLE(MultiLinkControlScreen_AllDevicesButton, LE_TRUE);
+            APP_LE_SETVISIBLE(LightControlScreen_ScrollKnobImageWidget, LE_TRUE);
+            APP_LE_SETVISIBLE(LightControlScreen_AllDevicesButton, LE_TRUE);
             
-            APP_LE_SETVISIBLE(MultiLinkControlScreen_DeviceInfoButton, LE_TRUE);
-            APP_LE_SETVISIBLE(MultiLinkControlScreen_BLEInfoButton, LE_TRUE);
-            APP_LE_SETVISIBLE(MultiLinkControlScreen_WiFiInfoButton, LE_TRUE);
+            APP_LE_SETVISIBLE(LightControlScreen_DeviceInfoButton, LE_TRUE);
+            APP_LE_SETVISIBLE(LightControlScreen_BLEInfoButton, LE_TRUE);
+            APP_LE_SETVISIBLE(LightControlScreen_WiFiInfoButton, LE_TRUE);
             
 #ifdef ENABLE_DISCONNECT_BUTTON    
-            APP_LE_SETVISIBLE(MultiLinkControlScreen_DisconnectButton, LE_TRUE);
+            APP_LE_SETVISIBLE(LightControlScreen_DisconnectButton, LE_TRUE);
 #endif            
 
             MLControlSetState(ML_CONTROL_INIT_DONE);
@@ -626,21 +653,21 @@ void MultiLinkControlScreen_OnUpdate(void)
             if(leRenderer_IsIdle() != LE_TRUE)
                 break;
             
-            APP_LE_SETHEIGHT(MultiLinkControlScreen_DeviceDataPanelA, INFO_PANEL_MIN_HEIGHT);
+            APP_LE_SETHEIGHT(LightControlScreen_DeviceDataPanelA, INFO_PANEL_MIN_HEIGHT);
             MLControlSetState(ML_CONTROL_PROCESSING);
             
 //            if (mlControlAnimTickCount != mlControlAnimTickPrev)
 //            {
-//                int32_t height = APP_LE_GETHEIGHT(MultiLinkControlScreen_DeviceDataPanelA);
+//                int32_t height = APP_LE_GETHEIGHT(LightControlScreen_DeviceDataPanelA);
 //                int32_t deltaHeight = height / CONTROL_PANEL_ANIM_COEFF;
 //                
 //                if (deltaHeight > 0)
 //                {
-//                    APP_LE_SETHEIGHT(MultiLinkControlScreen_DeviceDataPanelA, height - deltaHeight);
+//                    APP_LE_SETHEIGHT(LightControlScreen_DeviceDataPanelA, height - deltaHeight);
 //                }
 //                else
 //                {
-//                    APP_LE_SETHEIGHT(MultiLinkControlScreen_DeviceDataPanelA, INFO_PANEL_MIN_HEIGHT);
+//                    APP_LE_SETHEIGHT(LightControlScreen_DeviceDataPanelA, INFO_PANEL_MIN_HEIGHT);
 //                    
 //                    SYS_TIME_TimerStop(mlControlAnimTimer);
 //                    
@@ -661,18 +688,18 @@ void MultiLinkControlScreen_OnUpdate(void)
             
             if (mlControlAnimTickCount != mlControlAnimTickPrev)
             {
-                int32_t height = APP_LE_GETHEIGHT(MultiLinkControlScreen_DeviceDataPanelA);
+                int32_t height = APP_LE_GETHEIGHT(LightControlScreen_DeviceDataPanelA);
                 int32_t deltaHeight = (INFO_PANEL_HEIGHT - height) / CONTROL_PANEL_ANIM_COEFF;
                 
-                APP_LE_SETSCHEME(MultiLinkControlScreen_DeviceDataPanelA, &GraphScheme);
+                APP_LE_SETSCHEME(LightControlScreen_DeviceDataPanelA, &GraphScheme);
                 
                 if (deltaHeight > 0)
                 {
-                    APP_LE_SETHEIGHT(MultiLinkControlScreen_DeviceDataPanelA, height + deltaHeight);
+                    APP_LE_SETHEIGHT(LightControlScreen_DeviceDataPanelA, height + deltaHeight);
                 }
                 else
                 {
-                    APP_LE_SETHEIGHT(MultiLinkControlScreen_DeviceDataPanelA, INFO_PANEL_HEIGHT);
+                    APP_LE_SETHEIGHT(LightControlScreen_DeviceDataPanelA, INFO_PANEL_HEIGHT);
                     
                     ShowDeviceInfoWidgets();
                     
@@ -726,7 +753,7 @@ void MultiLinkControlScreen_OnUpdate(void)
             else
             {
                 //Hide the inforgraphic
-                APP_LE_SETVISIBLE(MultiLinkControlScreen_AnimImageWidget, LE_FALSE);
+                APP_LE_SETVISIBLE(LightControlScreen_AnimImageWidget, LE_FALSE);
                 
                 dataPanelState = ML_CTRL_DATA_NONE;
                 
@@ -742,18 +769,18 @@ void MultiLinkControlScreen_OnUpdate(void)
             
             if (mlControlAnimTickCount != mlControlAnimTickPrev)
             {
-                int32_t height = APP_LE_GETHEIGHT(MultiLinkControlScreen_DeviceDataPanelA);
+                int32_t height = APP_LE_GETHEIGHT(LightControlScreen_DeviceDataPanelA);
                 int32_t deltaHeight = (INFO_PANEL_HEIGHT - height) / CONTROL_PANEL_ANIM_COEFF;
                 
-                APP_LE_SETSCHEME(MultiLinkControlScreen_DeviceDataPanelA, &BLEPanelScheme);
+                APP_LE_SETSCHEME(LightControlScreen_DeviceDataPanelA, &BLEPanelScheme);
                 
                 if (deltaHeight > 0)
                 {
-                    APP_LE_SETHEIGHT(MultiLinkControlScreen_DeviceDataPanelA, height + deltaHeight);
+                    APP_LE_SETHEIGHT(LightControlScreen_DeviceDataPanelA, height + deltaHeight);
                 }
                 else
                 {
-                    APP_LE_SETHEIGHT(MultiLinkControlScreen_DeviceDataPanelA, INFO_PANEL_HEIGHT);
+                    APP_LE_SETHEIGHT(LightControlScreen_DeviceDataPanelA, INFO_PANEL_HEIGHT);
                     
                     ShowBluetoothInfoWidgets();
                     
@@ -776,18 +803,18 @@ void MultiLinkControlScreen_OnUpdate(void)
             
             if (mlControlAnimTickCount != mlControlAnimTickPrev)
             {
-                int32_t height = APP_LE_GETHEIGHT(MultiLinkControlScreen_DeviceDataPanelA);
+                int32_t height = APP_LE_GETHEIGHT(LightControlScreen_DeviceDataPanelA);
                 int32_t deltaHeight = (INFO_PANEL_HEIGHT - height) / CONTROL_PANEL_ANIM_COEFF;
                 
-                APP_LE_SETSCHEME(MultiLinkControlScreen_DeviceDataPanelA, &WifiPanelScheme);
+                APP_LE_SETSCHEME(LightControlScreen_DeviceDataPanelA, &WifiPanelScheme);
                 
                 if (deltaHeight > 0)
                 {
-                    APP_LE_SETHEIGHT(MultiLinkControlScreen_DeviceDataPanelA, height + deltaHeight);
+                    APP_LE_SETHEIGHT(LightControlScreen_DeviceDataPanelA, height + deltaHeight);
                 }
                 else
                 {
-                    APP_LE_SETHEIGHT(MultiLinkControlScreen_DeviceDataPanelA, INFO_PANEL_HEIGHT);
+                    APP_LE_SETHEIGHT(LightControlScreen_DeviceDataPanelA, INFO_PANEL_HEIGHT);
                     
                     ShowWifiInfoWidgets();
                     
@@ -829,7 +856,7 @@ void MultiLinkControlScreen_OnUpdate(void)
                     }
                     case APP_EVENT_UI_SHOW_INFOGRAPHIC:
                     {
-                        APP_LE_SETVISIBLE(MultiLinkControlScreen_AnimImageWidget, LE_TRUE);
+                        APP_LE_SETVISIBLE(LightControlScreen_AnimImageWidget, LE_TRUE);
                         
                         infoGraphAnimIdx = 0;
                         
@@ -964,7 +991,7 @@ void MultiLinkControlScreen_OnUpdate(void)
                             }
                         }  
                         
-                        APP_LE_SETSCHEME(MultiLinkControlScreen_AllDevicesButton, &TextScheme); 
+                        APP_LE_SETSCHEME(LightControlScreen_AllDevicesButton, &TextScheme); 
                         
                         break;
                     }
@@ -990,7 +1017,7 @@ void MultiLinkControlScreen_OnUpdate(void)
                             }
                         }
                         
-                        APP_LE_SETSCHEME(MultiLinkControlScreen_AllDevicesButton, &TextInactiveScheme); 
+                        APP_LE_SETSCHEME(LightControlScreen_AllDevicesButton, &TextInactiveScheme); 
 
                         break;                        
                     }
@@ -1081,7 +1108,7 @@ void MultiLinkControlScreen_OnUpdate(void)
                         
                         snprintf(tempCharBuff, sizeof(tempCharBuff), "%lu", APP_WIFI_GetConnectedCount());
                         numWifiConnStr.fn->setFromCStr(&numWifiConnStr, tempCharBuff);
-                        APP_LE_SETLABELSTRING(MultiLinkControlScreen_NetConnInfo, numWifiConnStr);
+                        APP_LE_SETLABELSTRING(LightControlScreen_NetConnInfo, numWifiConnStr);
                         break;
                     }
                     case APP_EVENT_HTTP_DEVICE_CONTROL:
@@ -1154,35 +1181,35 @@ static void MultiLink_InitDeviceControlTable(void)
     
     devices[APP_BLE_DEVICE_A] = (ML_CONTROL_DEVICE)
     {   
-        .button = MultiLinkControlScreen_DeviceAButton,
-        .deviceImage = MultiLinkControlScreen_ImageSequenceWidgetA, 
-        .tempLabel = MultiLinkControlScreen_TempLabelA,
-        .colorPanel = MultiLinkControlScreen_SelectedColorPanelA,
-        .lineGraphLabel = MultiLinkControlScreen_LineGraphLabelA,
-        .bleInfoLabel = MultiLinkControlScreen_BLEDeviceAName,                
-        .bleInfoConnected = MultiLinkControlScreen_BLEDeviceAOK,
+        .button = LightControlScreen_DeviceAButton,
+        .deviceImage = LightControlScreen_ImageSequenceWidgetA, 
+        .tempLabel = LightControlScreen_TempLabelA,
+        .colorPanel = LightControlScreen_SelectedColorPanelA,
+        .lineGraphLabel = LightControlScreen_LineGraphLabelA,
+        .bleInfoLabel = LightControlScreen_BLEDeviceAName,                
+        .bleInfoConnected = LightControlScreen_BLEDeviceAOK,
     };
     
     devices[APP_BLE_DEVICE_B] = (ML_CONTROL_DEVICE)
     {   
-        .button = MultiLinkControlScreen_DeviceBButton,
-        .deviceImage = MultiLinkControlScreen_ImageSequenceWidgetB, 
-        .tempLabel = MultiLinkControlScreen_TempLabelB,
-        .colorPanel = MultiLinkControlScreen_SelectedColorPanelB,
-        .lineGraphLabel = MultiLinkControlScreen_LineGraphLabelB,
-        .bleInfoLabel = MultiLinkControlScreen_BLEDeviceBName,
-        .bleInfoConnected = MultiLinkControlScreen_BLEDeviceBOK,
+        .button = LightControlScreen_DeviceBButton,
+        .deviceImage = LightControlScreen_ImageSequenceWidgetB, 
+        .tempLabel = LightControlScreen_TempLabelB,
+        .colorPanel = LightControlScreen_SelectedColorPanelB,
+        .lineGraphLabel = LightControlScreen_LineGraphLabelB,
+        .bleInfoLabel = LightControlScreen_BLEDeviceBName,
+        .bleInfoConnected = LightControlScreen_BLEDeviceBOK,
     };
     
     devices[APP_BLE_DEVICE_C] = (ML_CONTROL_DEVICE)
     {   
-        .button = MultiLinkControlScreen_DeviceCButton,
-        .deviceImage = MultiLinkControlScreen_ImageSequenceWidgetC, 
-        .tempLabel = MultiLinkControlScreen_TempLabelC,
-        .colorPanel = MultiLinkControlScreen_SelectedColorPanelC,
-        .lineGraphLabel = MultiLinkControlScreen_LineGraphLabelC,
-        .bleInfoLabel = MultiLinkControlScreen_BLEDeviceCName,              
-        .bleInfoConnected = MultiLinkControlScreen_BLEDeviceCOK,
+        .button = LightControlScreen_DeviceCButton,
+        .deviceImage = LightControlScreen_ImageSequenceWidgetC, 
+        .tempLabel = LightControlScreen_TempLabelC,
+        .colorPanel = LightControlScreen_SelectedColorPanelC,
+        .lineGraphLabel = LightControlScreen_LineGraphLabelC,
+        .bleInfoLabel = LightControlScreen_BLEDeviceCName,              
+        .bleInfoConnected = LightControlScreen_BLEDeviceCOK,
     };
     
     for (i = APP_BLE_DEVICE_A; i < APP_BLE_DEVICE_MAX; i++)
@@ -1227,17 +1254,17 @@ static void UpdateDeviceColorPanel(APP_BLE_DEVICE_ID id, gfxColor color888)
             devices[id].ColorSelectScheme.tables[LE_COLOR_MODE_RGB_565].colors.base = rgb888_rgb565(color888);
             devices[id].ColorSelectScheme.tables[LE_COLOR_MODE_RGB_888].colors.base = color888;
             
-            MultiLinkControlScreen_BarGraphWidget_0->fn->setDataInSeries(MultiLinkControlScreen_BarGraphWidget_0, 
+            LightControlScreen_BarGraphWidget_0->fn->setDataInSeries(LightControlScreen_BarGraphWidget_0, 
                                                                          0, id, 
                                                                          leColorChannelRed(color888, LE_COLOR_MODE_RGB_888));
-            MultiLinkControlScreen_BarGraphWidget_0->fn->setDataInSeries(MultiLinkControlScreen_BarGraphWidget_0, 
+            LightControlScreen_BarGraphWidget_0->fn->setDataInSeries(LightControlScreen_BarGraphWidget_0, 
                                                                          1, id, 
                                                                          leColorChannelGreen(color888, LE_COLOR_MODE_RGB_888));
-            MultiLinkControlScreen_BarGraphWidget_0->fn->setDataInSeries(MultiLinkControlScreen_BarGraphWidget_0, 
+            LightControlScreen_BarGraphWidget_0->fn->setDataInSeries(LightControlScreen_BarGraphWidget_0, 
                                                                          2, id, 
                                                                          leColorChannelBlue(color888, LE_COLOR_MODE_RGB_888));        
             
-            APP_LE_INVALIDATE(MultiLinkControlScreen_BarGraphWidget_0);
+            APP_LE_INVALIDATE(LightControlScreen_BarGraphWidget_0);
 
             APP_LE_SETSCHEME(devices[id].colorPanel, (const leScheme *) &devices[id].ColorSelectScheme);
             devices[id].colorPanel->fn->invalidate(devices[id].colorPanel);
@@ -1289,8 +1316,8 @@ static leBool ColorSelector_filterEvent(leWidget* target, leWidgetEvent* evt, vo
             ColorWheelSelectScheme.tables[LE_COLOR_MODE_RGB_565].colors.base = rgb888_rgb565(color888);
             ColorWheelSelectScheme.tables[LE_COLOR_MODE_RGB_888].colors.base = color888;
             
-            APP_LE_SETSCHEME(MultiLinkControlScreen_ColorWheelSelectColor, (const leScheme *) &ColorWheelSelectScheme);
-            APP_LE_INVALIDATE(MultiLinkControlScreen_ColorWheelSelectColor);
+            APP_LE_SETSCHEME(LightControlScreen_ColorWheelSelectColor, (const leScheme *) &ColorWheelSelectScheme);
+            APP_LE_INVALIDATE(LightControlScreen_ColorWheelSelectColor);
             
             uiMsg.event = APP_EVENT_UI_ML_LED_COLOR_SELECTED;
             uiMsg.param.num = color888;
@@ -1391,14 +1418,14 @@ static void SetBrightnessValue(uint32_t pct)
 static void SetSliderPosition(uint32_t pct)
 {
     uint32_t SliderKnobPosY = 
-            MultiLinkControlScreen_SliderControlPanel->fn->getY(MultiLinkControlScreen_SliderControlPanel) - 
-            MultiLinkControlScreen_ScrollKnobImageWidget->fn->getHeight(MultiLinkControlScreen_ScrollKnobImageWidget)/2;
+            LightControlScreen_SliderControlPanel->fn->getY(LightControlScreen_SliderControlPanel) - 
+            LightControlScreen_ScrollKnobImageWidget->fn->getHeight(LightControlScreen_ScrollKnobImageWidget)/2;
     
-    SliderKnobPosY = MultiLinkControlScreen_SliderControlPanel->fn->getY(MultiLinkControlScreen_SliderControlPanel) +
-                     ((MultiLinkControlScreen_SliderControlPanel->fn->getHeight(MultiLinkControlScreen_SliderControlPanel) * ( 100 - pct)) / 100) - 
-                     MultiLinkControlScreen_ScrollKnobImageWidget->fn->getHeight(MultiLinkControlScreen_ScrollKnobImageWidget) / 2;
+    SliderKnobPosY = LightControlScreen_SliderControlPanel->fn->getY(LightControlScreen_SliderControlPanel) +
+                     ((LightControlScreen_SliderControlPanel->fn->getHeight(LightControlScreen_SliderControlPanel) * ( 100 - pct)) / 100) - 
+                     LightControlScreen_ScrollKnobImageWidget->fn->getHeight(LightControlScreen_ScrollKnobImageWidget) / 2;
     
-    MultiLinkControlScreen_ScrollKnobImageWidget->fn->setY(MultiLinkControlScreen_ScrollKnobImageWidget, SliderKnobPosY);
+    LightControlScreen_ScrollKnobImageWidget->fn->setY(LightControlScreen_ScrollKnobImageWidget, SliderKnobPosY);
 }
 
 static void HideInfoWidgets(void)
@@ -1414,16 +1441,16 @@ static void HideInfoWidgets(void)
         APP_LE_SETVISIBLE(devices[i].bleInfoLabel, LE_FALSE);
     }
     
-    APP_LE_SETVISIBLE(MultiLinkControlScreen_DeviceInfoLabel, LE_FALSE);
+    APP_LE_SETVISIBLE(LightControlScreen_DeviceInfoLabel, LE_FALSE);
     
     //Graph info widgets
-    APP_LE_SETVISIBLE(MultiLinkControlScreen_ColorGraphLabel, LE_FALSE);
-    APP_LE_SETVISIBLE(MultiLinkControlScreen_LineGraphWidget_0, LE_FALSE);
-    APP_LE_SETVISIBLE(MultiLinkControlScreen_BarGraphWidget_0, LE_FALSE);
-    APP_LE_SETVISIBLE(MultiLinkControlScreen_TempSensorGraphLabel, LE_FALSE);
+    APP_LE_SETVISIBLE(LightControlScreen_ColorGraphLabel, LE_FALSE);
+    APP_LE_SETVISIBLE(LightControlScreen_LineGraphWidget_0, LE_FALSE);
+    APP_LE_SETVISIBLE(LightControlScreen_BarGraphWidget_0, LE_FALSE);
+    APP_LE_SETVISIBLE(LightControlScreen_TempSensorGraphLabel, LE_FALSE);
     
     //Wifi Info Widgets
-    APP_LE_SETVISIBLE(MultiLinkControlScreen_NetInfoPanel, LE_FALSE);
+    APP_LE_SETVISIBLE(LightControlScreen_NetInfoPanel, LE_FALSE);
 }
 
 static void ShowDeviceInfoWidgets(void)
@@ -1446,13 +1473,13 @@ static void ShowDeviceInfoWidgets(void)
         }
     }
     
-    APP_LE_SETVISIBLE(MultiLinkControlScreen_ColorGraphLabel, LE_TRUE);
-    APP_LE_SETVISIBLE(MultiLinkControlScreen_DeviceInfoLabel, LE_TRUE);
-    APP_LE_SETVISIBLE(MultiLinkControlScreen_LineGraphWidget_0, LE_TRUE);
-    APP_LE_SETVISIBLE(MultiLinkControlScreen_BarGraphWidget_0, LE_TRUE);
-    APP_LE_SETVISIBLE(MultiLinkControlScreen_TempSensorGraphLabel, LE_TRUE);
+    APP_LE_SETVISIBLE(LightControlScreen_ColorGraphLabel, LE_TRUE);
+    APP_LE_SETVISIBLE(LightControlScreen_DeviceInfoLabel, LE_TRUE);
+    APP_LE_SETVISIBLE(LightControlScreen_LineGraphWidget_0, LE_TRUE);
+    APP_LE_SETVISIBLE(LightControlScreen_BarGraphWidget_0, LE_TRUE);
+    APP_LE_SETVISIBLE(LightControlScreen_TempSensorGraphLabel, LE_TRUE);
     
-    APP_LE_SETLABELSTRING(MultiLinkControlScreen_DeviceInfoLabel, string_DeviceInfo);
+    APP_LE_SETLABELSTRING(LightControlScreen_DeviceInfoLabel, string_DeviceInfo);
     
     UpdateTempLineGraph();
 }
@@ -1475,8 +1502,8 @@ static void ShowBluetoothInfoWidgets(void)
         }
     }
     
-    APP_LE_SETVISIBLE(MultiLinkControlScreen_DeviceInfoLabel, LE_TRUE);
-    APP_LE_SETLABELSTRING(MultiLinkControlScreen_DeviceInfoLabel, string_BLEDeviceInfo);
+    APP_LE_SETVISIBLE(LightControlScreen_DeviceInfoLabel, LE_TRUE);
+    APP_LE_SETLABELSTRING(LightControlScreen_DeviceInfoLabel, string_BLEDeviceInfo);
 }
 
 static void ShowWifiInfoWidgets(void)
@@ -1486,8 +1513,8 @@ static void ShowWifiInfoWidgets(void)
     TCPIP_DHCPS_RES retval;
     static TCPIP_NET_HANDLE netHdl;
     
-    APP_LE_SETLABELSTRING(MultiLinkControlScreen_DeviceInfoLabel, string_WiFiDeviceInfo);
-    APP_LE_SETVISIBLE(MultiLinkControlScreen_NetInfoPanel, LE_TRUE);
+    APP_LE_SETLABELSTRING(LightControlScreen_DeviceInfoLabel, string_WiFiDeviceInfo);
+    APP_LE_SETVISIBLE(LightControlScreen_NetInfoPanel, LE_TRUE);
     
 
     

@@ -235,6 +235,9 @@ void MultiLinkConnectScreen_OnUpdate(void)
                 
                 mlConnectAnimTickPrev = mlConnectAnimTickCount;
             }
+            // Go to Sustainability Wall
+            
+            legato_showScreen(screenID_SWallControlScreen);
             
             break;
         }
@@ -697,7 +700,7 @@ void MultiLinkConnectScreen_OnUpdate(void)
                     
                     APP_LE_SETY(MultiLinkConnectScreen_ControlButton, CONNECT_POSY_HIDE_BOTTOM);
                     
-                    legato_showScreen(screenID_MultiLinkControlScreen);
+                    legato_showScreen(screenID_LightControlScreen);
                 }
                 
                 mlConnectAnimTickPrev = mlConnectAnimTickCount;

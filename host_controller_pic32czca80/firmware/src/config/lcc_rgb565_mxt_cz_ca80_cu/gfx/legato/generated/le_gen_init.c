@@ -9,9 +9,11 @@ void legato_initializeScreenState(void)
 
     initializeStrings();
 
+    screenInit_LightControlScreen();
     screenInit_MainMenu();
-    screenInit_MultiLinkControlScreen();
     screenInit_MultiLinkConnectScreen();
+    screenInit_SWallControlScreen();
+    screenInit_ControlScreen();
 
     currentScreen = -1;
     changingToScreen = -1;
@@ -28,21 +30,33 @@ static void legato_hideCurrentScreen(void)
 {
     switch(currentScreen)
     {
+        case screenID_LightControlScreen:
+        {
+            screenHide_LightControlScreen();
+            currentScreen = 0;
+            break;
+        }
         case screenID_MainMenu:
         {
             screenHide_MainMenu();
             currentScreen = 0;
             break;
         }
-        case screenID_MultiLinkControlScreen:
-        {
-            screenHide_MultiLinkControlScreen();
-            currentScreen = 0;
-            break;
-        }
         case screenID_MultiLinkConnectScreen:
         {
             screenHide_MultiLinkConnectScreen();
+            currentScreen = 0;
+            break;
+        }
+        case screenID_SWallControlScreen:
+        {
+            screenHide_SWallControlScreen();
+            currentScreen = 0;
+            break;
+        }
+        case screenID_ControlScreen:
+        {
+            screenHide_ControlScreen();
             currentScreen = 0;
             break;
         }
@@ -59,25 +73,38 @@ void legato_showScreen(uint32_t id)
 
 void legato_updateScreenState(void)
 {
+    if(leIsDrawing() == LE_TRUE)
+        return;
+
     if(changingToScreen >= 0)
     {
         legato_hideCurrentScreen();
 
         switch(changingToScreen)
         {
+            case screenID_LightControlScreen:
+            {
+                screenShow_LightControlScreen();
+                break;
+            }
             case screenID_MainMenu:
             {
                 screenShow_MainMenu();
                 break;
             }
-            case screenID_MultiLinkControlScreen:
-            {
-                screenShow_MultiLinkControlScreen();
-                break;
-            }
             case screenID_MultiLinkConnectScreen:
             {
                 screenShow_MultiLinkConnectScreen();
+                break;
+            }
+            case screenID_SWallControlScreen:
+            {
+                screenShow_SWallControlScreen();
+                break;
+            }
+            case screenID_ControlScreen:
+            {
+                screenShow_ControlScreen();
                 break;
             }
         }
@@ -88,19 +115,29 @@ void legato_updateScreenState(void)
 
     switch(currentScreen)
     {
+        case screenID_LightControlScreen:
+        {
+            screenUpdate_LightControlScreen();
+            break;
+        }
         case screenID_MainMenu:
         {
             screenUpdate_MainMenu();
             break;
         }
-        case screenID_MultiLinkControlScreen:
-        {
-            screenUpdate_MultiLinkControlScreen();
-            break;
-        }
         case screenID_MultiLinkConnectScreen:
         {
             screenUpdate_MultiLinkConnectScreen();
+            break;
+        }
+        case screenID_SWallControlScreen:
+        {
+            screenUpdate_SWallControlScreen();
+            break;
+        }
+        case screenID_ControlScreen:
+        {
+            screenUpdate_ControlScreen();
             break;
         }
     }

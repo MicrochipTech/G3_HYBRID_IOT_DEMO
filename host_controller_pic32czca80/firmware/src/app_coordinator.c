@@ -62,6 +62,8 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 // Section: Global Data Definitions
 // *****************************************************************************
 // *****************************************************************************
+#define MAX_DEVICES 16
+APP_COORDINATOR_DEVICE_INFO appCoordinatorDeviceInfo[MAX_DEVICES];
 
 // *****************************************************************************
 /* Application Data
@@ -85,6 +87,16 @@ USB_ALIGN APP_COORDINATOR_DATA appCoordinatorData;
 // Section: Application Callback Functions
 // *****************************************************************************
 // *****************************************************************************
+
+void APP_COORDINATOR_SYS_TIME_CallbackSetFlag(uintptr_t context)
+{
+    if (context != 0)
+    {
+        /* Context holds the flag's address */
+        *((bool *) context) = true;
+    }
+}
+
 
 USB_HOST_EVENT_RESPONSE APP_COORDINATOR_USBHostEventHandler 
 (
@@ -203,6 +215,159 @@ USB_HOST_CDC_EVENT_RESPONSE APP_COORDINATOR_USBHostCDCEventHandler
 // Section: Application Local Functions
 // *****************************************************************************
 // *****************************************************************************
+
+#define SRV_USI_PROT_ID_USED SRV_USI_PROT_ID_PHY
+#define USI_MESSAGE_LENGTH_MAX 256
+#define USI_HEARTBEAT_COUNTER_MS 10000
+
+/* TODO:  Add any necessary local functions.
+*/
+
+bool APP_COORDINATOR_Prepare2Send_Message(uint8_t index, uint8_t *buffer, uint16_t length, bool answerFlag)
+{
+    if (appCoordinatorData.freetransferFlag)
+    {
+        //Don't block this way - risk here
+        //appCoordinatorData.freetransferFlag = false;
+        appCoordinatorData.transferFlag = true;
+        memcpy(appCoordinatorData.transferBuffer, buffer, length);
+        appCoordinatorData.transferLength = length;
+        appCoordinatorData.transferAnswerFlag = answerFlag;
+        appCoordinatorData.transferAnswerOK = false;
+        return true;
+    }
+    return false;
+}
+
+void APP_COORDINATOR_Send_Message(uint8_t *buffer, uint16_t length )
+{
+#if 0    
+    char lData[USI_MESSAGE_LENGTH];
+    char* pData;
+    size_t len;
+
+    /*  */
+    pData++ = lData;
+    pData[0] = PROTOCOL_ID;
+    memcpy (pData, buffer, length);
+    
+    /* Copy Message */
+    pData += length;
+
+    /* Message Size */
+    len = pData - lData;
+#endif    
+    /* Send USI Message */
+    SRV_USI_Send_Message(appCoordinatorData.srvUSIHandle, SRV_USI_PROT_ID_USED, (uint8_t *)buffer, length);
+}
+
+void APP_COORDINATOR_deviceInit ( void )
+{
+    for (int i=0; i<MAX_DEVICES; i++)
+    {
+        appCoordinatorDeviceInfo[i].index = INDEX_UNKNOWN;
+        appCoordinatorDeviceInfo[i].type = TYPE_LIGHTING_INDOOR + i;
+        appCoordinatorDeviceInfo[i].alive = false;
+    }
+}
+
+bool APP_COORDINATOR_deviceGetAlive ( uint8_t type )
+{
+    return appCoordinatorDeviceInfo[type - TYPE_LIGHTING_INDOOR].alive;
+}
+
+uint8_t APP_COORDINATOR_deviceGetIndex ( uint8_t type )
+{
+    return appCoordinatorDeviceInfo[type - TYPE_LIGHTING_INDOOR].index;
+}
+
+void APP_COORDINATOR_ProtocolEventHandler(uint8_t *pData, size_t length)
+{   
+    
+    /* Protection for invalid length */
+    if (!length)
+    {
+        LED1_Toggle();
+        return;
+    }
+
+    SYS_DEBUG_PRINT(SYS_ERROR_INFO, "APP_COORDINATOR: Received USI message: 0x%02X, 0x%02X, 0x%02X\r\n", pData[0], pData[1], pData[2]);
+
+    /* Process received command because nobody is waiting for this */
+    uint8_t *pbuffer;
+    uint8_t index;
+    uint8_t type;
+    uint8_t available;
+                
+    pbuffer = pData;
+    //pbuffer++; // USI Protocol ID removal
+    //pbuffer++; // USI Frame Length removal
+    switch (*pbuffer++)
+    {
+        // Commands from the host PIC32CZCA80
+        case CMD_GET_DEVICES_ANSWER:
+        {
+            SYS_DEBUG_MESSAGE(SYS_ERROR_INFO, "Get Devices Answer\r\n");
+            // ANSWER TO CMD_GET_DEVICES out of timing...
+            
+            if (!appCoordinatorData.transferFlag)    
+            {           
+                uint16_t numdevices;
+                numdevices = *pbuffer++;
+                if (numdevices)
+                {
+                    for (int i = 0; i< numdevices; i++)
+                    {
+                        index = *pbuffer++;
+                        type = *pbuffer++;
+                        available = *pbuffer++;
+                        SYS_DEBUG_PRINT(SYS_ERROR_INFO, "%d - 0x%02X - %s \r\n",index, type, available? "true" : "false");
+                    }               
+                }
+            }
+            else
+            {
+                memcpy(appCoordinatorData.transferBuffer, pData, length);
+                appCoordinatorData.transferLength = length;
+                appCoordinatorData.transferAnswerOK = true;                
+            }
+            break;
+        }
+        case CMD_DEVICE_NOTIFICATION:
+        {
+            // Notification from Coordinator...
+            index = *pbuffer++;
+            type = *pbuffer++;
+            available = *pbuffer++;
+            SYS_DEBUG_PRINT(SYS_ERROR_INFO, "Device Notification: %d - 0x%02X - %s \r\n",index, type, available? "true" : "false");
+
+            break;
+        }
+        case CMD_RESET_NOTIFICATION:
+        {
+            // First Command sent by Coordinator after start-up
+            SYS_DEBUG_MESSAGE(SYS_ERROR_INFO, "Reset\r\n");
+            appCoordinatorData.remoteStatus = APP_COORDINATOR_REMOTE_STATUS_RESET;
+            // Initialize access to devices
+            APP_COORDINATOR_deviceInit();
+            if (appCoordinatorData.timer != SYS_TIME_HANDLE_INVALID)
+            {
+                SYS_TIME_TimerDestroy(appCoordinatorData.timer);
+                appCoordinatorData.timerExpired = true;
+            }
+            break;
+        }
+        case CMD_HEARTBEAT:
+        {
+            // Heartbeat from Coordinator to Host
+            SYS_DEBUG_MESSAGE(SYS_ERROR_INFO, "Heartbeat\r\n");
+            appCoordinatorData.remoteStatus = APP_COORDINATOR_REMOTE_STATUS_READY;
+            break;
+        }
+        default:
+            break;
+    }   
+}
 
 /* TODO:  Add any necessary local functions.
 */                        
@@ -332,11 +497,103 @@ static bool APP_COORDINATOR_TaskDelay(uint32_t ms, SYS_TIME_HANDLE* handle)
     See prototype in app.h.
  */
 
+void APP_COORDINATOR_usiInit ( void )
+{
+    appCoordinatorData.transferState = APP_COORDINATOR_TRANSFER_STATE_WAIT;
+    appCoordinatorData.availableBuffers = true;
+    appCoordinatorData.transferAnswerFlag = false;
+    appCoordinatorData.transferTimeExpired = false;
+    appCoordinatorData.transferAnswerOK = false;
+    appCoordinatorData.transferFlag = false;
+    appCoordinatorData.transferTimeout_ms = 5000;
+    appCoordinatorData.freetransferFlag = true;
+}
+
+/******************************************************************************
+  Function:
+    void APP_COORDINATOR_usiTasks ( void )
+
+  Remarks:
+    See prototype in app.h.
+ */
+void APP_COORDINATOR_usiTasks ( void )
+{
+    switch (appCoordinatorData.transferState)
+    {
+        case APP_COORDINATOR_TRANSFER_STATE_WAIT:
+            if (appCoordinatorData.transferFlag)
+            {
+                /* Someone wants to transmit */
+                appCoordinatorData.transferState = APP_COORDINATOR_TRANSFER_STATE_SEND_DATA;
+            }
+            break;
+            
+        case APP_COORDINATOR_TRANSFER_STATE_SEND_DATA:
+            if (appCoordinatorData.availableBuffers)
+            {         
+                SYS_DEBUG_MESSAGE(SYS_ERROR_ERROR, "APP_COORDINATOR: SEND USI PACKET\r\n");
+                APP_COORDINATOR_Send_Message(appCoordinatorData.transferBuffer, appCoordinatorData.transferLength);
+                if (appCoordinatorData.transferAnswerFlag)
+                {
+                    /* Create timer for timeout to detect UDP reply not received */
+                    appCoordinatorData.transferTimeExpired = false;
+                    appCoordinatorData.transferTimeHandle = SYS_TIME_CallbackRegisterMS(APP_COORDINATOR_SYS_TIME_CallbackSetFlag,
+                    (uintptr_t) &appCoordinatorData.transferTimeExpired , appCoordinatorData.transferTimeout_ms, SYS_TIME_SINGLE);
+                    appCoordinatorData.transferState = APP_COORDINATOR_TRANSFER_STATE_WAIT_DATA;
+                }
+                else
+                {
+                    appCoordinatorData.transferTimeExpired = true;
+                    appCoordinatorData.transferAnswerOK = true;
+                    appCoordinatorData.transferState = APP_COORDINATOR_TRANSFER_STATE_WAIT;
+                    /* For the next transfer */
+                    appCoordinatorData.transferFlag = false;
+                }
+            }
+            break; 
+
+        case APP_COORDINATOR_TRANSFER_STATE_WAIT_DATA:
+        {
+            if ((appCoordinatorData.transferTimeExpired == true) && (appCoordinatorData.availableBuffers == true))
+            {
+                /* Reply not received */
+                appCoordinatorData.transferAnswerOK = false;
+                SYS_DEBUG_PRINT(SYS_ERROR_ERROR, "APP_COORDINATOR: reply not received from coordinator\r\n");
+
+                /* Free Transfer State */
+                appCoordinatorData.transferFlag = false;
+                appCoordinatorData.transferState = APP_COORDINATOR_TRANSFER_STATE_WAIT;
+                break;
+            }
+
+            /* Check if received answer  */
+            if (!appCoordinatorData.transferAnswerOK)
+            {
+                break;
+            }
+
+            appCoordinatorData.transferTimeExpired = true;
+            SYS_TIME_TimerDestroy(appCoordinatorData.transferTimeHandle);
+            appCoordinatorData.transferFlag = false;
+            appCoordinatorData.transferState = APP_COORDINATOR_TRANSFER_STATE_WAIT;            
+
+            break;
+        }    
+        default:
+            break;
+    }    
+}
+
+
+
 void APP_COORDINATOR_Initialize ( void )
 {
+    
+    /* RELATED TO USB HOST */
          /* Initialize the application state machine */
     
     appCoordinatorData.state =  APP_COORDINATOR_STATE_BUS_ENABLE;
+    appCoordinatorData.state =  APP_COORDINATOR_STATE_USI_INIT;
     appCoordinatorData.cdcHostLineCoding.dwDTERate     = APP_COORDINATOR_HOST_CDC_BAUDRATE_SUPPORTED;
     appCoordinatorData.cdcHostLineCoding.bDataBits     = (uint8_t)APP_COORDINATOR_HOST_CDC_NO_OF_DATA_BITS;
     appCoordinatorData.cdcHostLineCoding.bParityType   = (uint8_t)APP_COORDINATOR_HOST_CDC_PARITY_TYPE;
@@ -349,6 +606,9 @@ void APP_COORDINATOR_Initialize ( void )
     appCoordinatorData.writeTransferDone = false;
     appCoordinatorData.controlRequestDone = false;
     appCoordinatorData.timer = SYS_TIME_HANDLE_INVALID;
+    appCoordinatorData.timerTimeout_ms = 10000;
+    appCoordinatorData.timerExpired = false;
+    appCoordinatorData.remoteStatus = APP_COORDINATOR_REMOTE_STATUS_INIT;
     
     indexBufferRx = 0;
     memset(serializationBufferRx,'\0',SERIALIZATION_BUFFER_SIZE);
@@ -359,9 +619,14 @@ void APP_COORDINATOR_Initialize ( void )
        
     USB1_DRD_Set();
     
-    SYS_DEBUG_MESSAGE(SYS_ERROR_INFO, "App init\r\n");
+    /* RELATED TO TRANSFER */
+    APP_COORDINATOR_usiInit();
+    
+    /* RELATED TO DEVICE INFO */
+    APP_COORDINATOR_deviceInit();
+    
+    SYS_DEBUG_MESSAGE(SYS_ERROR_INFO, "[APP COORDINATOR] - Init\r\n");
 }
-
 
 /******************************************************************************
   Function:
@@ -386,6 +651,9 @@ void APP_COORDINATOR_Tasks ( void )
        appCoordinatorData.controlRequestDone = false;
        appCoordinatorData.deviceWasDetached = false;
    }
+   
+   
+   APP_COORDINATOR_usiTasks();
    
     switch (appCoordinatorData.state)
     {
@@ -425,7 +693,7 @@ void APP_COORDINATOR_Tasks ( void )
             {
                 /* A CDC device is attached. We can open this device */
                 appCoordinatorData.deviceIsAttached = false;
-                SYS_DEBUG_MESSAGE(SYS_ERROR_INFO, "Attached USB CDC Device\r\n");
+                SYS_DEBUG_MESSAGE(SYS_ERROR_INFO, "[APP COORDINATOR] - Attached USB CDC Device\r\n");
                 /* Wait for a while */
                 appCoordinatorData.nextState = APP_COORDINATOR_STATE_OPEN_DEVICE;
                 appCoordinatorData.state = APP_COORDINATOR_STATE_DELAY;
@@ -439,7 +707,7 @@ void APP_COORDINATOR_Tasks ( void )
             appCoordinatorData.cdcHostHandle = USB_HOST_CDC_Open(appCoordinatorData.cdcObj);
             if(appCoordinatorData.cdcHostHandle != USB_HOST_CDC_HANDLE_INVALID)
             {
-                SYS_DEBUG_MESSAGE(SYS_ERROR_INFO, "Opened USB CDC Device\r\n");
+                SYS_DEBUG_MESSAGE(SYS_ERROR_INFO, "[APP COORDINATOR] - Opened USB CDC Device\r\n");
                 /* The CDC Device was opened successfully. Set the event handler
                  * and then go to the next state. */
                 USB_HOST_CDC_EventHandlerSet(appCoordinatorData.cdcHostHandle, APP_COORDINATOR_USBHostCDCEventHandler, (uintptr_t)0);
@@ -660,6 +928,125 @@ void APP_COORDINATOR_Tasks ( void )
             }
             break;
 
+// STATES related with USI HOST into SERCOM8 - Serial Port
+            
+        case APP_COORDINATOR_STATE_USI_INIT:
+        {   /* Application's initial state. */
+            /* Open USI Service */
+            appCoordinatorData.srvUSIHandle = SRV_USI_Open(SRV_USI_INDEX_0);
+
+            if (appCoordinatorData.srvUSIHandle != DRV_HANDLE_INVALID)
+            {
+                /* Set Application to next state */
+                appCoordinatorData.state = APP_COORDINATOR_STATE_USI_CONFIG;
+                SYS_DEBUG_MESSAGE(SYS_ERROR_INFO, "[APP COORDINATOR] - USI Opened\r\n");
+            }
+            else
+            {
+                /* Set Application to ERROR state */
+                appCoordinatorData.state = APP_COORDINATOR_STATE_ERROR;
+            }
+            break;
+        }
+
+        case APP_COORDINATOR_STATE_USI_CONFIG:
+        {
+            if (SRV_USI_Status(appCoordinatorData.srvUSIHandle) == SRV_USI_STATUS_CONFIGURED)
+            {
+                SYS_DEBUG_MESSAGE(SYS_ERROR_INFO, "[APP COORDINATOR] - USI Configured\r\n");
+                /* Register USI callback */
+                SRV_USI_CallbackRegister(appCoordinatorData.srvUSIHandle,
+                        SRV_USI_PROT_ID_USED, APP_COORDINATOR_ProtocolEventHandler);
+
+                /* Set Application to next state */
+                appCoordinatorData.state = APP_COORDINATOR_STATE_USI_READY;
+            }
+            break;
+        }
+
+        case APP_COORDINATOR_STATE_USI_READY:
+        {
+            /* Check USI status in case of USI device has been reset */
+            if (SRV_USI_Status(appCoordinatorData.srvUSIHandle) == SRV_USI_STATUS_NOT_CONFIGURED)
+            {
+                /* Set Application to next state */
+                appCoordinatorData.state = APP_COORDINATOR_STATE_USI_CONFIG;
+            }
+            else
+            {
+                if (appCoordinatorData.remoteStatus == APP_COORDINATOR_REMOTE_STATUS_READY)
+                {
+                    /* Waiting for device information */
+                    appCoordinatorData.state = APP_COORDINATOR_STATE_USI_GET_DEVICES;
+                    appCoordinatorData.timer = SYS_TIME_CallbackRegisterMS(APP_COORDINATOR_SYS_TIME_CallbackSetFlag,
+                        (uintptr_t) &appCoordinatorData.timerExpired, appCoordinatorData.timerTimeout_ms, SYS_TIME_SINGLE);
+                }
+            }
+            break;
+        }
+
+        case APP_COORDINATOR_STATE_USI_GET_DEVICES:
+        {          
+            if ((appCoordinatorData.freetransferFlag) && (!appCoordinatorData.transferFlag) && (appCoordinatorData.timerExpired))
+            {
+                appCoordinatorData.timerExpired = false;
+                appCoordinatorData.freetransferFlag = false;
+                appCoordinatorData.transferFlag = true;
+                appCoordinatorData.transferBuffer[0] = CMD_GET_DEVICES;
+                appCoordinatorData.transferLength = 1;
+                appCoordinatorData.transferAnswerFlag = true;
+                appCoordinatorData.transferAnswerOK = false;
+                appCoordinatorData.state = APP_COORDINATOR_STATE_USI_GET_DEVICES_ANSWER;
+            }
+            break;
+        }
+        
+        case APP_COORDINATOR_STATE_USI_GET_DEVICES_ANSWER:
+        {
+            if (!appCoordinatorData.transferFlag)
+            {                   
+                if (appCoordinatorData.transferAnswerOK)
+                {
+                    SYS_DEBUG_MESSAGE(SYS_ERROR_INFO, "[APP COORDINATOR] - Get Devices Answer OK\r\n");                     
+                    
+                    uint16_t numdevices;
+                    uint8_t index;
+                    uint8_t type;
+                    uint8_t alive;
+                    uint8_t *pbuffer;
+                    
+                    pbuffer = appCoordinatorData.transferBuffer;
+                    // First Byte is the command itself
+                    if (*pbuffer++ == CMD_GET_DEVICES_ANSWER)
+                    {
+                        // Will be better to check the length...
+                        numdevices = *pbuffer++;
+                        if (numdevices)
+                        {
+                            for (int i = 0; i< numdevices; i++)
+                            {
+                                index = *pbuffer++;
+                                type = *pbuffer++;
+                                alive = *pbuffer++;
+                                SYS_DEBUG_PRINT(SYS_ERROR_INFO, "Index:%d - Type:0x%02X - Alive: %s \r\n", index, type, alive? "yes" : "no");
+                                appCoordinatorDeviceInfo[type - TYPE_LIGHTING_INDOOR].index = index;
+                                appCoordinatorDeviceInfo[type - TYPE_LIGHTING_INDOOR].alive = alive;
+                            }               
+                        }
+                    }
+                }
+                else
+                {
+                    SYS_DEBUG_MESSAGE(SYS_ERROR_INFO, "[APP COORDINATOR] - Get Devices Answer FAILED\r\n");
+                }
+                /* Free transfer flag */
+                appCoordinatorData.freetransferFlag = true;
+                appCoordinatorData.state = APP_COORDINATOR_STATE_USI_READY;
+                break;
+            }            
+            break;
+        }        
+        
         case APP_COORDINATOR_STATE_DELAY:
         {
             // Wait delay time
