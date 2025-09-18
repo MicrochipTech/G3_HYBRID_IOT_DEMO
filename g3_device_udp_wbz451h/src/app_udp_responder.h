@@ -13,9 +13,10 @@
   Description:
     This header file provides function prototypes and data type definitions for
     the application.  Some of these are required by the system (such as the
-    "APP_UDP_RESPONDER_Initialize" and "APP_UDP_RESPONDER_Tasks" prototypes) and some of them are only used
-    internally by the application (such as the "APP_UDP_RESPONDER_STATES" definition).  Both
-    are defined here for convenience.
+    "APP_UDP_RESPONDER_Initialize" and "APP_UDP_RESPONDER_Tasks" prototypes) and
+    some of them are only used internally by the application (such as the
+    "APP_UDP_RESPONDER_STATES" definition). Both are defined here for
+    convenience.
 *******************************************************************************/
 
 #ifndef _APP_UDP_RESPONDER_H
@@ -84,39 +85,6 @@ typedef enum
 
 } APP_UDP_RESPONDER_STATES;
 
-typedef enum
-{
-    /* Device Type */
-    TYPE_BP_ELECTRICITY_METER = 0xAA,
-    TYPE_BP_IHD = 0x55,
-    TYPE_LIGHTING_INDOOR = 0x10,
-    TYPE_LIGHTING_OUTDOOR,
-    TYPE_PANEL_LED,
-    TYPE_LEAK_DETECTOR,
-    TYPE_SOLAR_INVERTER,
-    TYPE_BATTERY_CHARGER,
-    TYPE_ENERGY_STORAGE,
-    TYPE_HEAT_PUMP,
-    TYPE_EV_CHARGER,
-    TYPE_ELECTRICITY_METER,
-    TYPE_EMERGENCY_BUTTON,
-    TYPE_UNKNOWN = 0xFF            
-} APP_UDP_RESPONDER_TYPE;
-
-typedef enum
-{
-    /* UDP Responder Commands */
-    CMD_GET_METROLOGY_INFO = 0xF0,
-    CMD_GET_METROLOGY_INFO_RESP = 0xF1,
-    CMD_SHOW_METROLOGY_INFO = 0xF2,
-    CMD_GET_DEVICE_INFO = 0xF4,
-    CMD_GET_DEVICE_INFO_RESP = 0xF5,
-    CMD_SET_LED_RGB = 0xF6,
-    CMD_SET_LED_RGB_EXT = 0xF8,
-    CMD_SET_PANEL_LED = 0xFA,
-    CMD_EMERGENCY = 0xFC,
-    CMD_SET_LIGHT = 0xFE
-} APP_UDP_RESPONDER_CMDS;
 
 // *****************************************************************************
 /* Application Data
@@ -139,19 +107,10 @@ typedef struct
     /* The application's current state */
     APP_UDP_RESPONDER_STATES state;
 
-    /* TODO: Define any additional data used by the application. */
-    /* Application Device Type */
-	APP_UDP_RESPONDER_TYPE device_type;
-    
+    bool dataReceived;
 } APP_UDP_RESPONDER_DATA;
 
-// *****************************************************************************
-// *****************************************************************************
-// Section: Application Callback Routines
-// *****************************************************************************
-// *****************************************************************************
-/* These routines are called by drivers when certain events occur.
-*/
+extern APP_UDP_RESPONDER_DATA app_udp_responderData;
 
 // *****************************************************************************
 // *****************************************************************************
@@ -191,7 +150,6 @@ typedef struct
 */
 
 void APP_UDP_RESPONDER_Initialize ( void );
-
 
 /*******************************************************************************
   Function:
@@ -236,4 +194,3 @@ void APP_UDP_RESPONDER_Tasks( void );
 /*******************************************************************************
  End of File
  */
-

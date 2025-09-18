@@ -434,10 +434,10 @@
             <itemPath>../src/third_party/rtos/FreeRTOS/Source/include/stack_macros.h</itemPath>
             <itemPath>../src/third_party/rtos/FreeRTOS/Source/include/mpu_prototypes.h</itemPath>
             <itemPath>../src/third_party/rtos/FreeRTOS/Source/include/mpu_wrappers.h</itemPath>
+            <itemPath>../src/third_party/rtos/FreeRTOS/Source/include/mpu_syscall_numbers.h</itemPath>
             <itemPath>../src/third_party/rtos/FreeRTOS/Source/include/stream_buffer.h</itemPath>
             <itemPath>../src/third_party/rtos/FreeRTOS/Source/include/task.h</itemPath>
             <itemPath>../src/third_party/rtos/FreeRTOS/Source/include/list.h</itemPath>
-            <itemPath>../src/third_party/rtos/FreeRTOS/Source/include/mpu_syscall_numbers.h</itemPath>
           </logicalFolder>
           <logicalFolder name="portable" displayName="portable" projectFiles="true">
             <logicalFolder name="GCC" displayName="GCC" projectFiles="true">
@@ -1044,7 +1044,6 @@
               <itemPath>../src/third_party/wolfssl/wolfcrypt/src/sp_sm2_c32.c</itemPath>
               <itemPath>../src/third_party/wolfssl/wolfcrypt/src/sp_dsp32.c</itemPath>
               <itemPath>../src/third_party/wolfssl/wolfcrypt/src/ge_low_mem.c</itemPath>
-              <itemPath>../src/third_party/wolfssl/wolfcrypt/src/wc_lms_impl.c</itemPath>
             </logicalFolder>
           </logicalFolder>
           <logicalFolder name="wolfssl" displayName="wolfssl" projectFiles="true">
@@ -1125,22 +1124,21 @@
         <makeCustomizationNormalizeHexFile>false</makeCustomizationNormalizeHexFile>
       </makeCustomizationType>
       <C32>
-        <property key="additional-warnings" value="false"/>
+        <property key="additional-warnings" value="true"/>
         <property key="addresss-attribute-use" value="false"/>
-        <property key="appendMe" value=""/>
         <property key="enable-app-io" value="false"/>
         <property key="enable-omit-frame-pointer" value="false"/>
         <property key="enable-symbols" value="true"/>
         <property key="enable-unroll-loops" value="false"/>
         <property key="exclude-floating-point" value="false"/>
         <property key="extra-include-directories"
-                  value="../src;../src/config/default;../src/config/default/crypto/wolfcrypt;../src/config/default/driver//IEEE_802154_PHY/pal/inc;../src/config/default/driver//IEEE_802154_PHY/phy/inc/;../src/config/default/driver//IEEE_802154_PHY/resources/buffer/inc/;../src/config/default/driver//IEEE_802154_PHY/resources/queue/inc/;../src/config/default/library;../src/config/default/library/tcpip/src;../src/config/default/library/tcpip/src/common;../src/packs/CMSIS/;../src/packs/CMSIS/CMSIS/Core/Include;../src/packs/WBZ451H_DFP;../src/third_party/rtos/FreeRTOS/Source/include;../src/third_party/rtos/FreeRTOS/Source/portable/GCC/SAM/ARM_CM4F;../src/third_party/wolfcrypt;../src/third_party/wolfssl;../src/third_party/wolfssl/wolfssl/wolfcrypt;..\src;..\src\config\default;..\src\config\default\bsp;..\src\config\default\crypto;..\src\config\default\driver\IEEE_802154_PHY\pal\inc;..\src\config\default\driver\IEEE_802154_PHY\phy\inc;..\src\config\default\driver\IEEE_802154_PHY\resources\buffer\inc;..\src\config\default\driver\IEEE_802154_PHY\resources\queue\inc;..\src\config\default\driver\device_support\include;..\src\config\default\library;..\src\config\default\library\tcpip;..\src\config\default\library\tcpip\src;..\src\config\default\library\tcpip\src\common;..\src\third_party\rtos\FreeRTOS;..\src\third_party\rtos\FreeRTOS\Source\include;..\src\third_party\rtos\FreeRTOS\Source\portable;..\src\third_party\rtos\FreeRTOS\Source\portable\GCC\SAM\ARM_CM4F;..\src\third_party\wolfssl"/>
+                  value="../src;../src/config/default;../src/config/default/crypto/wolfcrypt;../src/config/default/driver//IEEE_802154_PHY/pal/inc;../src/config/default/driver//IEEE_802154_PHY/phy/inc/;../src/config/default/driver//IEEE_802154_PHY/resources/buffer/inc/;../src/config/default/driver//IEEE_802154_PHY/resources/queue/inc/;../src/config/default/library;../src/config/default/library/tcpip/src;../src/config/default/library/tcpip/src/common;../src/packs/CMSIS/;../src/packs/CMSIS/CMSIS/Core/Include;../src/packs/WBZ451H_DFP;../src/third_party/rtos/FreeRTOS/Source/include;../src/third_party/rtos/FreeRTOS/Source/portable/GCC/SAM/ARM_CM4F;../src/third_party/wolfcrypt;../src/third_party/wolfssl;../src/third_party/wolfssl/wolfssl/wolfcrypt"/>
         <property key="generate-16-bit-code" value="false"/>
         <property key="generate-micro-compressed-code" value="false"/>
-        <property key="isolate-each-function" value="false"/>
+        <property key="isolate-each-function" value="true"/>
         <property key="make-warnings-into-errors" value="false"/>
         <property key="optimization-level" value="-O2"/>
-        <property key="place-data-into-section" value="false"/>
+        <property key="place-data-into-section" value="true"/>
         <property key="post-instruction-scheduling" value="default"/>
         <property key="pre-instruction-scheduling" value="default"/>
         <property key="preprocessor-macros"
@@ -1158,7 +1156,6 @@
         <property key="additional-options-chop-files" value="false"/>
       </C32-AR>
       <C32-AS>
-        <property key="appendMe" value=""/>
         <property key="assembler-symbols" value=""/>
         <property key="enable-symbols" value="true"/>
         <property key="exclude-floating-point-library" value="false"/>
@@ -1184,10 +1181,9 @@
         <property key="stack-guidance" value="false"/>
       </C32-CO>
       <C32-LD>
-        <property key="additional-options-use-response-files" value="true"/>
+        <property key="additional-options-use-response-files" value="false"/>
         <property key="additional-options-write-sla" value="false"/>
         <property key="allocate-dinit" value="false"/>
-        <property key="appendMe" value=""/>
         <property key="code-dinit" value="false"/>
         <property key="ebase-addr" value=""/>
         <property key="enable-check-sections" value="false"/>
@@ -1227,7 +1223,6 @@
       <C32CPP>
         <property key="additional-warnings" value="false"/>
         <property key="addresss-attribute-use" value="false"/>
-        <property key="appendMe" value=""/>
         <property key="check-new" value="false"/>
         <property key="eh-specs" value="true"/>
         <property key="enable-app-io" value="false"/>
@@ -1256,7 +1251,6 @@
         <property key="use-indirect-calls" value="false"/>
       </C32CPP>
       <C32Global>
-        <property key="appendMe" value=""/>
         <property key="common-include-directories" value=""/>
         <property key="gp-relative-option" value=""/>
         <property key="legacy-libc" value="false"/>
@@ -1284,7 +1278,7 @@
         <property key="debugoptions.debug-startup" value="Use system settings"/>
         <property key="debugoptions.reset-behaviour" value="Use system settings"/>
         <property key="debugoptions.simultaneous.debug" value="false"/>
-        <property key="debugoptions.useswbreakpoints" value="true"/>
+        <property key="debugoptions.useswbreakpoints" value="false"/>
         <property key="event.recorder.debugger.behavior" value="Running"/>
         <property key="event.recorder.enabled" value="false"/>
         <property key="event.recorder.scvd.files" value=""/>
@@ -1342,7 +1336,7 @@
         <property key="debugoptions.debug-startup" value="Use system settings"/>
         <property key="debugoptions.reset-behaviour" value="Use system settings"/>
         <property key="debugoptions.simultaneous.debug" value="false"/>
-        <property key="debugoptions.useswbreakpoints" value="true"/>
+        <property key="debugoptions.useswbreakpoints" value="false"/>
         <property key="event.recorder.debugger.behavior" value="Running"/>
         <property key="event.recorder.enabled" value="false"/>
         <property key="event.recorder.scvd.files" value=""/>
@@ -1362,7 +1356,7 @@
         <property key="memories.programmemory" value="true"/>
         <property key="memories.programmemory.ranges" value="1000000-4ffffff"/>
         <property key="programmerToGoFilePath"
-                  value="C:/Users/M19888/Sergio/RepoGit/G3_HYBRID_IOT_DEMO/G3_HYBRID_IOT_DEMO/g3_device_udp_wbz451h/g3_device_udp_wbz451h_pl460.X/debug/default/g3_device_udp_wbz451h_pl460_ptg"/>
+                  value="C:/Data/M43561/projects/G3_HYBRID_IOT_DEMO/g3_device_udp_wbz451h/g3_device_udp_wbz451h_pl460.X/debug/default/g3_device_udp_wbz451h_pl460_ptg"/>
         <property key="programoptions.donoteraseauxmem" value="false"/>
         <property key="programoptions.eraseb4program" value="true"/>
         <property key="programoptions.pgmentry.voltage" value="low"/>

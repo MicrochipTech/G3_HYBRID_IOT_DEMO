@@ -161,6 +161,7 @@
 #include "app_udp_responder.h"
 #include "app_storage_wbz451h.h"
 #include "app_tcpip_management.h"
+#include "app.h"
 
 
 

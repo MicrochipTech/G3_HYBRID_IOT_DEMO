@@ -30,6 +30,7 @@
 #include "definitions.h"
 #include "service/random/srv_random.h"
 #include "app_udp_responder.h"
+#include "app.h"
 
 // *****************************************************************************
 // *****************************************************************************
@@ -131,43 +132,12 @@ static const APP_G3_MANAGEMENT_CONSTANTS app_g3_managementConst = {
 // Section: Application Callback Functions
 // *****************************************************************************
 // *****************************************************************************
-
-static void _APP_G3_MANAGEMENT_TimeExpiredSetFlag(uintptr_t context)
-{
-    /* Context holds the flag's address */
-    *((bool *) context) = true;
-}
-
-static void _APP_G3_MANAGEMENT_Reboot(void)
-{
-    // Debug Command - Reset MCU BLE Application via Software Reset (SWR)
-    // This device does not provide a specific RESET instruction; however, 
-    // a hardware Reset can be performed in software (software Reset) by 
-    // executing a software Reset command sequence. The software Reset acts 
-    // like a MCLR Reset. The software Reset sequence requires the system 
-    // unlock sequence to be executed before the SWRST bit (RSWRST[0]) can 
-    // be written.
-    // A software Reset is performed as follows:
-    // 1. Write the system unlock sequence
-    CFG_REGS->CFG_SYSKEY = 0x00000000U;
-    CFG_REGS->CFG_SYSKEY = 0xAA996655U;
-    CFG_REGS->CFG_SYSKEY = 0x556699AAU;    
-    // 2. Set the SWRST bit (RSWRST[0]) = 1.
-    RCON_REGS->RCON_RSWRST |= RCON_RSWRST_SWRST_SWRST;
-    // 3. Read the RSWRST register;
-    uint8_t rswrst = RCON_REGS->RCON_RSWRST;
-    // Setting the SWRST bit (RSWRST[0]) will arm the software Reset. 
-    // The subsequent read of the RSWRST register triggers the software Reset, 
-    // which must occur on the next clock cycle following the read operation. 
-    // To ensure no other user code is executed before the Reset event occurs, 
-    // it is recommended that four NOP instructions or a while(1) statement 
-    // be placed after the READ instruction.    
-    while ( true );
-}
+static void _APP_G3_MANAGEMENT_TimeExpiredSetFlag(uintptr_t context);
+static void _APP_G3_MANAGEMENT_Reboot(void);
 
 uint32_t timeoutTraffic = 0;
 /* Time waiting for G3/UDP responder traffic before to reboot - Safety Mechanism */    
-#define TIMEOUT_WAIT_TRAFFIC_BLINK 1800  // 15 minutes sin traffic (tick is 500ms)
+#define TIMEOUT_WAIT_TRAFFIC_BLINK 600  // 5 minutes without traffic (tick is 500ms)
 
 static void _ADP_DiscoveryConfirm(uint8_t status)
 {
@@ -294,10 +264,7 @@ static void _LBP_ADP_NetworkJoinConfirm(LBP_ADP_NETWORK_JOIN_CFM_PARAMS* pNetwor
         *((uint32_t*) &prefixData[7]) = 0x7FFFFFFF; // preferred lifetime
         memcpy(&prefixData[11], &networkPrefix, 16);
         ADP_SetRequestSync(ADP_IB_PREFIX_TABLE, 0, 27, (const uint8_t*) prefixData, &setConfirm);
-
-        SYS_DEBUG_PRINT(SYS_ERROR_INFO, "APP_G3_MANAGEMENT: Joined to the network. "
-                "PAN ID: 0x%04X, Short Address: 0x%04X, Media: 0x%04X\r\n", panId, shortAddress, app_g3_managementData.bestNetwork.mediaType);
-        
+      
         /* Identify Registering Process */
         RGB_LED_RED_On();
         /* Reset Reboot Protection */
@@ -306,14 +273,19 @@ static void _LBP_ADP_NetworkJoinConfirm(LBP_ADP_NETWORK_JOIN_CFM_PARAMS* pNetwor
         if ((app_g3_managementData.bestNetwork.mediaType == MAC_WRP_MEDIA_TYPE_REQ_PLC_BACKUP_RF) ||
             (app_g3_managementData.bestNetwork.mediaType == MAC_WRP_MEDIA_TYPE_REQ_PLC_NO_BACKUP))
         {
-            /* Reload timer callback to blink LED */
+            /* Reload timer callback to blink LED - Identifies RF or PLC */
             blink_rate_factor = 2;
             SYS_TIME_TimerReload(app_g3_managementData.timerLedHandle, 0, SYS_TIME_MSToCount(APP_G3_MANAGEMENT_LED_BLINK_PERIOD_MS * 2),
                             _APP_G3_MANAGEMENT_TimeExpiredSetFlag, (uintptr_t) &app_g3_managementData.timerLedExpired, SYS_TIME_PERIODIC);
         }
+
+        SYS_DEBUG_PRINT(SYS_ERROR_INFO, "APP_G3_MANAGEMENT: Joined to the network. "
+                "PAN ID: 0x%04X, Short Address: 0x%04X\r\n", panId, shortAddress);
     }
     else
     {
+        SYS_DEBUG_PRINT(SYS_ERROR_INFO, "APP_G3_MANAGEMENT: Unsuccessful join. "
+                "status: 0x%04X, retries %d\r\n", pNetworkJoinCfm->status, app_g3_managementData.joinRetries);
         /* Unsuccessful join. Try at maximum 3 times. */
         if (++app_g3_managementData.joinRetries < 3)
         {
@@ -337,6 +309,23 @@ static void _LBP_ADP_NetworkJoinConfirm(LBP_ADP_NETWORK_JOIN_CFM_PARAMS* pNetwor
     }
 }
 
+static void _LBP_ADP_NetworkLeaveConfirm(uint8_t status)
+{
+    if(status == G3_SUCCESS)
+    {
+        /* The device left the network. ADP is reseted internally. Go to first
+         * state. Notify UDP responder application to remove IPv6 addresses */
+        app_g3_managementData.state = APP_G3_MANAGEMENT_STATE_WAIT_ADP_READY;
+        APP_TCPIP_MANAGEMENT_NetworkDisconnected();
+
+        SYS_DEBUG_PRINT(SYS_ERROR_INFO, "APP_G3_MANAGEMENT: Network left\r\n", status);
+    }
+    else
+    {
+        _APP_G3_MANAGEMENT_Reboot();
+    }
+}
+
 static void _LBP_ADP_NetworkLeaveIndication(void)
 {
     /* The device left the network. ADP is reseted internally. Go to first
@@ -345,6 +334,12 @@ static void _LBP_ADP_NetworkLeaveIndication(void)
     APP_TCPIP_MANAGEMENT_NetworkDisconnected();
 
     SYS_DEBUG_MESSAGE(SYS_ERROR_INFO, "APP_G3_MANAGEMENT: Kicked from network\r\n");
+}
+
+static void _APP_G3_MANAGEMENT_TimeExpiredSetFlag(uintptr_t context)
+{
+    /* Context holds the flag's address */
+    *((bool *) context) = true;
 }
 
 // *****************************************************************************
@@ -834,14 +829,61 @@ static void _APP_G3_MANAGEMENT_ShowVersions(void)
     }
 }
 
+static void _APP_G3_MANAGEMENT_Reboot(void)
+{
+    // Debug Command - Reset MCU BLE Application via Software Reset (SWR)
+    // This device does not provide a specific RESET instruction; however, 
+    // a hardware Reset can be performed in software (software Reset) by 
+    // executing a software Reset command sequence. The software Reset acts 
+    // like a MCLR Reset. The software Reset sequence requires the system 
+    // unlock sequence to be executed before the SWRST bit (RSWRST[0]) can 
+    // be written.
+    // A software Reset is performed as follows:
+    // 1. Write the system unlock sequence
+    CFG_REGS->CFG_SYSKEY = 0x00000000U;
+    CFG_REGS->CFG_SYSKEY = 0xAA996655U;
+    CFG_REGS->CFG_SYSKEY = 0x556699AAU;    
+    // 2. Set the SWRST bit (RSWRST[0]) = 1.
+    RCON_REGS->RCON_RSWRST |= RCON_RSWRST_SWRST_SWRST;
+    // 3. Read the RSWRST register;
+    uint8_t rswrst = RCON_REGS->RCON_RSWRST;
+    (void)rswrst; // suppress compiler warning
+    // Setting the SWRST bit (RSWRST[0]) will arm the software Reset. 
+    // The subsequent read of the RSWRST register triggers the software Reset, 
+    // which must occur on the next clock cycle following the read operation. 
+    // To ensure no other user code is executed before the Reset event occurs, 
+    // it is recommended that four NOP instructions or a while(1) statement 
+    // be placed after the READ instruction.    
+    while ( true );
+}
+
+static void _APP_G3_MANAGEMENT_NetworkAliveCheck(void)
+{
+    if(app_g3_managementData.ntwAliveCheckExpired)
+    {
+        app_g3_managementData.ntwAliveCheckExpired = false;
+        
+        if(app_udp_responderData.dataReceived)
+        {
+            app_udp_responderData.dataReceived = false;
+        }
+        else
+        {
+            // Network seems to be lost - try to leave network, otherwise reboot
+            LBP_AdpNetworkLeaveRequest();
+        }
+    }
+}
+
+#if 0
 /*******************************************************************************
   Function:
-    void APP_G3_MANAGEMENT_Initialize ( void )
+    void APP_G3_MANAGEMENT_SendEmergency ( void )
 
   Remarks:
     See prototype in app_g3_management.h.
  */
-int APP_G3_MANAGEMENT_SendEmergency(uint8_t state)
+static void _APP_G3_MANAGEMENT_SendEmergency(void)
 {
     IPV6_ADDR targetAddress;
     uint16_t shortAddress, panId;
@@ -867,18 +909,54 @@ int APP_G3_MANAGEMENT_SendEmergency(uint8_t state)
 
     if (coord_socket != INVALID_SOCKET)
     {
-        SYS_DEBUG_PRINT(SYS_ERROR_DEBUG, "APP_G3_MGNT: Sending Emergency %d to %s (Short Address: 0x%04X)\r\n" , state, targetAddressString, shortAddress);
+        SYS_DEBUG_PRINT(SYS_ERROR_DEBUG, "APP_G3_MANAGEMENT: Sending Emergency to %s (Short Address: 0x%04X)\r\n" , targetAddressString, shortAddress);
         // Send Command Emergency Alarm to the UDP Responder Server on Coordinator
         TCPIP_UDP_Put(coord_socket, CMD_EMERGENCY);
         // Maybe include some state
         TCPIP_UDP_Flush(coord_socket);
-        return 0;
-    } 
-    
-    SYS_DEBUG_PRINT(SYS_ERROR_DEBUG, "APP_G3_MGNT: Wrong Socket\r\n");
-    return -1;
-}
+    }
+    else
+    {
+        SYS_DEBUG_PRINT(SYS_ERROR_DEBUG, "APP_G3_MANAGEMENT: Invalid Socket\r\n");
+    }
+} 
+  
+static void _APP_G3_MANAGEMENT_button_handle(void)
+{
+#define EMERGENCY_TIMEOUT 4 /* => 2 seconds */
+    static uint8_t pressTime = 0;
 
+    if (SWITCH_Get() == SWITCH_STATE_PRESSED)
+    {
+        if(pressTime <= EMERGENCY_TIMEOUT)
+        {
+            pressTime++;
+}
+        if(pressTime == EMERGENCY_TIMEOUT)
+        {
+            /* Send messages while switch is pressed */
+            pressTime = 0;
+
+            /* RGB - red for 5 seconds */
+            //app_g3_rgbData.rgbValues[0] = 0x00; // hue - red
+            //app_g3_rgbData.rgbValues[1] = 0xFF; // saturation
+            //app_g3_rgbData.rgbValues[2] = 0xFF; // value
+            //app_g3_rgbData.blinkFreq = 0;       // ms, no blinking
+            //app_g3_rgbData.blinkTime = 2000;    // ms
+            //app_g3_rgbData.newData = true;
+            //RGB_LED_GREEN_Off();
+            //RGB_LED_RED_On();
+            _APP_G3_MANAGEMENT_SendEmergency();
+        }
+    }
+    else
+    {
+        pressTime = 0;
+        //RGB_LED_RED_Off();
+        //RGB_LED_GREEN_On();
+    }
+}
+#endif
 // *****************************************************************************
 // *****************************************************************************
 // Section: Application Initialization and State Machine Functions
@@ -921,7 +999,9 @@ void APP_G3_MANAGEMENT_Initialize ( void )
 
     /* Initialize application variables */
     app_g3_managementData.timerLedHandle = SYS_TIME_HANDLE_INVALID;
+    app_g3_managementData.metworkAliveHandle = SYS_TIME_HANDLE_INVALID;
     app_g3_managementData.timerLedExpired = false;
+    app_g3_managementData.ntwAliveCheckExpired = false;
     app_g3_managementData.writeNonVolatileData = true;
     app_g3_managementData.configureParamsRF = false;
 
@@ -961,10 +1041,17 @@ void APP_G3_MANAGEMENT_Tasks ( void )
         USER_BLINK_LED_Toggle();
         
         /* Reboot protection */
+        if (app_udp_responderData.dataReceived)
+        {
+            app_udp_responderData.dataReceived = false;
+            timeoutTraffic = 0;
+        }else {
         timeoutTraffic++;
         if (timeoutTraffic == (TIMEOUT_WAIT_TRAFFIC_BLINK >> (blink_rate_factor - 1)))
         {
-            _APP_G3_MANAGEMENT_Reboot();
+                // Leave and Reboot
+                app_g3_managementData.ntwAliveCheckExpired = true;
+            }
         }
         
         // Make actions according with commands received or events        
@@ -974,15 +1061,16 @@ void APP_G3_MANAGEMENT_Tasks ( void )
             RGB_LED_RED_Toggle();
         }        
 
-        if (app_g3_managementData.state >= APP_G3_MANAGEMENT_STATE_JOINED)
-        {           
-            if ((app_udp_responderData.device_type == TYPE_PANEL_LED) && times)                
+#if 0 //APP_DEV_TYPE == APP_DEV_TYPE_EMERGENCY_BUTTON
+        if (app_g3_managementData.state == APP_G3_MANAGEMENT_STATE_JOINED)
             {
-                RGB_LED_RED_Toggle();        
-                times--;
-            }
+            _APP_G3_MANAGEMENT_button_handle();
         }
+#endif
     }
+
+	/* RBG LED handling */
+    //RGB_LED_Handle();
 
     if ((app_g3_managementData.state > APP_G3_MANAGEMENT_STATE_WAIT_ADP_READY) &&
             app_g3_managementData.state != APP_G3_MANAGEMENT_STATE_ERROR)
@@ -1021,8 +1109,8 @@ void APP_G3_MANAGEMENT_Tasks ( void )
             app_g3_managementData.eui64.value[3] = 0xCA;
             app_g3_managementData.eui64.value[2] = 0xFE;
             app_g3_managementData.eui64.value[1] = 0xCA;
-            app_g3_managementData.eui64.value[0] = app_udp_responderData.device_type;
-            SYS_DEBUG_PRINT(SYS_ERROR_INFO, "APP_G3_MANAGEMENT: Device Type: 0x%02X\r\n", app_udp_responderData.device_type);
+            app_g3_managementData.eui64.value[0] = APP_DEV_TYPE;
+            SYS_DEBUG_PRINT(SYS_ERROR_INFO, "APP_G3_MANAGEMENT: Device Type: 0x%02X\r\n", APP_DEV_TYPE);
 
 #ifdef APP_G3_MANAGEMENT_CONFORMANCE_TEST
             /* Conformance Test enabled at compilation time.
@@ -1056,7 +1144,7 @@ void APP_G3_MANAGEMENT_Tasks ( void )
                  * mode set call-backs and set PSK key */
                 LBP_InitDev();
                 lbpDevNotifications.adpNetworkJoinConfirm = _LBP_ADP_NetworkJoinConfirm;
-                lbpDevNotifications.adpNetworkLeaveConfirm = NULL;
+                lbpDevNotifications.adpNetworkLeaveConfirm = _LBP_ADP_NetworkLeaveConfirm;
                 lbpDevNotifications.adpNetworkLeaveIndication = _LBP_ADP_NetworkLeaveIndication;
                 LBP_SetNotificationsDev(&lbpDevNotifications);
                 if (app_g3_managementData.conformanceTest == false)
@@ -1082,6 +1170,14 @@ void APP_G3_MANAGEMENT_Tasks ( void )
                 /* Initialize back-off window for network discovery */
                 app_g3_managementData.backoffWindowLow = APP_G3_MANAGEMENT_DISCOVERY_BACKOFF_LOW_MIN;
                 app_g3_managementData.backoffWindowHigh = APP_G3_MANAGEMENT_DISCOVERY_BACKOFF_HIGH_MIN;
+
+                /* RGB - blink green forever */
+                //app_g3_rgbData.rgbValues[0] = 0x55; // hue - green
+                //app_g3_rgbData.rgbValues[1] = 0xFF; // saturation
+                //app_g3_rgbData.rgbValues[2] = 0xFF; // value
+                //app_g3_rgbData.blinkFreq = 500;     // ms
+                //app_g3_rgbData.blinkTime = 0xFFFF;  // wait forever
+                //app_g3_rgbData.newData = true;
 
                 /* Next state (without break): Start back-off before start
                  * network discovery. */
@@ -1258,18 +1354,10 @@ void APP_G3_MANAGEMENT_Tasks ( void )
         {
             /* Nothing to do. The device is joined to the network unless
              * _LBP_ADP_NetworkLeaveIndication is called */
-            //RGB_LED_Handle();
-            break;
-        }
-        
-        case APP_G3_MANAGEMENT_STATE_SEND_ALARM:
-        {
-            if (APP_G3_MANAGEMENT_SendEmergency(1) == 0)
-            {
-                app_g3_managementData.state = APP_G3_MANAGEMENT_STATE_JOINED;
-            } else {
-                app_g3_managementData.state = APP_G3_MANAGEMENT_STATE_ERROR;
-            }
+#if APP_DEV_TYPE == APP_DEV_TYPE_EMERGENCY_BUTTON
+            //_APP_G3_MANAGEMENT_button_handle();
+#endif
+			_APP_G3_MANAGEMENT_NetworkAliveCheck();
             break;
         }
 
