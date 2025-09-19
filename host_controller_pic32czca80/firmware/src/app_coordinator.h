@@ -136,6 +136,10 @@ typedef enum
             
     APP_COORDINATOR_STATE_USI_GET_DEVICES_ANSWER,
             
+    APP_COORDINATOR_STATE_USI_SEND_CMD_EMERGENCY,
+            
+    APP_COORDINATOR_STATE_USI_WAIT_SENT_CMD,
+            
     APP_COORDINATOR_STATE_DELAY,
 
     /* Application is in error state */
@@ -155,7 +159,8 @@ typedef enum
 {
     APP_COORDINATOR_REMOTE_STATUS_INIT,
     APP_COORDINATOR_REMOTE_STATUS_RESET,
-    APP_COORDINATOR_REMOTE_STATUS_READY
+    APP_COORDINATOR_REMOTE_STATUS_READY,
+    APP_COORDINATOR_REMOTE_STATUS_EMERGENCY
 }APP_COORDINATOR_REMOTE_STATUS;
 
 typedef enum
@@ -255,7 +260,7 @@ typedef struct
     APP_COORDINATOR_STATES state;
     /* The application's next state */
     APP_COORDINATOR_STATES nextState;
-
+    
     // RELATED TO TRANSFER
     APP_COORDINATOR_TRANSFER_STATES transferState;
     
@@ -348,7 +353,7 @@ typedef struct
     APP_COORDINATOR_REMOTE_STATUS remoteStatus;
     
     COORDINATOR_CMD_CALLBACK pCoordinatorCmdCallback;
-
+    
     /* TODO: Define any additional data used by the application. */
     SRV_USI_HANDLE srvUSIHandle;
 

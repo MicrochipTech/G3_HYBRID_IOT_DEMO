@@ -250,7 +250,7 @@ extern void SQI0_Handler               ( void ) __attribute__((weak, alias("Dumm
 extern void SQI1_Handler               ( void ) __attribute__((weak, alias("Dummy_Handler")));
 extern void TRNG_Handler               ( void ) __attribute__((weak, alias("Dummy_Handler")));
 extern void SDMMC0_Handler             ( void ) __attribute__((weak, alias("Dummy_Handler")));
-extern void USBHS0_Handler             ( void ) __attribute__((weak, alias("Dummy_Handler")));
+//extern void USBHS0_Handler             ( void ) __attribute__((weak, alias("Dummy_Handler")));
 
 extern void MLB_GENERAL_Handler        ( void ) __attribute__((weak, alias("Dummy_Handler")));
 extern void MLB_BUSREQ_Handler         ( void ) __attribute__((weak, alias("Dummy_Handler")));
@@ -492,7 +492,7 @@ const H3DeviceVectors exception_table=
     .pfnTRNG_Handler               = TRNG_Handler,
     .pfnSDMMC0_Handler             = SDMMC0_Handler,
     .pfnSDMMC1_Handler             = SDMMC1_InterruptHandler,
-    .pfnUSBHS0_Handler             = USBHS0_Handler,
+    .pfnUSBHS0_Handler             = DRV_USBHS0_Handler,
     .pfnUSBHS1_Handler             = DRV_USBHS1_Handler,
     .pfnMLB_GENERAL_Handler        = MLB_GENERAL_Handler,
     .pfnMLB_BUSREQ_Handler         = MLB_BUSREQ_Handler,

@@ -163,6 +163,8 @@ void NVIC_Initialize( void )
     NVIC_EnableIRQ(SERCOM8_4_IRQn);
     NVIC_SetPriority(SDMMC1_IRQn, 7);
     NVIC_EnableIRQ(SDMMC1_IRQn);
+    NVIC_SetPriority(USBHS0_IRQn, 6);
+    NVIC_EnableIRQ(USBHS0_IRQn);
     NVIC_SetPriority(USBHS1_IRQn, 6);
     NVIC_EnableIRQ(USBHS1_IRQn);
 

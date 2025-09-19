@@ -97,7 +97,6 @@ void APP_COORDINATOR_SYS_TIME_CallbackSetFlag(uintptr_t context)
     }
 }
 
-
 USB_HOST_EVENT_RESPONSE APP_COORDINATOR_USBHostEventHandler 
 (
     USB_HOST_EVENT event, 
@@ -346,7 +345,7 @@ void APP_COORDINATOR_ProtocolEventHandler(uint8_t *pData, size_t length)
         case CMD_RESET_NOTIFICATION:
         {
             // First Command sent by Coordinator after start-up
-            SYS_DEBUG_MESSAGE(SYS_ERROR_INFO, "Reset\r\n");
+            SYS_DEBUG_MESSAGE(SYS_ERROR_INFO, "Coordinator Reset\r\n");
             appCoordinatorData.remoteStatus = APP_COORDINATOR_REMOTE_STATUS_RESET;
             // Initialize access to devices
             APP_COORDINATOR_deviceInit();
@@ -360,8 +359,15 @@ void APP_COORDINATOR_ProtocolEventHandler(uint8_t *pData, size_t length)
         case CMD_HEARTBEAT:
         {
             // Heartbeat from Coordinator to Host
-            SYS_DEBUG_MESSAGE(SYS_ERROR_INFO, "Heartbeat\r\n");
+            SYS_DEBUG_MESSAGE(SYS_ERROR_INFO, "Coordinator Heartbeat\r\n");
             appCoordinatorData.remoteStatus = APP_COORDINATOR_REMOTE_STATUS_READY;
+            break;
+        }
+        case CMD_EMERGENCY:
+        {
+            // Emergency Button from Coordinator to Host
+            SYS_DEBUG_MESSAGE(SYS_ERROR_INFO, "Coordinator Emergency\r\n");
+            appCoordinatorData.remoteStatus = APP_COORDINATOR_REMOTE_STATUS_EMERGENCY;
             break;
         }
         default:
@@ -590,7 +596,7 @@ void APP_COORDINATOR_Initialize ( void )
 {
     
     /* RELATED TO USB HOST */
-         /* Initialize the application state machine */
+    /* Initialize the application state machine */
     
     appCoordinatorData.state =  APP_COORDINATOR_STATE_BUS_ENABLE;
     appCoordinatorData.state =  APP_COORDINATOR_STATE_USI_INIT;
@@ -927,7 +933,7 @@ void APP_COORDINATOR_Tasks ( void )
                 }
             }
             break;
-
+            
 // STATES related with USI HOST into SERCOM8 - Serial Port
             
         case APP_COORDINATOR_STATE_USI_INIT:
@@ -987,6 +993,12 @@ void APP_COORDINATOR_Tasks ( void )
 
         case APP_COORDINATOR_STATE_USI_GET_DEVICES:
         {          
+            if (appCoordinatorData.remoteStatus == APP_COORDINATOR_REMOTE_STATUS_EMERGENCY)
+            {
+                /* Emergency */
+                appCoordinatorData.state = APP_COORDINATOR_STATE_USI_SEND_CMD_EMERGENCY;
+                break;
+            }
             if ((appCoordinatorData.freetransferFlag) && (!appCoordinatorData.transferFlag) && (appCoordinatorData.timerExpired))
             {
                 appCoordinatorData.timerExpired = false;
@@ -1046,7 +1058,43 @@ void APP_COORDINATOR_Tasks ( void )
             }            
             break;
         }        
+        case APP_COORDINATOR_STATE_USI_SEND_CMD_EMERGENCY:
+        {
+            if ((appCoordinatorData.freetransferFlag) && (!appCoordinatorData.transferFlag))
+            {
+                uint8_t index = APP_COORDINATOR_deviceGetIndex(TYPE_PANEL_LED);
+                if (index != INDEX_UNKNOWN)
+                {
+                    bool alive = APP_COORDINATOR_deviceGetAlive(TYPE_PANEL_LED);
+                    if (alive)
+                    {
+                        appCoordinatorData.timerExpired = false;
+                        appCoordinatorData.freetransferFlag = false;
+                        appCoordinatorData.transferFlag = true;
+                        appCoordinatorData.transferBuffer[0] = CMD_SET_PANEL_LED;
+                        appCoordinatorData.transferBuffer[1] = index;
+                        appCoordinatorData.transferBuffer[2] = 1; /* Alarm */
+                        appCoordinatorData.transferLength = 2;
+                        appCoordinatorData.transferAnswerFlag = true;
+                        appCoordinatorData.transferAnswerOK = false;
+                        appCoordinatorData.state = APP_COORDINATOR_STATE_USI_WAIT_SENT_CMD;
+                    }
+                }
+            }
+            break;
+        }
         
+        case APP_COORDINATOR_STATE_USI_WAIT_SENT_CMD:
+        {
+            if (!appCoordinatorData.transferFlag)
+            {                   
+                /* Free transfer flag */
+                appCoordinatorData.freetransferFlag = true;
+                appCoordinatorData.remoteStatus = APP_COORDINATOR_REMOTE_STATUS_READY;
+                appCoordinatorData.state = APP_COORDINATOR_STATE_USI_READY;
+            }            
+            break;
+        }
         case APP_COORDINATOR_STATE_DELAY:
         {
             // Wait delay time

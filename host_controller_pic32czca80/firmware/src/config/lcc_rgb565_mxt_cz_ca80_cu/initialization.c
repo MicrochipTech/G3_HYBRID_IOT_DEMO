@@ -732,6 +732,40 @@ static const SYS_FS_REGISTRATION_TABLE sysFSInit [ SYS_FS_MAX_FILE_SYSTEM_TYPE ]
  * USB Driver Initialization
  ******************************************************/
 
+static const DRV_USBHS_INIT drvUSBHSInit1 =
+{
+
+    /* Interrupt Source for USB module */
+    .interruptSource = USBHS0_IRQn,
+
+    /* Interrupt Source for USB module */
+    .interruptSourceUSBDma = USBHS0_IRQn,
+
+    /* System module initialization */
+    .moduleInit = {0},
+
+    /* USB Controller to operate as USB Device */
+    .operationMode = DRV_USBHS_OPMODE_DEVICE,
+
+    /* Enable High Speed Operation */
+    .operationSpeed = USB_SPEED_HIGH,
+    
+    /* Stop in idle */
+    .stopInIdle = true,
+
+    /* Suspend in sleep */
+    .suspendInSleep = false,
+
+    /* Identifies peripheral (PLIB-level) ID */
+    .usbID = USBHS_ID_0,
+    
+};
+
+
+/******************************************************
+ * USB Driver Initialization
+ ******************************************************/
+
 static void DRV_USB_VBUSPowerEnable0(uint8_t port, bool enable)
 {
     /* Note: When operating in Host mode, the application can specify a Root 
@@ -1103,28 +1137,31 @@ static const SYS_TIME_INIT sysTimeInitData =
 // <editor-fold defaultstate="collapsed" desc="SYS_CONSOLE Instance 0 Initialization Data">
 
 
-static const SYS_CONSOLE_UART_PLIB_INTERFACE sysConsole0UARTPlibAPI =
-{
-    .read_t = (SYS_CONSOLE_UART_PLIB_READ)SERCOM1_USART_Read,
-    .readCountGet = (SYS_CONSOLE_UART_PLIB_READ_COUNT_GET)SERCOM1_USART_ReadCountGet,
-    .readFreeBufferCountGet = (SYS_CONSOLE_UART_PLIB_READ_FREE_BUFFFER_COUNT_GET)SERCOM1_USART_ReadFreeBufferCountGet,
-    .write_t = (SYS_CONSOLE_UART_PLIB_WRITE)SERCOM1_USART_Write,
-    .writeCountGet = (SYS_CONSOLE_UART_PLIB_WRITE_COUNT_GET)SERCOM1_USART_WriteCountGet,
-    .writeFreeBufferCountGet = (SYS_CONSOLE_UART_PLIB_WRITE_FREE_BUFFER_COUNT_GET)SERCOM1_USART_WriteFreeBufferCountGet,
-};
+/* These buffers are passed to the USB CDC Function Driver */
+static uint8_t CACHE_ALIGN sysConsole0USBCdcRdBuffer[SYS_CONSOLE_USB_CDC_READ_WRITE_BUFFER_SIZE];
+static uint8_t CACHE_ALIGN sysConsole0USBCdcWrBuffer[SYS_CONSOLE_USB_CDC_READ_WRITE_BUFFER_SIZE];
 
-static const SYS_CONSOLE_UART_INIT_DATA sysConsole0UARTInitData =
+/* These are the USB CDC Ring Buffers. Data received from USB layer are copied to these ring buffer. */
+static uint8_t sysConsole0USBCdcRdRingBuffer[SYS_CONSOLE_USB_CDC_RD_BUFFER_SIZE_IDX0];
+static uint8_t sysConsole0USBCdcWrRingBuffer[SYS_CONSOLE_USB_CDC_WR_BUFFER_SIZE_IDX0];
+
+static const SYS_CONSOLE_USB_CDC_INIT_DATA sysConsole0USBCdcInitData =
 {
-    .uartPLIB = &sysConsole0UARTPlibAPI,
+    .cdcInstanceIndex           = 0,
+    .cdcReadBuffer              = sysConsole0USBCdcRdBuffer,
+    .cdcWriteBuffer             = sysConsole0USBCdcWrBuffer,
+    .consoleReadBuffer          = sysConsole0USBCdcRdRingBuffer,
+    .consoleWriteBuffer         = sysConsole0USBCdcWrRingBuffer,
+    .consoleReadBufferSize      = SYS_CONSOLE_USB_CDC_RD_BUFFER_SIZE_IDX0,
+    .consoleWriteBufferSize     = SYS_CONSOLE_USB_CDC_WR_BUFFER_SIZE_IDX0,
 };
 
 static const SYS_CONSOLE_INIT sysConsole0Init =
 {
-    .deviceInitData = (const void*)&sysConsole0UARTInitData,
-    .consDevDesc = &sysConsoleUARTDevDesc,
+    .deviceInitData = (const void*)&sysConsole0USBCdcInitData,
+    .consDevDesc = &sysConsoleUSBCdcDevDesc,
     .deviceIndex = 0,
 };
-
 
 
 // </editor-fold>
@@ -1257,6 +1294,11 @@ void SYS_Initialize ( void* data )
 
     /* MISRAC 2012 deviation block end */
 
+
+    /* Initialize the USB device layer */
+    sysObj.usbDevObject0 = USB_DEVICE_Initialize (USB_DEVICE_INDEX_0 , ( SYS_MODULE_INIT* ) & usbDevInitData0);
+
+
     // initialize UI library
     Legato_Initialize();
 
@@ -1265,6 +1307,9 @@ void SYS_Initialize ( void* data )
 
     /* Initialize the USB Host layer */
     sysObj.usbHostObject0 = USB_HOST_Initialize (( SYS_MODULE_INIT *)& usbHostInitData );    
+
+    /* Initialize USB Driver */ 
+    sysObj.drvUSBHSObject1 = DRV_USBHS_Initialize(DRV_USBHS_INDEX_1, (SYS_MODULE_INIT *) &drvUSBHSInit1);    
 
     /* Initialize USB Driver */ 
     sysObj.drvUSBHSObject0 = DRV_USBHS_Initialize(DRV_USBHS_INDEX_0, (SYS_MODULE_INIT *) &drvUSBHSInit0);    

@@ -73,6 +73,7 @@
 void SYS_Tasks ( void )
 {
     /* Maintain system services */
+    SYS_CONSOLE_Tasks(SYS_CONSOLE_INDEX_0);
     
 
 SYS_FS_Tasks();
@@ -99,7 +100,10 @@ DRV_SDMMC_Tasks(sysObj.drvSDMMC0);
 
 
     /* Maintain Middleware & Other Libraries */
+        /* USB Device layer tasks routine */ 
+    USB_DEVICE_Tasks(sysObj.usbDevObject0);
     
+
     Legato_Tasks();
 
 
@@ -116,8 +120,10 @@ NET_PRES_Tasks(sysObj.netPres);
     //USB_HOST_Tasks(sysObj.usbHostObject0);
 
     /* USBHS Driver Task Routine */ 
-    //DRV_USBHS_Tasks(sysObj.drvUSBHSObject0);
+    DRV_USBHS_Tasks(sysObj.drvUSBHSObject1);
 
+    /* USBHS Driver Task Routine */ 
+    //DRV_USBHS_Tasks(sysObj.drvUSBHSObject0);
 
    TCPIP_STACK_Task(sysObj.tcpip);
 

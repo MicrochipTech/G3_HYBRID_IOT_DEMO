@@ -87,7 +87,11 @@ extern "C" {
 
 #define SYS_CONSOLE_INDEX_0                       0
 
+/* RX buffer size has one additional element for the empty spot needed in circular buffer */
+#define SYS_CONSOLE_USB_CDC_RD_BUFFER_SIZE_IDX0    129
 
+/* TX buffer size has one additional element for the empty spot needed in circular buffer */
+#define SYS_CONSOLE_USB_CDC_WR_BUFFER_SIZE_IDX0    129
 
 
 
@@ -139,10 +143,11 @@ extern "C" {
 
 
 #define SYS_CONSOLE_DEVICE_MAX_INSTANCES   			(1U)
-#define SYS_CONSOLE_UART_MAX_INSTANCES 	   			(1U)
-#define SYS_CONSOLE_USB_CDC_MAX_INSTANCES 	   		(0U)
+#define SYS_CONSOLE_UART_MAX_INSTANCES 	   			(0U)
+#define SYS_CONSOLE_USB_CDC_MAX_INSTANCES 	   		(1U)
 #define SYS_CONSOLE_PRINT_BUFFER_SIZE        		(1024U)
 
+#define SYS_CONSOLE_USB_CDC_READ_WRITE_BUFFER_SIZE 	(512)
 
 
 
@@ -492,6 +497,14 @@ extern "C" {
 #define TCPIP_HTTP_NET_CONSOLE_CMD           		false
 
 
+#define USB_DEVICE_INSTANCES_NUMBER                         1U
+
+/* EP0 size in bytes */
+#define USB_DEVICE_EP0_BUFFER_SIZE                          64U
+
+/* The USB Device Layer will not initialize the USB Driver */
+#define USB_DEVICE_DRIVER_INITIALIZE_EXPLICIT
+
 
 /*** DHCP Configuration ***/
 #define TCPIP_STACK_USE_DHCP_CLIENT
@@ -514,15 +527,15 @@ extern "C" {
 #define TCPIP_STACK_USE_ICMPV6_SERVER
 
 /* Number High Speed USB Driver instances */ 
-#define DRV_USBHS_INSTANCES_NUMBER                       1U
+#define DRV_USBHS_INSTANCES_NUMBER                       2U
 
 /* Interrupt mode enabled */
 #define DRV_USBHS_INTERRUPT_MODE                          true
 
-/* Disable Device Support */
-#define DRV_USBHS_DEVICE_SUPPORT                          false
+/* Enables Device Support */
+#define DRV_USBHS_DEVICE_SUPPORT                          true
 
-#define DRV_USBHS_ENDPOINTS_NUMBER                        1U
+#define DRV_USBHS_ENDPOINTS_NUMBER                        3U
 
 /* Enable Host Support */
 #define DRV_USBHS_HOST_SUPPORT                            true
@@ -537,7 +550,7 @@ extern "C" {
 #define DRV_USBHS_HOST_ATTACH_DEBOUNCE_DURATION           500
 
 /* Reset duration in milli Seconds */ 
-#define DRV_USBHS_HOST_RESET_DURATION                     250
+#define DRV_USBHS_HOST_RESET_DURATION                     100
 
 /* Alignment for buffers that are submitted to USB Driver*/ 
 #define USB_ALIGN  CACHE_ALIGN
@@ -575,6 +588,15 @@ extern "C" {
 #define USB_HOST_HUB_SUPPORT                  true
 #define USB_HOST_HUB_INSTANCES_NUMBER         2
 #define USB_HOST_HUB_PORTS_NUMBER             4
+
+/* Maximum instances of CDC function driver */
+#define USB_DEVICE_CDC_INSTANCES_NUMBER                     1U
+
+
+/* CDC Transfer Queue Size for both read and
+   write. Applicable to all instances of the
+   function driver */
+#define USB_DEVICE_CDC_QUEUE_DEPTH_COMBINED                 3U
 
 
 /*** DHCP Server v2 Configuration ***/

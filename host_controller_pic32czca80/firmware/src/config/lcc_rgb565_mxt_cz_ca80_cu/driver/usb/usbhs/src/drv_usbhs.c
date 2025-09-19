@@ -188,6 +188,31 @@ SYS_MODULE_OBJ DRV_USBHS_Initialize
      * On failure: SYS_MODULE_OBJ_INVALID */
     return (returnValue);
 }
+// *****************************************************************************
+/* Function:
+    void swDelayUs(uint32_t delay)
+
+  Summary:
+    This function will give the delay in microseconds.
+
+  Description:
+    This function is used to give a delay for enabling the controllers.
+  Remarks:
+    
+*/
+
+static void swDelayUs(uint32_t delay)
+{
+    uint32_t i, count;
+    /* delay * (CPU_CLOCK_FREQUENCY/1000000) / 6 */
+    count = delay *  (CPU_CLOCK_FREQUENCY/1000000U)/6U;
+    for (i = 0; i < count; i++)
+    {
+        /* 6 CPU cycles per iteration */
+        __NOP();
+    }
+}
+
 
 // *****************************************************************************
 /* Function:
@@ -225,6 +250,17 @@ void DRV_USBHS_Tasks
                 /* On PIC32MZ DA and EF devices, enable the global USB interrupt
                  * in the USBCRCON register. */
                 M_DRV_USBHS_CLOCK_CONTROL_GLOBAL_USB_INT_ENABLE(usbID);
+                if (usbID == USBHS0_BASE_ADDRESS )
+                {
+                     /* Enable USBHS0 Voltage Regulator */ 
+                    SUPC_REGS->SUPC_VREGCTRL  |= SUPC_VREGCTRL_AVREGEN_USBHS0_Msk; 
+                    while ((SUPC_REGS->SUPC_STATUS & SUPC_STATUS_ADDVREGRDY_USBHS0_Msk) != SUPC_STATUS_ADDVREGRDY_USBHS0_Msk)
+                    {
+                        /* Do Nothing */
+                    }
+                    /* Add 1 uSecond Delay after enabling the USB Voltage Regulator */ 
+                    swDelayUs(1);
+                }
                 if (usbID == USBHS1_BASE_ADDRESS)
                 {
                     /* Enable USBHS1 Voltage Regulator */
@@ -233,6 +269,8 @@ void DRV_USBHS_Tasks
                     {
                         /* Do Nothing */
                     }
+                    /* Add 1 uSecond Delay after enabling the USB Voltage Regulator */
+                    swDelayUs(1);
                 }
                 /* Reset the PHY. This is a workaround for an errata */
                 PLIB_USBHS_SoftResetEnable(usbID);
@@ -1035,6 +1073,26 @@ void F_DRV_USBHS_Setup_Device_Mode( USBHS_MODULE_ID usbID )
     {
     }
     
+}
+
+
+// *****************************************************************************
+/* Function:
+    void DRV_USBHS0_Handler(void)
+
+  Summary:
+    USBHS Peripheral 0 Interrupt Handler 
+
+  Description:
+    USBHS Peripheral 0 Interrupt Handler 
+
+  Remarks:
+None 
+*/
+
+void __attribute__((used)) DRV_USBHS0_Handler(void)
+{
+    DRV_USBHS_Tasks_ISR(sysObj.drvUSBHSObject1); 
 }
 
 

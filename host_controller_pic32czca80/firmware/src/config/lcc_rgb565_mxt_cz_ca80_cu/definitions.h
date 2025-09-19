@@ -51,16 +51,17 @@
 #include "crypto/crypto.h"
 #include "usb/usb_host_cdc.h"
 #include "usb/usb_cdc.h"
+#include "usb/usb_chapter_9.h"
+#include "usb/usb_device.h"
 #include "peripheral/rtc/plib_rtc.h"
 #include "gfx/driver/processor/vgpu/drv_gfx_vgpu.h"
-#include "system/time/sys_time.h"
 #include "driver/i2c/drv_i2c.h"
+#include "system/time/sys_time.h"
 #include "peripheral/ebi/plib_ebi.h"
 #include "driver/spi/drv_spi.h"
 #include "system/int/sys_int.h"
 #include "system/ports/sys_ports.h"
 #include "system/cache/sys_cache.h"
-#include "system/reset/sys_reset.h"
 #include "osal/osal.h"
 #include "system/debug/sys_debug.h"
 #include "driver/winc/include/wdrv_winc_api.h"
@@ -86,6 +87,9 @@
 #include "usb/usb_chapter_9.h"
 #include "usb/usb_host.h"
 #include "usb/usb_host_hub.h"
+#include "usb/usb_device_cdc.h"
+#include "usb/usb_cdc.h"
+#include "driver/usb/usbhs/drv_usbhs.h"
 #include "driver/usb/usbhs/drv_usbhs.h"
 #include "peripheral/sercom/usart/plib_sercom8_usart.h"
 #include "driver/input/drv_maxtouch.h"
@@ -109,7 +113,7 @@
 #include "peripheral/eic/plib_eic.h"
 #include "wolfssl/wolfcrypt/port/pic32/crypt_wolfcryptcb.h"
 #include "system/console/sys_console.h"
-#include "system/console/src/sys_console_uart_definitions.h"
+#include "system/console/src/sys_console_usb_cdc_definitions.h"
 #include "app.h"
 #include "app_ble.h"
 #include "app_http.h"
@@ -248,6 +252,8 @@ typedef struct
     /* I2C0 Driver Object */
     SYS_MODULE_OBJ drvI2C0;
 
+    SYS_MODULE_OBJ  usbDevObject0;
+
     SYS_MODULE_OBJ  sysTime;
     SYS_MODULE_OBJ  sysConsole0;
 
@@ -257,6 +263,10 @@ typedef struct
 
     SYS_MODULE_OBJ srvUSI0;
     SYS_MODULE_OBJ  usbHostObject0;
+
+
+    SYS_MODULE_OBJ  drvUSBHSObject1;
+
 
 
     SYS_MODULE_OBJ  drvUSBHSObject0;
@@ -284,6 +294,8 @@ typedef struct
 // Section: extern declarations
 // *****************************************************************************
 // *****************************************************************************
+
+extern const USB_DEVICE_INIT usbDevInitData0; 
 
 extern const USB_HOST_INIT usbHostInitData; 
 

@@ -76,6 +76,7 @@ void SERCOM3_USART_InterruptHandler (void);
 void SERCOM4_USART_InterruptHandler (void);
 void SERCOM8_USART_InterruptHandler (void);
 void SDMMC1_InterruptHandler (void);
+void DRV_USBHS0_Handler (void);
 void DRV_USBHS1_Handler (void);
 
 

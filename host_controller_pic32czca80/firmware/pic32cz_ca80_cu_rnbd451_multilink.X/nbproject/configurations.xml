@@ -563,8 +563,8 @@
             <logicalFolder name="console" displayName="console" projectFiles="true">
               <itemPath>../src/config/lcc_rgb565_mxt_cz_ca80_cu/system/console/src/sys_console_local.h</itemPath>
               <itemPath>../src/config/lcc_rgb565_mxt_cz_ca80_cu/system/console/sys_console.h</itemPath>
-              <itemPath>../src/config/lcc_rgb565_mxt_cz_ca80_cu/system/console/src/sys_console_uart_definitions.h</itemPath>
-              <itemPath>../src/config/lcc_rgb565_mxt_cz_ca80_cu/system/console/src/sys_console_uart.h</itemPath>
+              <itemPath>../src/config/lcc_rgb565_mxt_cz_ca80_cu/system/console/src/sys_console_usb_cdc.h</itemPath>
+              <itemPath>../src/config/lcc_rgb565_mxt_cz_ca80_cu/system/console/src/sys_console_usb_cdc_definitions.h</itemPath>
             </logicalFolder>
             <logicalFolder name="f5" displayName="debug" projectFiles="true">
               <itemPath>../src/config/lcc_rgb565_mxt_cz_ca80_cu/system/debug/sys_debug.h</itemPath>
@@ -626,6 +626,10 @@
               <itemPath>../src/config/lcc_rgb565_mxt_cz_ca80_cu/usb/src/usb_host_local.h</itemPath>
               <itemPath>../src/config/lcc_rgb565_mxt_cz_ca80_cu/usb/src/usb_external_dependencies.h</itemPath>
               <itemPath>../src/config/lcc_rgb565_mxt_cz_ca80_cu/usb/src/usb_host_cdc_local.h</itemPath>
+              <itemPath>../src/config/lcc_rgb565_mxt_cz_ca80_cu/usb/src/usb_device_function_driver.h</itemPath>
+              <itemPath>../src/config/lcc_rgb565_mxt_cz_ca80_cu/usb/src/usb_device_cdc_local.h</itemPath>
+              <itemPath>../src/config/lcc_rgb565_mxt_cz_ca80_cu/usb/src/usb_device_local.h</itemPath>
+              <itemPath>../src/config/lcc_rgb565_mxt_cz_ca80_cu/usb/src/usb_device_mapping.h</itemPath>
             </logicalFolder>
             <itemPath>../src/config/lcc_rgb565_mxt_cz_ca80_cu/usb/usb_common.h</itemPath>
             <itemPath>../src/config/lcc_rgb565_mxt_cz_ca80_cu/usb/usb_host_cdc.h</itemPath>
@@ -636,6 +640,8 @@
             <itemPath>../src/config/lcc_rgb565_mxt_cz_ca80_cu/usb/usb_host_hub.h</itemPath>
             <itemPath>../src/config/lcc_rgb565_mxt_cz_ca80_cu/usb/usb_chapter_9.h</itemPath>
             <itemPath>../src/config/lcc_rgb565_mxt_cz_ca80_cu/usb/usb_hub.h</itemPath>
+            <itemPath>../src/config/lcc_rgb565_mxt_cz_ca80_cu/usb/usb_device.h</itemPath>
+            <itemPath>../src/config/lcc_rgb565_mxt_cz_ca80_cu/usb/usb_device_cdc.h</itemPath>
           </logicalFolder>
           <itemPath>../src/config/lcc_rgb565_mxt_cz_ca80_cu/device_cache.h</itemPath>
           <itemPath>../src/config/lcc_rgb565_mxt_cz_ca80_cu/toolchain_specifics.h</itemPath>
@@ -1034,6 +1040,7 @@
                 <logicalFolder name="src" displayName="src" projectFiles="true">
                   <itemPath>../src/config/lcc_rgb565_mxt_cz_ca80_cu/driver/usb/usbhs/src/drv_usbhs_host.c</itemPath>
                   <itemPath>../src/config/lcc_rgb565_mxt_cz_ca80_cu/driver/usb/usbhs/src/drv_usbhs.c</itemPath>
+                  <itemPath>../src/config/lcc_rgb565_mxt_cz_ca80_cu/driver/usb/usbhs/src/drv_usbhs_device.c</itemPath>
                 </logicalFolder>
               </logicalFolder>
             </logicalFolder>
@@ -1477,7 +1484,7 @@
             </logicalFolder>
             <logicalFolder name="console" displayName="console" projectFiles="true">
               <itemPath>../src/config/lcc_rgb565_mxt_cz_ca80_cu/system/console/src/sys_console.c</itemPath>
-              <itemPath>../src/config/lcc_rgb565_mxt_cz_ca80_cu/system/console/src/sys_console_uart.c</itemPath>
+              <itemPath>../src/config/lcc_rgb565_mxt_cz_ca80_cu/system/console/src/sys_console_usb_cdc.c</itemPath>
             </logicalFolder>
             <logicalFolder name="debug" displayName="debug" projectFiles="true">
               <itemPath>../src/config/lcc_rgb565_mxt_cz_ca80_cu/system/debug/src/sys_debug.c</itemPath>
@@ -1520,6 +1527,9 @@
               <itemPath>../src/config/lcc_rgb565_mxt_cz_ca80_cu/usb/src/usb_host_cdc_acm.c</itemPath>
               <itemPath>../src/config/lcc_rgb565_mxt_cz_ca80_cu/usb/src/usb_host_hub.c</itemPath>
               <itemPath>../src/config/lcc_rgb565_mxt_cz_ca80_cu/usb/src/usb_host.c</itemPath>
+              <itemPath>../src/config/lcc_rgb565_mxt_cz_ca80_cu/usb/src/usb_device.c</itemPath>
+              <itemPath>../src/config/lcc_rgb565_mxt_cz_ca80_cu/usb/src/usb_device_cdc_acm.c</itemPath>
+              <itemPath>../src/config/lcc_rgb565_mxt_cz_ca80_cu/usb/src/usb_device_cdc.c</itemPath>
             </logicalFolder>
           </logicalFolder>
           <itemPath>../src/config/lcc_rgb565_mxt_cz_ca80_cu/initialization.c</itemPath>
@@ -1529,6 +1539,7 @@
           <itemPath>../src/config/lcc_rgb565_mxt_cz_ca80_cu/libc_syscalls.c</itemPath>
           <itemPath>../src/config/lcc_rgb565_mxt_cz_ca80_cu/tasks.c</itemPath>
           <itemPath>../src/config/lcc_rgb565_mxt_cz_ca80_cu/usb_host_init_data.c</itemPath>
+          <itemPath>../src/config/lcc_rgb565_mxt_cz_ca80_cu/usb_device_init_data_0.c</itemPath>
         </logicalFolder>
       </logicalFolder>
       <logicalFolder name="wolfcrypt" displayName="wolfcrypt" projectFiles="true">
@@ -1680,11 +1691,11 @@
         <targetPluginBoard></targetPluginBoard>
         <platformTool>pkob4hybrid</platformTool>
         <languageToolchain>XC32</languageToolchain>
-        <languageToolchainVersion>4.20</languageToolchainVersion>
+        <languageToolchainVersion>4.60</languageToolchainVersion>
         <platform>3</platform>
       </toolsSet>
       <packs>
-        <pack name="PIC32CZ-CA80_DFP" vendor="Microchip" version="1.2.150"/>
+        <pack name="PIC32CZ-CA80_DFP" vendor="Microchip" version="1.4.158"/>
         <pack name="CMSIS" vendor="ARM" version="5.8.0"/>
       </packs>
       <ScriptingSettings>
@@ -2123,6 +2134,7 @@
         <property key="programoptions.programuserotp" value="false"/>
         <property key="programoptions.smart.program" value="When debugging only"/>
         <property key="programoptions.testmodeentrymethod" value="VDDFirst"/>
+        <property key="script.reset_by_pin" value="false"/>
         <property key="toolpack.updateoptions"
                   value="toolpack.updateoptions.specifictoolpack"/>
         <property key="toolpack.updateoptions.packversion" value="1.8.869"/>
@@ -2191,6 +2203,7 @@
         <property key="programoptions.programuserotp" value="false"/>
         <property key="programoptions.smart.program" value="When debugging only"/>
         <property key="programoptions.testmodeentrymethod" value="VDDFirst"/>
+        <property key="script.reset_by_pin" value="false"/>
         <property key="toolpack.updateoptions"
                   value="toolpack.updateoptions.specifictoolpack"/>
         <property key="toolpack.updateoptions.packversion" value="1.8.869"/>
