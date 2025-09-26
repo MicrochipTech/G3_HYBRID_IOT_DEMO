@@ -110,10 +110,6 @@ DRV_SDMMC_Tasks(sysObj.drvSDMMC0);
     SYS_INP_Tasks();
 
 
-NET_PRES_Tasks(sysObj.netPres);
-
-
-
     SRV_USI_Tasks(sysObj.srvUSI0);
 
     /* USB Host Task Routine */ 
@@ -124,9 +120,6 @@ NET_PRES_Tasks(sysObj.netPres);
 
     /* USBHS Driver Task Routine */ 
     //DRV_USBHS_Tasks(sysObj.drvUSBHSObject0);
-
-   TCPIP_STACK_Task(sysObj.tcpip);
-
 
 
 
@@ -141,7 +134,7 @@ NET_PRES_Tasks(sysObj.netPres);
     //APP_HTTP_Tasks();
 
     /* Call Application task APP_WIFI. */
-    //APP_WIFI_Tasks();
+    APP_WIFI_Tasks();
 
     /* Call Application task APP_COORDINATOR. */
     APP_COORDINATOR_Tasks();

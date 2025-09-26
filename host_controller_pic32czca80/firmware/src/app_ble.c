@@ -120,9 +120,9 @@ void BLE_Intf_Init(bool reset)
     if (reset)
     {
         //Reset the module
-        BLE_RESET_Clear();
+        //BLE_RESET_Clear();
         APP_DelayMS(100);
-        BLE_RESET_Set();
+        //BLE_RESET_Set();
         APP_DelayMS(100);
         uartMode = BLE_DEFAULT_MODE;
     }

@@ -28,28 +28,15 @@
 // *****************************************************************************
 
 #include "definitions.h"
-#include "wdrv_winc_client_api.h"
 #include "app_ui.h"
 #include "app_wifi.h"
-
-#define APP_WIFI_DPRINTF(fmt, ...) SYS_DEBUG_PRINT(SYS_ERROR_INFO, fmt, ##__VA_ARGS__);
-
-#define APP_WIFI_SSID       "DEMO_AP"
-#define APP_WIFI_AUTH       WDRV_WINC_AUTH_TYPE_WPA_PSK
-#define APP_WIFI_BOOTMODE   APP_AP_MODE
-#define APP_WIFI_CHANNEL    1
-#define APP_WIFI_PSK        "12345678" 
-#define APP_WIFI_DHCP_SRV_ADDR      "192.168.1.1"
-#define APP_WIFI_DHCP_SRV_NETMASK   "255.255.255.0"
-#define APP_TCP_LISTEN_PORT         6666
-#define APP_TCP_BUFFER_SIZE         1460
-
-typedef enum
-{
-    APP_WIFI_CONNECT ,
-    APP_WIFI_DISCONNECT,
-    APP_WIFI_PROVISION,
-}APP_CALLBACK_NOTIFY;
+#include "wdrv_winc.h"
+#include "time.h"
+#include "stdio.h"
+#include "system/wifi/sys_wincs_wifi_service.h"
+#include "system/sys_wincs_system_service.h"
+#include "system/mqtt/sys_wincs_mqtt_service.h"
+#include "app_coordinator.h"
 
 // *****************************************************************************
 /* Application Data
@@ -66,26 +53,29 @@ typedef enum
     Application strings and buffers are be defined outside this structure.
 */
 
-typedef struct
-{
-    WDRV_WINC_BSS_CONTEXT   bss;
-    WDRV_WINC_AUTH_CONTEXT auth;
-    
-}APP_WIFI_CONFIG;
-
-typedef void (*APP_CALLBACK) (APP_CALLBACK_NOTIFY value,void *data);
-
-
-APP_WIFI_CONFIG appWiFiConfig;
 APP_WIFI_DATA app_wifiData;
-static DRV_HANDLE wdrvHandle;
-static WDRV_WINC_AUTH_CONTEXT authCtx;
-static WDRV_WINC_BSS_CONTEXT bssCtx;
-static TCPIP_NET_HANDLE netHdl;
-static WDRV_WINC_NETWORK_ADDRESS peerAddress;
-static APP_CALLBACK pAPPWiFiSocketCallback;
 static uint32_t connectedCount = 0;
 
+// MQTT configuration settings for connecting to Broker
+SYS_WINCS_MQTT_CFG_t    g_mqttCfg = {
+    .url                    = SYS_WINCS_MQTT_CLOUD_URL,
+    .username               = SYS_WINCS_MQTT_CLOUD_USER_NAME,
+    .clientId               = SYS_WINCS_MQTT_CLIENT_ID,
+    .password               = SYS_WINCS_MQTT_PASSWORD,
+    .port                   = SYS_WINCS_MQTT_CLOUD_PORT,
+    .tlsIdx                 = SYS_WINCS_MQTT_TLS_ENABLE,
+    .protoVer               = SYS_WINCS_MQTT_PROTO_VERSION,
+    .keepAliveTime          = SYS_WINCS_MQTT_KEEP_ALIVE_TIME,
+    .cleanSession           = SYS_WINCS_MQTT_CLEAN_SESSION,
+    .sessionExpiryInterval  = SYS_WINCS_MQTT_KEEP_ALIVE_TIME,
+};
+
+// MQTT frame settings for subscribing to a topic
+SYS_WINCS_MQTT_FRAME_t  g_mqttSubsframe = {
+    .qos                    = SYS_WINCS_MQTT_SUB_TOPIC_0_QOS,
+    .topic                  = SYS_WINCS_MQTT_SUB_TOPIC_0,
+    .protoVer               = SYS_WINCS_MQTT_PROTO_VERSION
+};
 
 /*******************************************************************************
   Function:
@@ -95,100 +85,334 @@ static uint32_t connectedCount = 0;
     See prototype in app_wifi.h.
  */
 
-void APP_WIFI_Callback(APP_CALLBACK_NOTIFY value,void *data)
+void APP_WIFI_Initialize ( void )
 {
-    switch (value)
+    /* Place the App state machine in its initial state. */
+    app_wifiData.state = APP_WIFI_STATE_WINCS_PRINT;
+
+}
+
+void APP_SYS_TIME_CallbackSetFlag(uintptr_t context)
+{
+    if (context != 0)
     {
-        case APP_WIFI_CONNECT:
-        {
-            break;
-        }
-        case APP_WIFI_DISCONNECT:
-        {
-            app_wifiData.state = APP_WIFI_STA_AP_STATE_DONE;
-            
-            break;
-        }
-        default:
-        {
-            break;
-        }
+        /* Context holds the flag's address */
+        *((bool *) context) = true;
     }
 }
+
+void APP_WIFI_SubscribeData(char *msg)
+{
+    SYS_WINCS_MQTT_FRAME_t mqtt_pub;
+    mqtt_pub.qos      = SYS_WINCS_MQTT_PUB_MSG_QOS_TYPE;
+    mqtt_pub.topic    = SYS_WINCS_MQTT_PUB_TOPIC_NAME;
+    mqtt_pub.message  = msg;
+    mqtt_pub.protoVer = SYS_WINCS_MQTT_PROTO_VERSION;
+    SYS_WINCS_MQTT_SrvCtrl(SYS_WINCS_MQTT_PUBLISH, (void *)&mqtt_pub);
+}
+
+void APP_WIFI_SubscribeDataInit(void)
+{
+    APP_WIFI_SubscribeData("{\"alarm\": 0}");
+    APP_WIFI_SubscribeData("{\"light_indoor\": 0}");
+    APP_WIFI_SubscribeData("{\"light_outdoor\": 0}");
+}
+
+void APP_Parse_Rx_Message(SYS_WINCS_MQTT_FRAME_t *mqttRxFrame)
+{
+    char *parts[10];
+    int count = 0;
+
+    char *str_copy = strdup(mqttRxFrame->topic);
+    if (!str_copy)
+    {
+        return;
+    }
+
+    char *token = strtok(str_copy, "/");
+    while(token != NULL)
+    {
+        parts[count++] = token;
+        token = strtok(NULL, "/");
+    }
+
+    if (strcmp(parts[count - 2], "switch-light") == 0)
+    {
+        // toggle indoor light
+        if (strstr(mqttRxFrame->message, "\"light_indoor\":\"toggle\"") != NULL)
+        {
+            if(app_wifiData.lightIndoorStatus)
+            {
+                SYS_DEBUG_PRINT(SYS_ERROR_DEBUG, "[APP_WIFI] : light_indoor off\r\n");
+                app_wifiData.lightIndoorStatus = false;
+                APP_WIFI_SubscribeData("{\"light_indoor\": 0}");
+
+            }
+            else
+            {
+                SYS_DEBUG_PRINT(SYS_ERROR_DEBUG, "[APP_WIFI] : light_indoor on\r\n");
+                app_wifiData.lightIndoorStatus = true;
+                APP_WIFI_SubscribeData("{\"light_indoor\": 1}");
+            }
+
+            // inform coordinator
+            if(APP_COORDINATOR_deviceGetAlive(TYPE_LIGHTING_INDOOR))
+            {
+                uint8_t index;
+                uint8_t buffer[3];
+                uint8_t length = 3;
+
+                index = APP_COORDINATOR_deviceGetIndex(TYPE_LIGHTING_INDOOR);
+                buffer[0] = CMD_SET_LIGHT;;
+                buffer[1] = index;
+                buffer[2] = app_wifiData.lightIndoorStatus;
+                while(!APP_COORDINATOR_Prepare2Send_Message(index, buffer, length, false));
+            }
+        }
+        // toggle outdoor light
+        else if (strstr(mqttRxFrame->message, "\"light_outdoor\":\"toggle\"") != NULL)
+        {
+            if(app_wifiData.lightOutdoorStatus)
+            {
+                SYS_DEBUG_PRINT(SYS_ERROR_DEBUG, "[APP_WIFI] : light_outdoor off\r\n");
+                app_wifiData.lightOutdoorStatus = false;
+                APP_WIFI_SubscribeData("{\"light_outdoor\": 0}");
+
+            }
+            else
+            {
+                SYS_DEBUG_PRINT(SYS_ERROR_DEBUG, "[APP_WIFI] : light_outdoor on\r\n");
+                app_wifiData.lightOutdoorStatus = true;
+                APP_WIFI_SubscribeData("{\"light_outdoor\": 1}");
+            }
+
+            // inform coordinator
+            if(APP_COORDINATOR_deviceGetAlive(TYPE_LIGHTING_OUTDOOR))
+            {
+                uint8_t index;
+                uint8_t buffer[3];
+                uint8_t length = 3;
+
+                index = APP_COORDINATOR_deviceGetIndex(TYPE_LIGHTING_OUTDOOR);
+                buffer[0] = CMD_SET_LIGHT;;
+                buffer[1] = index;
+                buffer[2] = app_wifiData.lightOutdoorStatus;
+                while(!APP_COORDINATOR_Prepare2Send_Message(index, buffer, length, false));
+            }
+        }
+    }
+
+    free(str_copy);
+}
+
 
 uint32_t APP_WIFI_GetConnectedCount(void)
 {
     return connectedCount;
 }
 
+// *****************************************************************************
+// Application MQTT Callback Handler
+//
+// Summary:
+//    Handles MQTT events.
+//
+// Description:
+//    This function handles various MQTT events and performs appropriate actions.
+//
+// Parameters:
+//    event - The type of MQTT event
+//    mqttHandle - The MQTT handle associated with the event
+//
+// Returns:
+//    SYS_WINCS_RESULT_t - The result of the callback handling
+//
+// Remarks:
+//    None.
+// *****************************************************************************
 
-void APP_WIFI_Initialize ( void )
+SYS_WINCS_RESULT_t APP_MQTT_Callback
+(
+    SYS_WINCS_MQTT_EVENT_t event,
+    SYS_WINCS_MQTT_HANDLE_t mqttHandle
+)
 {
-    /* Place the App state machine in its initial state. */
-    app_wifiData.state = APP_WIFI_STATE_INIT;
-    
-    memcpy((uint8_t *)appWiFiConfig.bss.ssid.name,APP_WIFI_SSID,sizeof(APP_WIFI_SSID));
-    appWiFiConfig.auth.authType = APP_WIFI_AUTH;
-    memcpy((uint8_t *)appWiFiConfig.auth.authInfo.WPAPerPSK.key,APP_WIFI_PSK,sizeof(APP_WIFI_PSK));
-    appWiFiConfig.auth.authType = WDRV_WINC_AUTH_TYPE_OPEN;;
-    
-    pAPPWiFiSocketCallback = APP_WIFI_Callback;
-
-
-
-    /* TODO: Initialize your application's state machine and other
-     * parameters.
-     */
-}
-
-static void APP_WiFiAPAssocCallback(DRV_HANDLE handle, WDRV_WINC_ASSOC_HANDLE assocHandle, const WDRV_WINC_SSID *const pSSID, const WDRV_WINC_NETWORK_ADDRESS *const pPeerAddress, WDRV_WINC_AUTH_TYPE authType, int8_t rssi)
-{
-    memcpy(&peerAddress,pPeerAddress,sizeof(WDRV_WINC_NETWORK_ADDRESS));    
-    
-    app_wifiData.state  = APP_WIFI_AP_WAIT_FOR_STA_IP;
-}
-
-static void APP_WiFiAPConnectNotifyCallback(DRV_HANDLE handle, WDRV_WINC_ASSOC_HANDLE assocHandle, WDRV_WINC_CONN_STATE currentState, WDRV_WINC_CONN_ERROR errorCode)
-{
-    if (WDRV_WINC_CONN_STATE_CONNECTED == currentState)
+    switch(event)
     {
-        APP_WIFI_DPRINTF( "AP Mode: Station connected\r\n");
-        WDRV_WINC_AssocPeerAddressGet(assocHandle, (WDRV_WINC_MAC_ADDR *const)&peerAddress,(WDRV_WINC_ASSOC_CALLBACK const)&APP_WiFiAPAssocCallback);   
-        connectedCount += 1;
+        case SYS_WINCS_MQTT_CONNECTED:
+        {    
+            SYS_DEBUG_PRINT(SYS_ERROR_INFO, TERM_GREEN"\r\n[APP_WIFI] : MQTT : Connected to broker\r\n"TERM_RESET);
+            SYS_DEBUG_PRINT(SYS_ERROR_INFO, "[APP_WIFI] : Subscribing to %s\r\n",SYS_WINCS_MQTT_SUB_TOPIC_0);
+            
+            //Subscribe to topic 
+            SYS_WINCS_MQTT_SrvCtrl(SYS_WINCS_MQTT_SUBS_TOPIC, (SYS_WINCS_MQTT_HANDLE_t)&g_mqttSubsframe);
+            break;
+        }
         
-        APP_UI_SendEvent(APP_EVENT_HTTP_CONNECTED);
-     }
-    else if (WDRV_WINC_CONN_STATE_DISCONNECTED == currentState)
-    {
-        APP_WIFI_DPRINTF( "AP Mode: Station disconnected\r\n");
-        (*pAPPWiFiSocketCallback)(APP_WIFI_DISCONNECT, NULL);
         
-        connectedCount -= 1;
-        
-        APP_UI_SendEvent(APP_EVENT_HTTP_DISCONNECTED);
-    }
-}
-
-static void APP_DHCPS_EventHandler(TCPIP_DHCPS_EVENT_DATA* evData, const void* param)
-{
-    APP_WIFI_DPRINTF("\r\n APP_DHCPS_EventHandler (%d) \r\n", evData->evType);
-
-    switch (evData->evType)
-    {
-        case TCPIP_DHCPS_EVENT_REQ_UNKNOWN:
-        case TCPIP_DHCPS_EVENT_REQUEST_OFFERRED:
+        case SYS_WINCS_MQTT_SUBCRIBE_ACK:
         {
-            app_wifiData.state = APP_WIFI_AP_DHCP_EVENT;       
+            SYS_DEBUG_PRINT(SYS_ERROR_INFO, TERM_GREEN"[APP_WIFI] : MQTT Subscription has been acknowledged. \r\n"TERM_RESET);
+            APP_WIFI_SubscribeDataInit();
+            break;
+        }
+        
+        case SYS_WINCS_MQTT_SUBCRIBE_MSG:
+        {   
+            SYS_WINCS_MQTT_FRAME_t *mqttRxFrame = (SYS_WINCS_MQTT_FRAME_t *)mqttHandle;
+            SYS_DEBUG_PRINT(SYS_ERROR_INFO, TERM_YELLOW"[APP_WIFI] : MQTT RX: From Topic : %s ; Msg -> %s\r\n"TERM_RESET,
+                    mqttRxFrame->topic, mqttRxFrame->message);
+            APP_Parse_Rx_Message(mqttRxFrame);
+            break;
+        }
+        
+        case SYS_WINCS_MQTT_UNSUBSCRIBED:
+        {
+            SYS_DEBUG_PRINT(SYS_ERROR_INFO, "[APP_WIFI] : MQTT- A topic has been un-subscribed. \r\n");
+            break;
+        }
+        
+        case SYS_WINCS_MQTT_PUBLISH_ACK:
+        {
+            SYS_DEBUG_PRINT(SYS_ERROR_INFO, "[APP_WIFI] : MQTT- Publish has been sent. \r\n");
+            break;
+        }
+        
+        case SYS_WINCS_MQTT_DISCONNECTED:
+        {            
+            SYS_DEBUG_PRINT(SYS_ERROR_WARNING, "[APP_WIFI] :MQTT-  Reconnecting...\r\n");
+            SYS_WINCS_MQTT_SrvCtrl(SYS_WINCS_MQTT_CONNECT, NULL);
+            break;            
+        }
+        
+        case SYS_WINCS_MQTT_ERROR:
+        {
+            SYS_DEBUG_PRINT(SYS_ERROR_ERROR, "[APP_WIFI] : MQTT - ERROR\r\n");
+            break;
+        }
+        
+        default:
+        break;
+    }
+    return SYS_WINCS_PASS;
+}
+// *****************************************************************************
+// Application Wi-Fi Callback Handler
+//
+// Summary:
+//    Handles Wi-Fi events.
+//
+// Description:
+//    This function handles various Wi-Fi events and performs appropriate actions.
+//
+// Parameters:
+//    event - The type of Wi-Fi event
+//    wifiHandle - Handle to the Wi-Fi event data
+//
+// Returns:
+//    None.
+//
+// Remarks:
+//    None.
+// *****************************************************************************
+void SYS_WINCS_WIFI_CallbackHandler
+(
+    SYS_WINCS_WIFI_EVENT_t event,         // The type of Wi-Fi event
+    SYS_WINCS_WIFI_HANDLE_t wifiHandle    // Handle to the Wi-Fi event data
+)
+{
+
+    switch(event)
+    {
+        /* Set regulatory domain Acknowledgment */
+        case SYS_WINCS_WIFI_REG_DOMAIN_SET_ACK:
+        {
+            // The driver generates this event callback twice, hence the if condition 
+            // to ignore one more callback. This will be resolved in the next release.
+            static bool domainFlag = false;
+            if( domainFlag == false)
+            {
+                SYS_DEBUG_PRINT(SYS_ERROR_INFO, "[APP_WIFI] : Set Reg Domain -> SUCCESS\r\n");
+                app_wifiData.state = APP_WIFI_STATE_WINCS_SET_WIFI_PARAMS;
+                domainFlag = true;
+            }
             
             break;
-        }
-        default:
-        {
+        }  
+        
+        /* SNTP UP event code*/
+        case SYS_WINCS_WIFI_SNTP_UP:
+        {            
+            SYS_DEBUG_PRINT(SYS_ERROR_INFO, "[APP_WIFI] : SNTP UP \r\n"); 
+            SYS_DEBUG_PRINT(SYS_ERROR_INFO, "[APP_WIFI] : Connecting to the Cloud\r\n");
+
+            // Set the callback function for MQTT events
+            SYS_WINCS_MQTT_SrvCtrl(SYS_WINCS_MQTT_SET_CALLBACK, APP_MQTT_Callback);
+
+            // Configure the MQTT service with the provided configuration
+            SYS_WINCS_MQTT_SrvCtrl(SYS_WINCS_MQTT_CONFIG, (SYS_WINCS_MQTT_HANDLE_t)&g_mqttCfg);
+
+            // Connect to the MQTT broker using the specified configuration
+            SYS_WINCS_MQTT_SrvCtrl(SYS_WINCS_MQTT_CONNECT, &g_mqttCfg);
             break;
         }
-    }
-}
+        break;
 
+        /* Wi-Fi connected event code*/
+        case SYS_WINCS_WIFI_CONNECTED:
+        {
+            SYS_DEBUG_PRINT(SYS_ERROR_INFO, TERM_GREEN"[APP_WIFI] : Wi-Fi Connected\r\n"TERM_RESET);
+            connectedCount += 1;
+            break;
+        }
+
+        /* Wi-Fi disconnected event code*/
+        case SYS_WINCS_WIFI_DISCONNECTED:
+        {
+            SYS_DEBUG_PRINT(SYS_ERROR_ERROR, TERM_RED"[APP_WIFI] : Wi-Fi Disconnected\nReconnecting... \r\n"TERM_RESET);
+            SYS_WINCS_WIFI_SrvCtrl(SYS_WINCS_WIFI_STA_CONNECT, NULL);
+            connectedCount -= 1;
+            break;
+        }
+
+        /* Wi-Fi connection failed event code*/
+        case SYS_WINCS_WIFI_CONNECT_FAILED:
+        {
+            SYS_DEBUG_PRINT(SYS_ERROR_WARNING, TERM_RED"[APP_WIFI] : Wi-Fi connection failed\nReconnecting... \r\n"TERM_RESET);
+            SYS_WINCS_WIFI_SrvCtrl(SYS_WINCS_WIFI_STA_CONNECT, NULL);
+            break;
+        }
+
+        /* Wi-Fi DHCP complete event code*/
+        case SYS_WINCS_WIFI_DHCP_IPV4_COMPLETE:
+        {         
+            SYS_DEBUG_PRINT(SYS_ERROR_INFO, "[APP_WIFI] : DHCP IPv4 : %s\r\n", (uint8_t *)wifiHandle);
+            SYS_WINCS_WIFI_SrvCtrl(SYS_WINCS_WIFI_GET_TIME, NULL);
+            break;
+        }
+        
+        case SYS_WINCS_WIFI_DHCP_IPV6_LOCAL_COMPLETE:
+        {
+            //SYS_DEBUG_PRINT(SYS_ERROR_INFO, "[APP_WIFI] : DHCP IPv6 Local : %s\r\n", (uint8_t *)wifiHandle);
+            break;
+        }
+        
+        case SYS_WINCS_WIFI_DHCP_IPV6_GLOBAL_COMPLETE:
+        {
+            //SYS_DEBUG_PRINT(SYS_ERROR_INFO, "[APP_WIFI] : DHCP IPv6 Global: %s\r\n", (uint8_t *)wifiHandle);
+
+            // Retrieve the current time from the Wi-Fi service
+            //SYS_WINCS_WIFI_SrvCtrl(SYS_WINCS_WIFI_GET_TIME, NULL);
+            break;
+        }
+        
+        default:
+        {
+            SYS_DEBUG_PRINT(SYS_ERROR_WARNING, "[APP_WIFI] : WiFi Callback unhandeled event: %d\r\n", event);
+            break;
+        }
+    }    
+}
 
 /******************************************************************************
   Function:
@@ -200,168 +424,185 @@ static void APP_DHCPS_EventHandler(TCPIP_DHCPS_EVENT_DATA* evData, const void* p
 
 void APP_WIFI_Tasks ( void )
 {
-
+    static SYS_TIME_HANDLE timer = SYS_TIME_HANDLE_INVALID;
+    static SYS_TIME_HANDLE alarmTimer = SYS_TIME_HANDLE_INVALID;
+    
     /* Check the application's current state. */
-    switch ( app_wifiData.state )
+    switch(app_wifiData.state)
     {
-        /* Application's initial state. */
-        case APP_WIFI_STATE_INIT:
+        // State to print Message 
+        case APP_WIFI_STATE_WINCS_PRINT:
         {
-            if (SYS_STATUS_READY == WDRV_WINC_Status(sysObj.drvWifiWinc))
-            {
-                APP_WIFI_DPRINTF("WINC STATUS READY \r\n");
-                app_wifiData.state = APP_WIFI_STATE_WDRV_INIT_READY;
-            }
+            SYS_DEBUG_PRINT(SYS_ERROR_INFO, " --- WINCS02 MQTT client demo ---\r\n");
             
+            app_wifiData.state = APP_WIFI_STATE_WINCS_INIT;
             break;
         }
-        case APP_WIFI_STATE_WDRV_INIT_READY:
+        
+        /* Application's initial state. */
+        case APP_WIFI_STATE_WINCS_INIT:
         {
-            wdrvHandle = WDRV_WINC_Open(0, 0);
+            SYS_STATUS status;
+            // Get the driver status
+            SYS_WINCS_WIFI_SrvCtrl(SYS_WINCS_WIFI_GET_DRV_STATUS, &status);
 
-            if (DRV_HANDLE_INVALID != wdrvHandle)
-            {   
-                APP_WIFI_DPRINTF("WINC STATUS OPENED \r\n");
-                app_wifiData.state = APP_WIFI_STA_AP_STATE_CONFIG;
+            // If the driver is ready, move to the next state
+            if (SYS_STATUS_READY == status)
+            {
+                SYS_TIME_DelayMS(2000, &timer);
+                app_wifiData.state = APP_WIFI_STATE_WINCS_OPEN_DRIVER;
             }
+
             break;
         }
-        //Configure for STA mode
-        case APP_WIFI_STA_AP_STATE_CONFIG:
+
+        case APP_WIFI_STATE_WINCS_OPEN_DRIVER:
         {
-            /* Preset the error appSocketStaApState incase any following operations fail. */            
-            /* Reset the internal BSS context */
-            WDRV_WINC_BSSCtxSetDefaults(&bssCtx);
-            if (WDRV_WINC_STATUS_OK != WDRV_WINC_BSSCtxSetChannel(&bssCtx, APP_WIFI_CHANNEL))
+            DRV_HANDLE wdrvHandle = DRV_HANDLE_INVALID;
+            
+            if(SYS_TIME_DelayIsComplete(timer) == false)
             {
                 break;
             }
-            WDRV_WINC_BSSCtxSetSSID(&bssCtx, (uint8_t*)appWiFiConfig.bss.ssid.name, strlen((const char *)appWiFiConfig.bss.ssid.name));
-            
-            /* Reset the internal Auth context */
-            WDRV_WINC_AuthCtxSetDefaults(&authCtx);
+            // Open the Wi-Fi driver
+            if (SYS_WINCS_FAIL == SYS_WINCS_WIFI_SrvCtrl(SYS_WINCS_WIFI_OPEN_DRIVER, &wdrvHandle))
+            {
+                app_wifiData.state = APP_WIFI_STATE_WINCS_ERROR;
+                break;
+            }
 
-            /* Prepare the Auth context with desired AP's Security settings */
-            if (WDRV_WINC_AUTH_TYPE_OPEN == appWiFiConfig.auth.authType)
-            {
-                WDRV_WINC_AuthCtxSetOpen(&authCtx);
-            }
-            else if (WDRV_WINC_AUTH_TYPE_WPA_PSK == appWiFiConfig.auth.authType)
-            {
-                WDRV_WINC_AuthCtxSetWPA(&authCtx, (uint8_t*)appWiFiConfig.auth.authInfo.WPAPerPSK.key, strlen((const char *)appWiFiConfig.auth.authInfo.WPAPerPSK.key));
-            }
-            else if (WDRV_WINC_AUTH_TYPE_802_1X_MSCHAPV2 == appWiFiConfig.auth.authType)
-            {
-                WDRV_WINC_AuthCtxSetWPAEnterpriseMSCHAPv2(&authCtx, (char*)appWiFiConfig.auth.authInfo.WPAEntMSCHAPv2.domainUserName, (uint8_t*)appWiFiConfig.auth.authInfo.WPAEntMSCHAPv2.password, strlen((const char *)appWiFiConfig.auth.authInfo.WPAEntMSCHAPv2.password), false);
-            }
-            app_wifiData.state = APP_WIFI_STA_AP_STATE_TCP_INIT;
-            
+            // Get the driver handle
+            SYS_WINCS_WIFI_SrvCtrl(SYS_WINCS_WIFI_GET_DRV_HANDLE, &wdrvHandle);
+            app_wifiData.state = APP_WIFI_STATE_WINCS_DEVICE_INFO;
             break;
         }
-        case APP_WIFI_STA_AP_STATE_TCP_INIT:
+
+        case APP_WIFI_STATE_WINCS_DEVICE_INFO:
         {
-            /* WINC network handle*/
-            netHdl = TCPIP_STACK_NetHandleGet("WINC");
-            if (true == TCPIP_DHCP_IsEnabled(netHdl)) 
+            APP_DRIVER_VERSION_INFO drvVersion;
+            APP_FIRMWARE_VERSION_INFO fwVersion;
+            APP_DEVICE_INFO devInfo;
+            SYS_WINCS_RESULT_t status = SYS_WINCS_BUSY;
+
+            // Get the firmware version
+            status = SYS_WINCS_SYSTEM_SrvCtrl(SYS_WINCS_SYSTEM_SW_REV, &fwVersion);
+
+            if(status == SYS_WINCS_PASS)
             {
-                TCPIP_DHCP_Disable(netHdl);
+                // Get the device information
+                status = SYS_WINCS_SYSTEM_SrvCtrl(SYS_WINCS_SYSTEM_DEV_INFO, &devInfo);
             }
-            /* Enable DHCP Server in AP mode */
-            TCPIP_DHCPS_Enable(netHdl);
-            /* Register a callback to DHCPS */
-            TCPIP_DHCPS_HandlerRegister(netHdl, APP_DHCPS_EventHandler, NULL);
-            app_wifiData.state = APP_WIFI_AP_STATE_START;
-            break;
-        }
-        case APP_WIFI_AP_STATE_START:
-        {
-            /* Preset the error state incase any following operations fail. */                        
-            /* Create the AP using the BSS and authentication context. */
-            if (WDRV_WINC_STATUS_OK == WDRV_WINC_APStart(wdrvHandle, &bssCtx, &authCtx, NULL, &APP_WiFiAPConnectNotifyCallback))
+
+            if(status == SYS_WINCS_PASS)
             {
-                APP_WIFI_DPRINTF("AP started, you can connect to %s\r\n", appWiFiConfig.bss.ssid.name);
-                APP_WIFI_DPRINTF( "On the android device, connect to %s then run setting app\r\n", appWiFiConfig.bss.ssid.name);
-                
-                app_wifiData.state = APP_WIFI_AP_STATE_STARTED;
+                // Get the driver version
+                status = SYS_WINCS_SYSTEM_SrvCtrl(SYS_WINCS_SYSTEM_DRIVER_VER, &drvVersion);
             }
-           
-            break;
-        }
-        case APP_WIFI_AP_STATE_STARTED:
-        {
-            IPV4_ADDR                    apLastIp = {-1};
-            IPV4_ADDR                    apIpAddr;
-            apIpAddr.Val = TCPIP_STACK_NetAddress(netHdl);
-            if ((apLastIp.Val != apIpAddr.Val) && (apLastIp.Val != 0))
+
+            if(status == SYS_WINCS_PASS)
             {
-                apLastIp.Val = apIpAddr.Val;
-                APP_WIFI_DPRINTF("%s \r\n", TCPIP_STACK_NetNameGet(netHdl));
-                APP_WIFI_DPRINTF("WINC AP Mode IP Address: ");
-                APP_WIFI_DPRINTF("%d.%d.%d.%d \r\n", apIpAddr.v[0], apIpAddr.v[1], apIpAddr.v[2], apIpAddr.v[3]);  
-                app_wifiData.state = APP_WIFI_STA_AP_STATE_DONE;
-            }              
-           
-            break;
-        }
-        case APP_WIFI_AP_DHCP_EVENT:
-        {  
-#if 0           
-            uint16_t leases = 0;
-            uint16_t inUse = 0;
-            TCPIP_DHCPS_RES retval;
-            uint16_t idx;
-             
-            retval = TCPIP_DHCPS_LeaseEntriesGet(netHdl, &leases, &inUse);
-        
-            APP_WIFI_DPRINTF("\r\n (%d) retval, (%d) In Use\r\n", retval, inUse);
-            if ((TCPIP_DHCPS_RES_OK == retval))
-            {
-                APP_WIFI_DPRINTF("\r\n (%d) Leases, (%d) In Use\r\n", leases, inUse);
-                
-                for (idx = 0; idx < leases; idx++)
+                char buff[30];
+                // Print device information
+                SYS_DEBUG_PRINT(SYS_ERROR_INFO, "WINC: Device ID = %08x\r\n", devInfo.id);
+                for (int i = 0; i < devInfo.numImages; i++)
                 {
-                    TCPIP_DHCPS_LEASE_INFO leaseInfo;
-                    
-                    TCPIP_DHCPS_LeaseGetInfo(netHdl, &leaseInfo, idx);
-
-                    APP_WIFI_DPRINTF("\r\n (%d) Lease State (%d) \r\n", idx, leaseInfo.leaseState);
-                        
-                    if (leaseInfo.leaseState != TCPIP_DHCPS_LEASE_STATE_IDLE)
-                    {
-                        APP_WIFI_DPRINTF("(%d) Connected MAC:%x:%x:%x:%x:%x:%x \r\n", idx, leaseInfo.macAdd.v[0], leaseInfo.macAdd.v[1], leaseInfo.macAdd.v[2], leaseInfo.macAdd.v[3],leaseInfo.macAdd.v[4], leaseInfo.macAdd.v[5]);
-                        APP_WIFI_DPRINTF("(%d) Connected IP:%d.%d.%d.%d \r\n", idx, leaseInfo.ipAddress.v[0], leaseInfo.ipAddress.v[1], leaseInfo.ipAddress.v[2], leaseInfo.ipAddress.v[3]);
-                        
-                        app_wifiData.state = APP_WIFI_AP_SOCKET_LISTENING;                        
-                    }
+                    SYS_DEBUG_PRINT(SYS_ERROR_INFO, "%d: Seq No = %08x, Version = %08x, Source Address = %08x\r\n", 
+                            i, devInfo.image[i].seqNum, devInfo.image[i].version, devInfo.image[i].srcAddr);
                 }
-                
-                
-            }
-#endif            
 
-            app_wifiData.state = APP_WIFI_AP_SOCKET_LISTENING;    
-            
+                // Print firmware version
+                SYS_DEBUG_PRINT(SYS_ERROR_INFO, TERM_CYAN "Firmware Version: %d.%d.%d ", fwVersion.version.major,
+                        fwVersion.version.minor, fwVersion.version.patch);
+                strftime(buff, sizeof(buff), "%X %b %d %Y", localtime((time_t*)&fwVersion.build.timeUTC));
+                SYS_DEBUG_PRINT(SYS_ERROR_INFO, " [%s]\r\n", buff);
+
+                // Print driver version
+                SYS_DEBUG_PRINT(SYS_ERROR_INFO, "Driver Version: %d.%d.%d\r\n"TERM_RESET, drvVersion.version.major, 
+                        drvVersion.version.minor, drvVersion.version.patch);
+
+                app_wifiData.state = APP_WIFI_STATE_WINCS_SET_REG_DOMAIN;
+            }
             break;
         }
-        case APP_WIFI_AP_WAIT_FOR_STA_IP:
+
+        case APP_WIFI_STATE_WINCS_SET_REG_DOMAIN:
         {
+            // Set the callback handler for Wi-Fi events
+            SYS_WINCS_WIFI_SrvCtrl(SYS_WINCS_WIFI_SET_CALLBACK, SYS_WINCS_WIFI_CallbackHandler);
+
+            SYS_DEBUG_PRINT(SYS_ERROR_INFO, TERM_YELLOW"[APP_WIFI] : Setting REG domain to " TERM_UL "%s\r\n"TERM_RESET ,SYS_WINCS_WIFI_COUNTRYCODE);
+
+            app_wifiData.state = APP_WIFI_STATE_WINCS_SERVICE_TASKS;
+            // Set the regulatory domain
+            if (SYS_WINCS_FAIL == SYS_WINCS_WIFI_SrvCtrl(SYS_WINCS_WIFI_SET_REG_DOMAIN, SYS_WINCS_WIFI_COUNTRYCODE))
+            {
+                app_wifiData.state = APP_WIFI_STATE_WINCS_ERROR;
+                break;
+            }
+            break;
+        }
+
+        case APP_WIFI_STATE_WINCS_SET_WIFI_PARAMS:
+        {
+            char sntp_url[] =  SYS_WINCS_WIFI_SNTP_ADDRESS;
+            if (SYS_WINCS_FAIL == SYS_WINCS_WIFI_SrvCtrl(SYS_WINCS_WIFI_SET_SNTP, sntp_url))
+            {
+                app_wifiData.state = APP_WIFI_STATE_WINCS_ERROR;
+                break;
+            }
+
+            // Configuration parameters for Wi-Fi station mode
+            SYS_WINCS_WIFI_PARAM_t wifi_sta_cfg = {
+                .mode        = SYS_WINCS_WIFI_DEVMODE,         // Set Wi-Fi mode to Station (STA)
+                .ssid        = SYS_WINCS_WIFI_STA_SSID,        // Set the SSID (network name) for the Wi-Fi connection
+                .passphrase  = SYS_WINCS_WIFI_STA_PWD,         // Set the passphrase (password) for the Wi-Fi connection
+                .security    = SYS_WINCS_WIFI_STA_SECURITY,    // Set the security type (e.g., WPA2) for the Wi-Fi connection
+                .autoConnect = SYS_WINCS_WIFI_STA_AUTOCONNECT  // Enable or disable auto-connect to the Wi-Fi network
+            }; 
+
+            // Set the Wi-Fi parameters
+            if (SYS_WINCS_FAIL == SYS_WINCS_WIFI_SrvCtrl(SYS_WINCS_WIFI_SET_PARAMS, &wifi_sta_cfg))
+            {
+                app_wifiData.state = APP_WIFI_STATE_WINCS_ERROR;
+                break;
+            }
+            SYS_DEBUG_PRINT(SYS_ERROR_INFO, "\r\n[APP_WIFI] : Wi-Fi Connecting to : %s\r\n", SYS_WINCS_WIFI_STA_SSID);
+            app_wifiData.state = APP_WIFI_STATE_WINCS_SERVICE_TASKS;
+            break;
+        }
+
+        case APP_WIFI_STATE_WINCS_SERVICE_TASKS:
+        {
+            if(app_wifiData.alarmExpired == true)
+            {
+                //SYS_DEBUG_PRINT(SYS_ERROR_INFO, "Alarm off\r\n");
+                //USER_LED1_Set();
+                app_wifiData.alarmExpired = false;
+                alarmTimer = SYS_TIME_HANDLE_INVALID;
+                app_wifiData.alarmStatus = false;
+                APP_WIFI_SubscribeData("{\"alarm\": 0}");
+                break;
+            }
             
-            app_wifiData.state = APP_WIFI_AP_SOCKET_LISTENING;   
-            
+            if((app_wifiData.alarmStatus != false) && (alarmTimer == SYS_TIME_HANDLE_INVALID))
+            {
+                //SYS_DEBUG_PRINT(SYS_ERROR_INFO, "Alarm on\r\n");
+                //USER_LED1_Clear();
+                APP_WIFI_SubscribeData("{\"alarm\": 1}");
+                app_wifiData.alarmExpired = false;
+                alarmTimer = SYS_TIME_CallbackRegisterMS(APP_SYS_TIME_CallbackSetFlag,
+                        (uintptr_t) &app_wifiData.alarmExpired, 30000, SYS_TIME_SINGLE);
+                (void)alarmTimer; // prevent compiler warning - set but not used
+            }
             break;
         }
         
-        case APP_WIFI_AP_SOCKET_LISTENING:
+        case APP_WIFI_STATE_WINCS_ERROR:
         {
+            SYS_DEBUG_PRINT(SYS_ERROR_ERROR, TERM_RED"[APP_WIFI] : ERROR in Application "TERM_RESET);
+            app_wifiData.state = APP_WIFI_STATE_WINCS_SERVICE_TASKS;
             break;
         }
-        case APP_WIFI_STA_AP_STATE_DONE:
-        {
-            break;
-        }        
-
-        /* TODO: implement your application state machine.*/
-
 
         /* The default state should never be executed. */
         default:

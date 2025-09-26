@@ -79,6 +79,10 @@ typedef enum
 {
     /* DMA Channel 0 */
     DMA_CHANNEL_0 = 0,
+    /* DMA Channel 1 */
+    DMA_CHANNEL_1 = 1,
+    /* DMA Channel 2 */
+    DMA_CHANNEL_2 = 2,
 } DMA_CHANNEL;
 
 typedef uint32_t DMA_TRANSFER_EVENT;

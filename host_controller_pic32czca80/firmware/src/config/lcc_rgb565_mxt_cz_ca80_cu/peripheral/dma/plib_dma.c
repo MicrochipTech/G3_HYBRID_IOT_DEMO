@@ -53,7 +53,7 @@
 // *****************************************************************************
 // *****************************************************************************
 
-#define DMA_CHANNELS_NUMBER        (1U)
+#define DMA_CHANNELS_NUMBER        (3U)
 
 /* DMA channels object configuration structure */
 typedef struct
@@ -100,6 +100,36 @@ void DMA_Initialize( void )
    
 
    DMA_REGS->CHANNEL[0].DMA_CHINTENSET = DMA_CHINTENSET_BC_Msk;
+
+   
+
+
+
+
+   /***************** Configure DMA channel 1 ********************/
+   DMA_REGS->CHANNEL[1].DMA_CHCTRLB = DMA_CHCTRLB_TRIG(12U) | DMA_CHCTRLB_PRI(DMA_CHCTRLB_PRI_PRI_1_Val) | DMA_CHCTRLB_RAS(DMA_CHCTRLB_RAS_BYTE_ADDR_INCR_Val) | DMA_CHCTRLB_WAS(DMA_CHCTRLB_WAS_FIXED_BYTE_ADDR_INCR_Val) | DMA_CHCTRLB_CASTEN(0U) ;
+   
+
+   DMA_REGS->CHANNEL[1].DMA_CHXSIZ = DMA_CHXSIZ_CSZ(1U);
+
+   
+
+   DMA_REGS->CHANNEL[1].DMA_CHINTENSET = DMA_CHINTENSET_BC_Msk;
+
+   
+
+
+
+
+   /***************** Configure DMA channel 2 ********************/
+   DMA_REGS->CHANNEL[2].DMA_CHCTRLB = DMA_CHCTRLB_TRIG(11U) | DMA_CHCTRLB_PRI(DMA_CHCTRLB_PRI_PRI_1_Val) | DMA_CHCTRLB_RAS(DMA_CHCTRLB_RAS_FIXED_BYTE_ADDR_INCR_Val) | DMA_CHCTRLB_WAS(DMA_CHCTRLB_WAS_BYTE_ADDR_INCR_Val) | DMA_CHCTRLB_CASTEN(0U) ;
+   
+
+   DMA_REGS->CHANNEL[2].DMA_CHXSIZ = DMA_CHXSIZ_CSZ(1U);
+
+   
+
+   DMA_REGS->CHANNEL[2].DMA_CHINTENSET = DMA_CHINTENSET_BC_Msk;
 
    
 
@@ -478,7 +508,7 @@ void __attribute__((used)) DMA_PRI0_InterruptHandler( void )
     /* Get the DMA channel interrupt status */
     dmaIntPriority1Status = DMA_REGS->DMA_INTSTAT1;
 
-    for (channel = 0U; channel < 1U; channel++)
+    for (channel = 0U; channel < 3U; channel++)
     {
         if ((dmaIntPriority1Status & ((uint32_t)1U << channel)) != (uint32_t)0U)
         {
@@ -494,7 +524,7 @@ void __attribute__((used)) DMA_PRI1_InterruptHandler( void )
     /* Get the DMA channel interrupt status */
     dmaIntPriority2Status = DMA_REGS->DMA_INTSTAT2;
 
-    for (channel = 0U; channel < 1U; channel++)
+    for (channel = 0U; channel < 3U; channel++)
     {
         if ((dmaIntPriority2Status & ((uint32_t)1U << channel)) != (uint32_t)0U)
         {
@@ -510,7 +540,7 @@ void __attribute__((used)) DMA_PRI2_InterruptHandler( void )
     /* Get the DMA channel interrupt status */
     dmaIntPriority3Status = DMA_REGS->DMA_INTSTAT3;
 
-    for (channel = 0U; channel < 1U; channel++)
+    for (channel = 0U; channel < 3U; channel++)
     {
         if ((dmaIntPriority3Status & ((uint32_t)1U << channel)) != (uint32_t)0U)
         {
@@ -526,7 +556,7 @@ void __attribute__((used)) DMA_PRI3_InterruptHandler( void )
     /* Get the DMA channel interrupt status */
     dmaIntPriority4Status = DMA_REGS->DMA_INTSTAT4;
 
-    for (channel = 0U; channel < 1U; channel++)
+    for (channel = 0U; channel < 3U; channel++)
     {
         if ((dmaIntPriority4Status & ((uint32_t)1U << channel)) != (uint32_t)0U)
         {

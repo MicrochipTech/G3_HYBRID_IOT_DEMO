@@ -34,5 +34,38 @@
             <file>file:/C:/Users/M19888/Sergio/RepoGit/BluePannel/pic32czca_ble_gateway/firmware/src/config/lcc_rgb565_mxt_cz_ca80_cu/tasks.c</file>
             <file>file:/C:/Users/M19888/Sergio/RepoGit/BluePannel/pic32czca_ble_gateway/firmware/src/custom_http_net_app.c</file>
         </group>
+        <group name="Enlit 2025">
+            <file>file:/C:/Temp/G3_HYBRID_IOT_DEMO_PIC32CZCA80_WINCS02/host_controller_pic32czca80/firmware/src/app_ble_multilink.c</file>
+            <file>file:/C:/Temp/G3_HYBRID_IOT_DEMO_PIC32CZCA80_WINCS02/host_controller_pic32czca80/firmware/src/app.c</file>
+            <file>file:/C:/Temp/G3_HYBRID_IOT_DEMO_PIC32CZCA80_WINCS02/host_controller_pic32czca80/firmware/src/config/lcc_rgb565_mxt_cz_ca80_cu/driver/wifi/wincs02/include/wdrv_winc_mqtt.h</file>
+            <file>file:/C:/Temp/G3_HYBRID_IOT_DEMO_PIC32CZCA80_WINCS02/host_controller_pic32czca80/firmware/src/config/lcc_rgb565_mxt_cz_ca80_cu/driver/wifi/wincs02/include/wdrv_winc.h</file>
+            <file>file:/C:/Temp/G3_HYBRID_IOT_DEMO_PIC32CZCA80_WINCS02/host_controller_pic32czca80/firmware/src/app_coordinator.h</file>
+            <file>file:/C:/Temp/G3_HYBRID_IOT_DEMO_PIC32CZCA80_WINCS02/host_controller_pic32czca80/firmware/src/app_ble.c</file>
+            <file>file:/C:/Temp/G3_HYBRID_IOT_DEMO_PIC32CZCA80_WINCS02/host_controller_pic32czca80/firmware/src/config/lcc_rgb565_mxt_cz_ca80_cu/system/console/sys_console.h</file>
+            <file>file:/C:/Temp/G3_HYBRID_IOT_DEMO_PIC32CZCA80_WINCS02/host_controller_pic32czca80/firmware/src/config/lcc_rgb565_mxt_cz_ca80_cu/driver/wifi/wincs02/wdrv_winc_socket.c</file>
+            <file>file:/C:/Temp/G3_HYBRID_IOT_DEMO_PIC32CZCA80_WINCS02/host_controller_pic32czca80/firmware/src/app_screen_swall.c</file>
+            <file>file:/C:/Temp/G3_HYBRID_IOT_DEMO_PIC32CZCA80_WINCS02/host_controller_pic32czca80/firmware/src/app_wifi.h</file>
+            <file>file:/C:/Temp/G3_HYBRID_IOT_DEMO_PIC32CZCA80_WINCS02/host_controller_pic32czca80/firmware/src/app_wifi.c</file>
+            <file>file:/C:/Temp/G3_HYBRID_IOT_DEMO_PIC32CZCA80_WINCS02/host_controller_pic32czca80/firmware/src/config/lcc_rgb565_mxt_cz_ca80_cu/driver/wifi/wincs02/include/wdrv_winc_utils.h</file>
+            <file>file:/C:/Temp/G3_HYBRID_IOT_DEMO_PIC32CZCA80_WINCS02/host_controller_pic32czca80/firmware/src/config/lcc_rgb565_mxt_cz_ca80_cu/driver/wifi/wincs02/include/wdrv_winc_systime.h</file>
+            <file>file:/C:/Temp/G3_HYBRID_IOT_DEMO_PIC32CZCA80_WINCS02/host_controller_pic32czca80/firmware/src/config/lcc_rgb565_mxt_cz_ca80_cu/system/console/src/sys_console_usb_cdc.c</file>
+            <file>file:/C:/Temp/G3_HYBRID_IOT_DEMO_PIC32CZCA80_WINCS02/host_controller_pic32czca80/firmware/src/config/lcc_rgb565_mxt_cz_ca80_cu/definitions.h</file>
+            <file>file:/C:/Temp/G3_HYBRID_IOT_DEMO_PIC32CZCA80_WINCS02/host_controller_pic32czca80/firmware/src/config/lcc_rgb565_mxt_cz_ca80_cu/driver/wifi/wincs02/wdrv_winc_mqtt.c</file>
+            <file>file:/C:/Temp/G3_HYBRID_IOT_DEMO_PIC32CZCA80_WINCS02/host_controller_pic32czca80/firmware/src/config/lcc_rgb565_mxt_cz_ca80_cu/tasks.c</file>
+            <file>file:/C:/Temp/G3_HYBRID_IOT_DEMO_PIC32CZCA80_WINCS02/host_controller_pic32czca80/firmware/src/config/lcc_rgb565_mxt_cz_ca80_cu/driver/wifi/wincs02/wdrv_winc_softap.c</file>
+            <file>file:/C:/Temp/G3_HYBRID_IOT_DEMO_PIC32CZCA80_WINCS02/host_controller_pic32czca80/firmware/src/config/lcc_rgb565_mxt_cz_ca80_cu/driver/wifi/wincs02/include/wdrv_winc_common.h</file>
+            <file>file:/C:/Temp/G3_HYBRID_IOT_DEMO_PIC32CZCA80_WINCS02/host_controller_pic32czca80/firmware/src/config/lcc_rgb565_mxt_cz_ca80_cu/system/console/src/sys_console.c</file>
+            <file>file:/C:/Temp/G3_HYBRID_IOT_DEMO_PIC32CZCA80_WINCS02/host_controller_pic32czca80/firmware/src/config/lcc_rgb565_mxt_cz_ca80_cu/driver/wifi/wincs02/include/wdrv_winc_socket.h</file>
+            <file>file:/C:/Temp/G3_HYBRID_IOT_DEMO_PIC32CZCA80_WINCS02/host_controller_pic32czca80/firmware/src/config/lcc_rgb565_mxt_cz_ca80_cu/initialization.c</file>
+            <file>file:/C:/Temp/G3_HYBRID_IOT_DEMO_PIC32CZCA80_WINCS02/host_controller_pic32czca80/firmware/src/config/lcc_rgb565_mxt_cz_ca80_cu/system/wifi/src/sys_wincs_wifi_service.c</file>
+            <file>file:/C:/Temp/G3_HYBRID_IOT_DEMO_PIC32CZCA80_WINCS02/host_controller_pic32czca80/firmware/src/config/lcc_rgb565_mxt_cz_ca80_cu/system/debug/src/sys_debug.c</file>
+            <file>file:/C:/Temp/G3_HYBRID_IOT_DEMO_PIC32CZCA80_WINCS02/host_controller_pic32czca80/firmware/src/app_screen_control.c</file>
+            <file>file:/C:/Temp/G3_HYBRID_IOT_DEMO_PIC32CZCA80_WINCS02/host_controller_pic32czca80/firmware/src/config/lcc_rgb565_mxt_cz_ca80_cu/system/mqtt/sys_wincs_mqtt_service.h</file>
+            <file>file:/C:/Temp/G3_HYBRID_IOT_DEMO_PIC32CZCA80_WINCS02/host_controller_pic32czca80/firmware/src/config/lcc_rgb565_mxt_cz_ca80_cu/system/mqtt/src/sys_wincs_mqtt_service.c</file>
+            <file>file:/C:/Temp/G3_HYBRID_IOT_DEMO_PIC32CZCA80_WINCS02/host_controller_pic32czca80/firmware/src/app_coordinator.c</file>
+            <file>file:/C:/Temp/G3_HYBRID_IOT_DEMO_PIC32CZCA80_WINCS02/host_controller_pic32czca80/firmware/src/config/lcc_rgb565_mxt_cz_ca80_cu/configuration.h</file>
+            <file>file:/C:/Temp/G3_HYBRID_IOT_DEMO_PIC32CZCA80_WINCS02/host_controller_pic32czca80/firmware/src/main.c</file>
+            <file>file:/C:/Temp/G3_HYBRID_IOT_DEMO_PIC32CZCA80_WINCS02/host_controller_pic32czca80/firmware/src/config/lcc_rgb565_mxt_cz_ca80_cu/system/debug/sys_debug.h</file>
+        </group>
     </open-files>
 </project-private>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project>
+  <executable name="dist/lcc_rgb565_mxt_cz_ca80_cu/production/pic32cz_ca80_cu_rnbd451_multilink.X.production.elf">
+    <memory name="program">
+      <units>bytes</units>
+      <length>8388608</length>
+      <used>1231525</used>
+      <free>7157083</free>
+    </memory>
+    <memory name="data">
+      <units>bytes</units>
+      <length>1048576</length>
+      <used>408041</used>
+      <free>640535</free>
+    </memory>
+  </executable>
+</project>

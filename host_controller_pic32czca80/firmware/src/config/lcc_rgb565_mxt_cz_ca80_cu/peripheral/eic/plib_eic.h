@@ -83,6 +83,9 @@ typedef enum
     /* External Interrupt Controller Pin 7 */
     EIC_PIN_7 = 7,
 
+    /* External Interrupt Controller Pin 8 */
+    EIC_PIN_8 = 8,
+
     EIC_PIN_MAX = 16
 
 } EIC_PIN;

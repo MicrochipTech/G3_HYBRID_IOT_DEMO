@@ -82,6 +82,23 @@
 #define SERCOM_COORD_TX_Get()               (((PORT_REGS->GROUP[3].PORT_IN >> 24U)) & 0x01U)
 #define SERCOM_COORD_TX_PIN                  PORT_PIN_PD24
 
+/*** Macros for WDRV_WINC_SSN pin ***/
+#define WDRV_WINC_SSN_Set()               (PORT_REGS->GROUP[2].PORT_OUTSET = ((uint32_t)1U << 14U))
+#define WDRV_WINC_SSN_Clear()             (PORT_REGS->GROUP[2].PORT_OUTCLR = ((uint32_t)1U << 14U))
+#define WDRV_WINC_SSN_Toggle()            (PORT_REGS->GROUP[2].PORT_OUTTGL = ((uint32_t)1U << 14U))
+#define WDRV_WINC_SSN_OutputEnable()      (PORT_REGS->GROUP[2].PORT_DIRSET = ((uint32_t)1U << 14U))
+#define WDRV_WINC_SSN_InputEnable()       (PORT_REGS->GROUP[2].PORT_DIRCLR = ((uint32_t)1U << 14U))
+#define WDRV_WINC_SSN_Get()               (((PORT_REGS->GROUP[2].PORT_IN >> 14U)) & 0x01U)
+#define WDRV_WINC_SSN_PIN                  PORT_PIN_PC14
+
+/*** Macros for WDRV_WINC_SCK pin ***/
+#define WDRV_WINC_SCK_Get()               (((PORT_REGS->GROUP[2].PORT_IN >> 13U)) & 0x01U)
+#define WDRV_WINC_SCK_PIN                  PORT_PIN_PC13
+
+/*** Macros for WDRV_WINC_MOSI pin ***/
+#define WDRV_WINC_MOSI_Get()               (((PORT_REGS->GROUP[2].PORT_IN >> 12U)) & 0x01U)
+#define WDRV_WINC_MOSI_PIN                  PORT_PIN_PC12
+
 /*** Macros for BLE_UART_RX_IND pin ***/
 #define BLE_UART_RX_IND_Set()               (PORT_REGS->GROUP[0].PORT_OUTSET = ((uint32_t)1U << 22U))
 #define BLE_UART_RX_IND_Clear()             (PORT_REGS->GROUP[0].PORT_OUTCLR = ((uint32_t)1U << 22U))
@@ -100,6 +117,10 @@
 #define GFX_DISP_INTF_PIN_RESET_Get()               (((PORT_REGS->GROUP[4].PORT_IN >> 5U)) & 0x01U)
 #define GFX_DISP_INTF_PIN_RESET_PIN                  PORT_PIN_PE05
 
+/*** Macros for WDRV_WINC_MISO pin ***/
+#define WDRV_WINC_MISO_Get()               (((PORT_REGS->GROUP[2].PORT_IN >> 15U)) & 0x01U)
+#define WDRV_WINC_MISO_PIN                  PORT_PIN_PC15
+
 /*** Macros for GFX_DISP_INTF_PIN_RSDC pin ***/
 #define GFX_DISP_INTF_PIN_RSDC_Set()               (PORT_REGS->GROUP[2].PORT_OUTSET = ((uint32_t)1U << 27U))
 #define GFX_DISP_INTF_PIN_RSDC_Clear()             (PORT_REGS->GROUP[2].PORT_OUTCLR = ((uint32_t)1U << 27U))
@@ -117,6 +138,10 @@
 #define GFX_DISP_INTF_PIN_BACKLIGHT_InputEnable()       (PORT_REGS->GROUP[6].PORT_DIRCLR = ((uint32_t)1U << 5U))
 #define GFX_DISP_INTF_PIN_BACKLIGHT_Get()               (((PORT_REGS->GROUP[6].PORT_IN >> 5U)) & 0x01U)
 #define GFX_DISP_INTF_PIN_BACKLIGHT_PIN                  PORT_PIN_PG05
+
+/*** Macros for WDRV_WINC_INT pin ***/
+#define WDRV_WINC_INT_Get()               (((PORT_REGS->GROUP[0].PORT_IN >> 8U)) & 0x01U)
+#define WDRV_WINC_INT_PIN                  PORT_PIN_PA08
 
 /*** Macros for USB_HOST_PWR pin ***/
 #define USB_HOST_PWR_Set()               (PORT_REGS->GROUP[4].PORT_OUTSET = ((uint32_t)1U << 9U))
@@ -199,23 +224,14 @@
 #define LED1_Get()               (((PORT_REGS->GROUP[1].PORT_IN >> 22U)) & 0x01U)
 #define LED1_PIN                  PORT_PIN_PB22
 
-/*** Macros for BLE_RESET pin ***/
-#define BLE_RESET_Set()               (PORT_REGS->GROUP[1].PORT_OUTSET = ((uint32_t)1U << 27U))
-#define BLE_RESET_Clear()             (PORT_REGS->GROUP[1].PORT_OUTCLR = ((uint32_t)1U << 27U))
-#define BLE_RESET_Toggle()            (PORT_REGS->GROUP[1].PORT_OUTTGL = ((uint32_t)1U << 27U))
-#define BLE_RESET_OutputEnable()      (PORT_REGS->GROUP[1].PORT_DIRSET = ((uint32_t)1U << 27U))
-#define BLE_RESET_InputEnable()       (PORT_REGS->GROUP[1].PORT_DIRCLR = ((uint32_t)1U << 27U))
-#define BLE_RESET_Get()               (((PORT_REGS->GROUP[1].PORT_IN >> 27U)) & 0x01U)
-#define BLE_RESET_PIN                  PORT_PIN_PB27
-
 /*** Macros for WDRV_WINC_RESETN pin ***/
-#define WDRV_WINC_RESETN_Set()               (PORT_REGS->GROUP[1].PORT_OUTSET = ((uint32_t)1U << 25U))
-#define WDRV_WINC_RESETN_Clear()             (PORT_REGS->GROUP[1].PORT_OUTCLR = ((uint32_t)1U << 25U))
-#define WDRV_WINC_RESETN_Toggle()            (PORT_REGS->GROUP[1].PORT_OUTTGL = ((uint32_t)1U << 25U))
-#define WDRV_WINC_RESETN_OutputEnable()      (PORT_REGS->GROUP[1].PORT_DIRSET = ((uint32_t)1U << 25U))
-#define WDRV_WINC_RESETN_InputEnable()       (PORT_REGS->GROUP[1].PORT_DIRCLR = ((uint32_t)1U << 25U))
-#define WDRV_WINC_RESETN_Get()               (((PORT_REGS->GROUP[1].PORT_IN >> 25U)) & 0x01U)
-#define WDRV_WINC_RESETN_PIN                  PORT_PIN_PB25
+#define WDRV_WINC_RESETN_Set()               (PORT_REGS->GROUP[1].PORT_OUTSET = ((uint32_t)1U << 27U))
+#define WDRV_WINC_RESETN_Clear()             (PORT_REGS->GROUP[1].PORT_OUTCLR = ((uint32_t)1U << 27U))
+#define WDRV_WINC_RESETN_Toggle()            (PORT_REGS->GROUP[1].PORT_OUTTGL = ((uint32_t)1U << 27U))
+#define WDRV_WINC_RESETN_OutputEnable()      (PORT_REGS->GROUP[1].PORT_DIRSET = ((uint32_t)1U << 27U))
+#define WDRV_WINC_RESETN_InputEnable()       (PORT_REGS->GROUP[1].PORT_DIRCLR = ((uint32_t)1U << 27U))
+#define WDRV_WINC_RESETN_Get()               (((PORT_REGS->GROUP[1].PORT_IN >> 27U)) & 0x01U)
+#define WDRV_WINC_RESETN_PIN                  PORT_PIN_PB27
 
 // *****************************************************************************
 /* PORT Group

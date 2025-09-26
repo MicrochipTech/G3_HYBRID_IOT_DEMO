@@ -55,6 +55,7 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 
 #include "app_coordinator.h"
 #include "system/debug/sys_debug.h"
+#include "app_wifi.h"
 #include <string.h>
 
 // *****************************************************************************
@@ -368,6 +369,7 @@ void APP_COORDINATOR_ProtocolEventHandler(uint8_t *pData, size_t length)
             // Emergency Button from Coordinator to Host
             SYS_DEBUG_MESSAGE(SYS_ERROR_INFO, "Coordinator Emergency\r\n");
             appCoordinatorData.remoteStatus = APP_COORDINATOR_REMOTE_STATUS_EMERGENCY;
+            app_wifiData.alarmStatus = true;
             break;
         }
         default:

@@ -188,7 +188,7 @@ APP_RESULT APP_HTTP_ReadMsg(APP_HTTP_MSG * msg)
 
 void APP_HTTP_Tasks ( void )
 {
-
+#if false
     SYS_STATUS          tcpipStat;
     TCPIP_NET_HANDLE    netH;
     int                 nNets;
@@ -275,6 +275,7 @@ void APP_HTTP_Tasks ( void )
         default:
             break;
     }
+#endif
 }
 
 int32_t APP_HTTP_RegisterStateNotification(void (*func)(uint32_t, void *, uint32_t))
@@ -361,7 +362,7 @@ APP_RESULT APP_HTTP_SendBLELEDColorSetMsg(APP_BLE_DEVICE_ID device, uint32_t rgb
 
 return APP_BLE_Send_Msg(&appHttpBLEMsg);   
 }
-
+#if false
 void APP_HTTP_ProcessDemoForm(uint8_t *httpDataBuff)
 {
     const uint8_t * ptr;
@@ -463,7 +464,7 @@ TCPIP_HTTP_DYN_PRINT_RES TCPIP_HTTP_Print_bletemp(TCPIP_HTTP_NET_CONN_HANDLE con
 
     return TCPIP_HTTP_DYN_PRINT_RES_DONE;
 }
-
+#endif
 
 /*******************************************************************************
  End of File

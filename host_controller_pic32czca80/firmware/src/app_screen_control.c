@@ -1510,18 +1510,18 @@ static void ShowWifiInfoWidgets(void)
 {
     uint16_t leases = 0;
     uint16_t inUse = 0;
-    TCPIP_DHCPS_RES retval;
-    static TCPIP_NET_HANDLE netHdl;
+//    TCPIP_DHCPS_RES retval;
+//    static TCPIP_NET_HANDLE netHdl;
     
     APP_LE_SETLABELSTRING(LightControlScreen_DeviceInfoLabel, string_WiFiDeviceInfo);
     APP_LE_SETVISIBLE(LightControlScreen_NetInfoPanel, LE_TRUE);
     
 
     
-    netHdl = TCPIP_STACK_NetHandleGet("WINC");
+//    netHdl = TCPIP_STACK_NetHandleGet("WINC");
              
-    retval = TCPIP_DHCPS_LeaseEntriesGet(netHdl, &leases, &inUse);
+//    retval = TCPIP_DHCPS_LeaseEntriesGet(netHdl, &leases, &inUse);
         
-    APP_DPRINTF("\r\n (%d) retval, (%d) In Use\r\n", retval, inUse);
+//    APP_DPRINTF("\r\n (%d) retval, (%d) In Use\r\n", retval, inUse);
 }
 

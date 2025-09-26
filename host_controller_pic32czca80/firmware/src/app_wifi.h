@@ -33,6 +33,16 @@
 #include <stdlib.h>
 #include "configuration.h"
 
+#define TERM_GREEN "\x1B[32m"
+#define TERM_RED   "\x1B[31m"
+#define TERM_YELLOW "\x1B[33m"
+#define TERM_CYAN "\x1B[36m"
+#define TERM_WHITE "\x1B[47m"
+#define TERM_RESET "\x1B[0m"
+#define TERM_BG_RED "\x1B[41m" 
+#define TERM_BOLD "\x1B[1m" 
+#define TERM_UL "\x1B[4m"
+
 // DOM-IGNORE-BEGIN
 #ifdef __cplusplus  // Provide C++ Compatibility
 
@@ -40,7 +50,8 @@ extern "C" {
 
 #endif
 // DOM-IGNORE-END
-
+#define APP_BUILD_HASH_SZ 5
+#define APP_DI_IMAGE_INFO_NUM 2
 // *****************************************************************************
 // *****************************************************************************
 // Section: Type Definitions
@@ -62,16 +73,36 @@ typedef enum
 {
     /* Application's state machine's initial state. */
     APP_WIFI_STATE_INIT=0,
-    APP_WIFI_STATE_WDRV_INIT_READY,
-    APP_WIFI_STA_AP_STATE_CONFIG,
-    APP_WIFI_STA_AP_STATE_TCP_INIT,
-    APP_WIFI_AP_STATE_START,
-    APP_WIFI_AP_STATE_STARTED,
-    APP_WIFI_AP_WAIT_FOR_STA_IP,
-    APP_WIFI_AP_DHCP_EVENT,
-    APP_WIFI_AP_SOCKET_LISTENING,
-    APP_WIFI_AP_STOPPED,
-    APP_WIFI_STA_AP_STATE_DONE,              
+
+    // State to print Message 
+    APP_WIFI_STATE_WINCS_PRINT,
+
+    // Initial state of the application
+    APP_WIFI_STATE_WINCS_INIT,
+
+    // State to open the Wi-Fi driver
+    APP_WIFI_STATE_WINCS_OPEN_DRIVER,
+
+    // State to retrieve device information
+    APP_WIFI_STATE_WINCS_DEVICE_INFO,
+
+    // State to set the regulatory domain for Wi-Fi
+    APP_WIFI_STATE_WINCS_SET_REG_DOMAIN,
+
+    // State to configure Wi-Fi parameters
+    APP_WIFI_STATE_WINCS_ENABLE_PROV,
+
+    // State to configure Wi-Fi parameters
+    APP_WIFI_STATE_WINCS_SET_WIFI_PARAMS,
+
+    // State to create socket
+    //APP_WIFI_STATE_WINCS_CREATE_SOCKET,
+
+    // State to handle errors
+    APP_WIFI_STATE_WINCS_ERROR,
+
+    // State to perform regular service tasks and wait for callback
+    APP_WIFI_STATE_WINCS_SERVICE_TASKS
     /* TODO: Define states used by the application state machine. */
 
 } APP_WIFI_STATES;
@@ -95,11 +126,100 @@ typedef struct
     /* The application's current state */
     APP_WIFI_STATES state;
 
-    /* TODO: Define any additional data used by the application. */
+    /* alarm expired flag */
+    bool alarmExpired;
+    /* alarm status */
+    bool alarmStatus;
+    /* light_indoor status */
+    bool lightIndoorStatus;
+    /* light_outdoor status */
+    bool lightOutdoorStatus;
 
 } APP_WIFI_DATA;
+extern APP_WIFI_DATA app_wifiData;
+
+typedef struct
+{
+    /* Version number structure. */
+    struct
+    {
+        /* Major version number. */
+        uint16_t major;
+
+        /* Major minor number. */
+        uint16_t minor;
+
+        /* Major patch number. */
+        uint16_t patch;
+    } version;
+} APP_DRIVER_VERSION_INFO;
+
+typedef struct
+{
+    /* Flag indicating if this information is valid. */
+    bool isValid;
+
+    /* Version number structure. */
+    struct
+    {
+        /* Major version number. */
+        uint16_t major;
+
+        /* Major minor number. */
+        uint16_t minor;
+
+        /* Major patch number. */
+        uint16_t patch;
+    } version;
+
+    /* Build date/time structure. */
+    struct
+    {
+        uint8_t hash[APP_BUILD_HASH_SZ];
+
+        uint32_t timeUTC;
+    } build;
+} APP_FIRMWARE_VERSION_INFO;
+
 
 // *****************************************************************************
+/*  Device Information
+
+  Summary:
+    Defines the device information.
+
+  Description:
+    This data type defines the device information of the WINC.
+
+  Remarks:
+    None.
+*/
+
+typedef struct
+{
+    /* Flag indicating if this information is valid. */
+    bool isValid;
+
+    /* WINC device ID. */
+    uint32_t id;
+
+    /* Number of flash images. */
+    uint8_t numImages;
+
+    /* Information for each device image. */
+    struct
+    {
+        /* Sequence number. */
+        uint32_t seqNum;
+
+        /* Version information. */
+        uint32_t version;
+
+        /* Source address. */
+        uint32_t srcAddr;
+    } image[APP_DI_IMAGE_INFO_NUM];
+} APP_DEVICE_INFO;
+
 // *****************************************************************************
 // Section: Application Callback Routines
 // *****************************************************************************

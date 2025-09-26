@@ -38,20 +38,20 @@ D17,PC17,,Available,,,,,,No,FAST
 E1,PA06,,Available,,,,,,No,FAST
 E2,PA05,,Available,,,,,,No,FAST
 E4,PA00,,Available,,,,,,No,FAST
-E17,PC14,,Available,,,,,,No,FAST
+E17,PC14,WDRV_WINC_SSN,GPIO,Digital,Out,High,,,No,FAST
 E18,PC29,,Available,,,,,,No,FAST
 F1,PA21,,Available,,,,,,No,FAST
 F2,PA30,,Available,,,,,,No,FAST
 F4,PE04,,Available,,,,,,No,FAST
 F7,PD07,,EBI_D15,Digital,High Impedance,n/a,No,No,No,FAST
-F17,PC13,,Available,,,,,,No,FAST
-F18,PC12,,Available,,Out,,,,No,FAST
+F17,PC13,WDRV_WINC_SCK,SERCOM3_PAD1,Digital,High Impedance,n/a,No,No,No,FAST
+F18,PC12,WDRV_WINC_MOSI,SERCOM3_PAD0,Digital,Out,High,,,No,FAST
 G1,PA23,,Available,,,,,,No,FAST
 G2,PA31,,Available,,Out,,,,No,FAST
 G4,PA22,BLE_UART_RX_IND,GPIO,Digital,Out,High,,,No,FAST
 G6,PE05,GFX_DISP_INTF_PIN_RESET,GPIO,Digital,Out,High,,,No,FAST
 G11,PG11,,Available,,,,,,No,FAST
-G12,PC15,,Available,,,,,,No,FAST
+G12,PC15,WDRV_WINC_MISO,SERCOM3_PAD3,Digital,High Impedance,n/a,No,No,No,FAST
 G13,PG10,,Available,,,,,,No,FAST
 G15,PC27,GFX_DISP_INTF_PIN_RSDC,GPIO,Digital,Out,High,,,No,FAST
 G17,PG03,,Available,,,,,,No,FAST
@@ -69,7 +69,7 @@ J15,PG01,,Available,,,,,,No,FAST
 J17,PG05,GFX_DISP_INTF_PIN_BACKLIGHT,GPIO,Digital,Out,High,,,No,FAST
 J18,PG00,,Available,,,,,,No,FAST
 K1,PA07,,EIC_EXTINT7,Digital,High Impedance,n/a,No,No,No,FAST
-K2,PA08,,Available,,,,,,No,FAST
+K2,PA08,WDRV_WINC_INT,EIC_EXTINT8,Digital,High Impedance,n/a,No,No,No,FAST
 K4,PE09,USB_HOST_PWR,GPIO,Digital,Out,Low,,,No,FAST
 K12,PG09,,Available,,,,,,No,FAST
 K15,PC30,,SDMMC1_SDCK,Digital,High Impedance,n/a,No,No,No,FAST
@@ -148,11 +148,11 @@ V6,PB21,LED0,GPIO,Digital,Out,High,,,No,FAST
 V7,PB06,,Available,,,,,,No,FAST
 V8,PB22,LED1,GPIO,Digital,Out,High,,,No,FAST
 V9,PB07,,Available,,,,,,No,FAST
-V10,PB27,BLE_RESET,GPIO,Digital,Out,High,,,No,FAST
+V10,PB27,WDRV_WINC_RESETN,GPIO,Digital,In/Out,High,,,No,FAST
 V11,PF03,,Available,,,,,,No,FAST
 V12,PF05,,Available,,,,,,No,FAST
 V13,PB10,,Available,,,,,,No,FAST
 V14,PB11,,Available,,,,,,No,FAST
 V15,PB31,,Available,,,,,,No,FAST
-V16,PB25,WDRV_WINC_RESETN,GPIO,Digital,Out,High,,,No,FAST
+V16,PB25,,Available,,,,,,No,FAST
 V17,PB14,,Available,,,,,,No,FAST
