@@ -101,7 +101,7 @@ void APP_SYS_TIME_CallbackSetFlag(uintptr_t context)
     }
 }
 
-void APP_WIFI_SubscribeData(char *msg)
+void APP_WIFI_PublishData(char *msg)
 {
     SYS_WINCS_MQTT_FRAME_t mqtt_pub;
     mqtt_pub.qos      = SYS_WINCS_MQTT_PUB_MSG_QOS_TYPE;
@@ -111,11 +111,11 @@ void APP_WIFI_SubscribeData(char *msg)
     SYS_WINCS_MQTT_SrvCtrl(SYS_WINCS_MQTT_PUBLISH, (void *)&mqtt_pub);
 }
 
-void APP_WIFI_SubscribeDataInit(void)
+void APP_WIFI_PublishDataInit(void)
 {
-    APP_WIFI_SubscribeData("{\"alarm\": 0}");
-    APP_WIFI_SubscribeData("{\"light_indoor\": 0}");
-    APP_WIFI_SubscribeData("{\"light_outdoor\": 0}");
+    APP_WIFI_PublishData("{\"alarm\": 0}");
+    APP_WIFI_PublishData("{\"light_indoor\": 0}");
+    APP_WIFI_PublishData("{\"light_outdoor\": 0}");
 }
 
 void APP_Parse_Rx_Message(SYS_WINCS_MQTT_FRAME_t *mqttRxFrame)
@@ -136,23 +136,23 @@ void APP_Parse_Rx_Message(SYS_WINCS_MQTT_FRAME_t *mqttRxFrame)
         token = strtok(NULL, "/");
     }
 
-    if (strcmp(parts[count - 2], "switch-light") == 0)
+    if(strcmp(parts[count - 2], "switch-light") == 0)
     {
         // toggle indoor light
-        if (strstr(mqttRxFrame->message, "\"light_indoor\":\"toggle\"") != NULL)
+        if(strstr(mqttRxFrame->message, "\"light_indoor\":\"toggle\"") != NULL)
         {
             if(app_wifiData.lightIndoorStatus)
             {
                 SYS_DEBUG_PRINT(SYS_ERROR_DEBUG, "[APP_WIFI] : light_indoor off\r\n");
                 app_wifiData.lightIndoorStatus = false;
-                APP_WIFI_SubscribeData("{\"light_indoor\": 0}");
+                APP_WIFI_PublishData("{\"light_indoor\": 0}");
 
             }
             else
             {
                 SYS_DEBUG_PRINT(SYS_ERROR_DEBUG, "[APP_WIFI] : light_indoor on\r\n");
                 app_wifiData.lightIndoorStatus = true;
-                APP_WIFI_SubscribeData("{\"light_indoor\": 1}");
+                APP_WIFI_PublishData("{\"light_indoor\": 1}");
             }
 
             // inform coordinator
@@ -176,14 +176,14 @@ void APP_Parse_Rx_Message(SYS_WINCS_MQTT_FRAME_t *mqttRxFrame)
             {
                 SYS_DEBUG_PRINT(SYS_ERROR_DEBUG, "[APP_WIFI] : light_outdoor off\r\n");
                 app_wifiData.lightOutdoorStatus = false;
-                APP_WIFI_SubscribeData("{\"light_outdoor\": 0}");
+                APP_WIFI_PublishData("{\"light_outdoor\": 0}");
 
             }
             else
             {
                 SYS_DEBUG_PRINT(SYS_ERROR_DEBUG, "[APP_WIFI] : light_outdoor on\r\n");
                 app_wifiData.lightOutdoorStatus = true;
-                APP_WIFI_SubscribeData("{\"light_outdoor\": 1}");
+                APP_WIFI_PublishData("{\"light_outdoor\": 1}");
             }
 
             // inform coordinator
@@ -201,6 +201,47 @@ void APP_Parse_Rx_Message(SYS_WINCS_MQTT_FRAME_t *mqttRxFrame)
             }
         }
     }
+    else if(strcmp(parts[count - 2], "set-rgb") == 0)
+    {
+        const char *device_str = strstr(mqttRxFrame->message, "\"device\":\"0x");
+        const char *color_str = strstr(mqttRxFrame->message, "\"color\":\"0x");
+
+        uint8_t device = 0;
+        uint8_t color = 0;
+
+        if(device_str && color_str)
+        {
+            unsigned int temp_device, temp_color;
+
+            sscanf(device_str, "\"device\":\"0x%x\"", &temp_device);
+            sscanf(color_str, "\"color\":\"0x%x\"", &temp_color);
+
+            device = (uint8_t)temp_device;
+            color = (uint8_t)temp_color;
+
+            SYS_DEBUG_PRINT(SYS_ERROR_DEBUG, "[APP_WIFI] : Device: 0x%02X, Color: 0x%02X\n", device, color);
+            // inform coordinator
+            if(APP_COORDINATOR_deviceGetAlive(device))
+            {
+                uint8_t index;
+                uint8_t buffer[9];
+                uint8_t length = 9;
+
+                index = APP_COORDINATOR_deviceGetIndex(device);
+                buffer[0] = CMD_SET_LED_RGB_BLINK;;
+                buffer[1] = index;
+                buffer[2] = color;  // COLOR : 0x2B: yellow, 0x55: green, 0xAA: blue, 0xFF: red
+                buffer[3] = 0xFF;   // Saturation Value
+                buffer[4] = 0xFF;   // Saturation Value
+                buffer[5] = 0xf4;   // Blinking Frequency
+                buffer[6] = 0x01;   // Blinking Frequency - 500ms
+                buffer[7] = 0x10;   // Blinking Time
+                buffer[8] = 0x27;   // Blinking Time - 10s
+                while(!APP_COORDINATOR_Prepare2Send_Message(index, buffer, length, false));
+            }
+        }
+    }
+
 
     free(str_copy);
 }
@@ -253,7 +294,7 @@ SYS_WINCS_RESULT_t APP_MQTT_Callback
         case SYS_WINCS_MQTT_SUBCRIBE_ACK:
         {
             SYS_DEBUG_PRINT(SYS_ERROR_INFO, TERM_GREEN"[APP_WIFI] : MQTT Subscription has been acknowledged. \r\n"TERM_RESET);
-            APP_WIFI_SubscribeDataInit();
+            APP_WIFI_PublishDataInit();
             break;
         }
         
@@ -281,7 +322,12 @@ SYS_WINCS_RESULT_t APP_MQTT_Callback
         case SYS_WINCS_MQTT_DISCONNECTED:
         {            
             SYS_DEBUG_PRINT(SYS_ERROR_WARNING, "[APP_WIFI] :MQTT-  Reconnecting...\r\n");
-            SYS_WINCS_MQTT_SrvCtrl(SYS_WINCS_MQTT_CONNECT, NULL);
+            // Set the callback function for MQTT events
+            SYS_WINCS_MQTT_SrvCtrl(SYS_WINCS_MQTT_SET_CALLBACK, APP_MQTT_Callback);
+            // Configure the MQTT service with the provided configuration
+            SYS_WINCS_MQTT_SrvCtrl(SYS_WINCS_MQTT_CONFIG, (SYS_WINCS_MQTT_HANDLE_t)&g_mqttCfg);
+            // Connect to the MQTT broker using the specified configuration
+            SYS_WINCS_MQTT_SrvCtrl(SYS_WINCS_MQTT_CONNECT, &g_mqttCfg);
             break;            
         }
         
@@ -336,10 +382,10 @@ void SYS_WINCS_WIFI_CallbackHandler
                 app_wifiData.state = APP_WIFI_STATE_WINCS_SET_WIFI_PARAMS;
                 domainFlag = true;
             }
-            
+
             break;
-        }  
-        
+        }
+
         /* SNTP UP event code*/
         case SYS_WINCS_WIFI_SNTP_UP:
         {            
@@ -370,6 +416,12 @@ void SYS_WINCS_WIFI_CallbackHandler
         case SYS_WINCS_WIFI_DISCONNECTED:
         {
             SYS_DEBUG_PRINT(SYS_ERROR_ERROR, TERM_RED"[APP_WIFI] : Wi-Fi Disconnected\nReconnecting... \r\n"TERM_RESET);
+            char sntp_url[] =  SYS_WINCS_WIFI_SNTP_ADDRESS;
+            if (SYS_WINCS_FAIL == SYS_WINCS_WIFI_SrvCtrl(SYS_WINCS_WIFI_SET_SNTP, sntp_url))
+            {
+                app_wifiData.state = APP_WIFI_STATE_WINCS_ERROR;
+                break;
+            }
             SYS_WINCS_WIFI_SrvCtrl(SYS_WINCS_WIFI_STA_CONNECT, NULL);
             connectedCount -= 1;
             break;
@@ -385,18 +437,18 @@ void SYS_WINCS_WIFI_CallbackHandler
 
         /* Wi-Fi DHCP complete event code*/
         case SYS_WINCS_WIFI_DHCP_IPV4_COMPLETE:
-        {         
+        {
             SYS_DEBUG_PRINT(SYS_ERROR_INFO, "[APP_WIFI] : DHCP IPv4 : %s\r\n", (uint8_t *)wifiHandle);
             SYS_WINCS_WIFI_SrvCtrl(SYS_WINCS_WIFI_GET_TIME, NULL);
             break;
         }
-        
+
         case SYS_WINCS_WIFI_DHCP_IPV6_LOCAL_COMPLETE:
         {
             //SYS_DEBUG_PRINT(SYS_ERROR_INFO, "[APP_WIFI] : DHCP IPv6 Local : %s\r\n", (uint8_t *)wifiHandle);
             break;
         }
-        
+
         case SYS_WINCS_WIFI_DHCP_IPV6_GLOBAL_COMPLETE:
         {
             //SYS_DEBUG_PRINT(SYS_ERROR_INFO, "[APP_WIFI] : DHCP IPv6 Global: %s\r\n", (uint8_t *)wifiHandle);
@@ -405,13 +457,13 @@ void SYS_WINCS_WIFI_CallbackHandler
             //SYS_WINCS_WIFI_SrvCtrl(SYS_WINCS_WIFI_GET_TIME, NULL);
             break;
         }
-        
+
         default:
         {
             SYS_DEBUG_PRINT(SYS_ERROR_WARNING, "[APP_WIFI] : WiFi Callback unhandeled event: %d\r\n", event);
             break;
         }
-    }    
+    }
 }
 
 /******************************************************************************
@@ -426,7 +478,7 @@ void APP_WIFI_Tasks ( void )
 {
     static SYS_TIME_HANDLE timer = SYS_TIME_HANDLE_INVALID;
     static SYS_TIME_HANDLE alarmTimer = SYS_TIME_HANDLE_INVALID;
-    
+
     /* Check the application's current state. */
     switch(app_wifiData.state)
     {
@@ -438,7 +490,7 @@ void APP_WIFI_Tasks ( void )
             app_wifiData.state = APP_WIFI_STATE_WINCS_INIT;
             break;
         }
-        
+
         /* Application's initial state. */
         case APP_WIFI_STATE_WINCS_INIT:
         {
@@ -558,7 +610,7 @@ void APP_WIFI_Tasks ( void )
                 .passphrase  = SYS_WINCS_WIFI_STA_PWD,         // Set the passphrase (password) for the Wi-Fi connection
                 .security    = SYS_WINCS_WIFI_STA_SECURITY,    // Set the security type (e.g., WPA2) for the Wi-Fi connection
                 .autoConnect = SYS_WINCS_WIFI_STA_AUTOCONNECT  // Enable or disable auto-connect to the Wi-Fi network
-            }; 
+            };
 
             // Set the Wi-Fi parameters
             if (SYS_WINCS_FAIL == SYS_WINCS_WIFI_SrvCtrl(SYS_WINCS_WIFI_SET_PARAMS, &wifi_sta_cfg))
@@ -580,7 +632,7 @@ void APP_WIFI_Tasks ( void )
                 app_wifiData.alarmExpired = false;
                 alarmTimer = SYS_TIME_HANDLE_INVALID;
                 app_wifiData.alarmStatus = false;
-                APP_WIFI_SubscribeData("{\"alarm\": 0}");
+                APP_WIFI_PublishData("{\"alarm\": 0}");
                 break;
             }
             
@@ -588,7 +640,7 @@ void APP_WIFI_Tasks ( void )
             {
                 //SYS_DEBUG_PRINT(SYS_ERROR_INFO, "Alarm on\r\n");
                 //USER_LED1_Clear();
-                APP_WIFI_SubscribeData("{\"alarm\": 1}");
+                APP_WIFI_PublishData("{\"alarm\": 1}");
                 app_wifiData.alarmExpired = false;
                 alarmTimer = SYS_TIME_CallbackRegisterMS(APP_SYS_TIME_CallbackSetFlag,
                         (uintptr_t) &app_wifiData.alarmExpired, 30000, SYS_TIME_SINGLE);
@@ -596,7 +648,7 @@ void APP_WIFI_Tasks ( void )
             }
             break;
         }
-        
+
         case APP_WIFI_STATE_WINCS_ERROR:
         {
             SYS_DEBUG_PRINT(SYS_ERROR_ERROR, TERM_RED"[APP_WIFI] : ERROR in Application "TERM_RESET);

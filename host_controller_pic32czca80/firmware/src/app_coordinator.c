@@ -539,7 +539,7 @@ void APP_COORDINATOR_usiTasks ( void )
         case APP_COORDINATOR_TRANSFER_STATE_SEND_DATA:
             if (appCoordinatorData.availableBuffers)
             {         
-                SYS_DEBUG_MESSAGE(SYS_ERROR_ERROR, "APP_COORDINATOR: SEND USI PACKET\r\n");
+                SYS_DEBUG_MESSAGE(SYS_ERROR_INFO, "APP_COORDINATOR: SEND USI PACKET\r\n");
                 APP_COORDINATOR_Send_Message(appCoordinatorData.transferBuffer, appCoordinatorData.transferLength);
                 if (appCoordinatorData.transferAnswerFlag)
                 {
@@ -652,25 +652,25 @@ void APP_COORDINATOR_Tasks ( void )
    if (appCoordinatorData.deviceWasDetached)
    {
        /* This means the device is not attached. Reset the application state */
-       
+
        appCoordinatorData.state = APP_COORDINATOR_STATE_WAIT_FOR_DEVICE_ATTACH;
        appCoordinatorData.readTransferDone = false;
        appCoordinatorData.writeTransferDone = false;
        appCoordinatorData.controlRequestDone = false;
        appCoordinatorData.deviceWasDetached = false;
    }
-   
-   
+
+
    APP_COORDINATOR_usiTasks();
-   
+
     switch (appCoordinatorData.state)
     {
         case APP_COORDINATOR_STATE_BUS_ENABLE:
-        
+
             /* In this state, the application enables the USB Host Bus. Note how
                the CDC Attach event handler is registered before the bus is 
                enabled. */
-            
+
             USB_HOST_EventHandlerSet(APP_COORDINATOR_USBHostEventHandler, (uintptr_t)0);
             USB_HOST_CDC_AttachEventHandlerSet(APP_COORDINATOR_USBHostCDCAttachEventListener, (uintptr_t) 0);
             USB_HOST_BusEnable(USB_HOST_BUS_ALL);
@@ -681,7 +681,7 @@ void APP_COORDINATOR_Tasks ( void )
             break;
         
         case APP_COORDINATOR_STATE_WAIT_FOR_BUS_ENABLE_COMPLETE:
-            
+
             /* In this state, the application is waiting for the Bus enable to 
                complete. */
             if(USB_HOST_BusIsEnabled(USB_HOST_BUS_ALL))
@@ -692,9 +692,9 @@ void APP_COORDINATOR_Tasks ( void )
                 appCoordinatorData.delayMs = 1;
             }
             break;
-            
+
         case APP_COORDINATOR_STATE_WAIT_FOR_DEVICE_ATTACH:
-            
+
             /* In this state, the application is waiting for the device to be
                attached. */
             if(appCoordinatorData.deviceIsAttached)
@@ -708,9 +708,9 @@ void APP_COORDINATOR_Tasks ( void )
                 appCoordinatorData.delayMs = 1;
             }
             break;
-            
+
         case APP_COORDINATOR_STATE_OPEN_DEVICE:
-            
+
             /* In this state, the application opens the attached device */
             appCoordinatorData.cdcHostHandle = USB_HOST_CDC_Open(appCoordinatorData.cdcObj);
             if(appCoordinatorData.cdcHostHandle != USB_HOST_CDC_HANDLE_INVALID)
@@ -724,12 +724,12 @@ void APP_COORDINATOR_Tasks ( void )
                 appCoordinatorData.delayMs = 1;
             }
             break;
-            
+
         case APP_COORDINATOR_STATE_SET_LINE_CODING:
-            
+
             /* Here we set the Line coding. The control request done flag will
              * be set to true when the control request has completed. */
-            
+
             appCoordinatorData.controlRequestDone = false;
             result = USB_HOST_CDC_ACM_LineCodingSet(appCoordinatorData.cdcHostHandle, NULL, &appCoordinatorData.cdcHostLineCoding);
             
@@ -740,11 +740,11 @@ void APP_COORDINATOR_Tasks ( void )
                 appCoordinatorData.state = APP_COORDINATOR_STATE_DELAY;
                 appCoordinatorData.delayMs = 1;
             }
-                            
+
             break;
-            
+
         case APP_COORDINATOR_STATE_WAIT_FOR_SET_LINE_CODING:
-            
+
             if(appCoordinatorData.controlRequestDone)
             {
                 if(appCoordinatorData.controlRequestResult != USB_HOST_CDC_RESULT_SUCCESS)
@@ -761,14 +761,14 @@ void APP_COORDINATOR_Tasks ( void )
                 }
             }
             break;
-            
+
         case APP_COORDINATOR_STATE_SEND_SET_CONTROL_LINE_STATE:
-            
+
             /* Here we set the control line state */
             appCoordinatorData.controlRequestDone = false;
             result = USB_HOST_CDC_ACM_ControlLineStateSet(appCoordinatorData.cdcHostHandle, NULL, 
                     &appCoordinatorData.controlLineState);
-            
+
             if(result == USB_HOST_CDC_RESULT_SUCCESS)
             {
                 /* We wait for the set line coding to complete */
@@ -776,11 +776,11 @@ void APP_COORDINATOR_Tasks ( void )
                 appCoordinatorData.state = APP_COORDINATOR_STATE_DELAY;
                 appCoordinatorData.delayMs = 1;
             }
-            
+
             break;
-            
+
         case APP_COORDINATOR_STATE_WAIT_FOR_SET_CONTROL_LINE_STATE:
-            
+
             /* Here, we wait for the control line state set request to complete */
             if(appCoordinatorData.controlRequestDone)
             {
@@ -794,7 +794,7 @@ void APP_COORDINATOR_Tasks ( void )
                     /* Turn ON LED to indicate the device is attached and ready 
                        for data transfer. */
                     //LED1_On();
-                    
+
                     /* Now, the application will send an "LED ON" message to the
                        CDC Device. Fill the buffer here. */
                     //appCoordinatorData.cdcWriteSize = sizeof(ledon);
@@ -807,14 +807,14 @@ void APP_COORDINATOR_Tasks ( void )
                     appCoordinatorData.nextState = APP_COORDINATOR_STATE_DELAY;
                 }
             }
-            
+
             break;
-            
+
         case APP_COORDINATOR_STATE_SEND_PROMPT_TO_DEVICE:
-            
+
             /* The prompt is sent to the device here. The write transfer done
              * flag is updated in the event handler. */
-                      
+
             appCoordinatorData.writeTransferDone = false;
             appCoordinatorData.cdcWriteData = serializationBufferTx;
             appCoordinatorData.cdcWriteSize = indexBufferTx;
@@ -829,9 +829,9 @@ void APP_COORDINATOR_Tasks ( void )
                 SYS_DEBUG_MESSAGE(SYS_ERROR_INFO, "Error writting CDC\r\n");
             }
             break;
-            
+
         case APP_COORDINATOR_STATE_WAIT_FOR_PROMPT_SEND_COMPLETE:
-            
+
             /* Here we check if the write transfer is done. */
             if(appCoordinatorData.writeTransferDone)
             {
@@ -857,9 +857,9 @@ void APP_COORDINATOR_Tasks ( void )
                     appCoordinatorData.state = APP_COORDINATOR_STATE_SEND_PROMPT_TO_DEVICE;
                 }
             }
-            
+
             break;
-            
+
         case APP_COORDINATOR_STATE_GET_DATA_FROM_DEVICE:
             /* Here we request data from the device */
             appCoordinatorData.readTransferDone = false;
@@ -885,9 +885,9 @@ void APP_COORDINATOR_Tasks ( void )
                 }
             }
             break;
-           
+
         case APP_COORDINATOR_STATE_WAIT_FOR_DATA_FROM_DEVICE:
-            
+
             /* Wait for data from device. If the data has arrived, then toggle
              * the LED. */
             if(appCoordinatorData.readTransferDone)
@@ -895,7 +895,7 @@ void APP_COORDINATOR_Tasks ( void )
                 if(appCoordinatorData.readTransferResult == USB_HOST_CDC_RESULT_SUCCESS)
                 {
                     appCoordinatorData.timer = SYS_TIME_HANDLE_INVALID;
-                    
+
                     if ( appCoordinatorData.readTransferLength > 0 )
                     {
                         SYS_DEBUG_PRINT(SYS_ERROR_INFO, "Reading CDC %d bytes\r\n", appCoordinatorData.readTransferLength);
@@ -903,7 +903,7 @@ void APP_COORDINATOR_Tasks ( void )
                         memset(appCoordinatorData.inDataArray,'\0', appCoordinatorData.readTransferLength);
                         /* Switch on LED   */
                         //LED1_Off();
-                        
+
                         /* Fill the buffer. */
                         //appCoordinatorData.cdcWriteSize = sizeof(ledon);
                         //appCoordinatorData.cdcWriteData = ledon;
@@ -913,13 +913,13 @@ void APP_COORDINATOR_Tasks ( void )
                     {
                         /* Switch off LED  */
                         //LED1_On();
-                        
+
                         /* Fill the buffer. */
                         //appCoordinatorData.cdcWriteSize = sizeof(ledoff);
                         //appCoordinatorData.cdcWriteData = ledoff;
 
                     }
-                    
+
                     /* Send the prompt to the device and wait
                      * for data again */
                     appCoordinatorData.state = APP_COORDINATOR_STATE_SEND_PROMPT_TO_DEVICE;
@@ -935,9 +935,9 @@ void APP_COORDINATOR_Tasks ( void )
                 }
             }
             break;
-            
+
 // STATES related with USI HOST into SERCOM8 - Serial Port
-            
+
         case APP_COORDINATOR_STATE_USI_INIT:
         {   /* Application's initial state. */
             /* Open USI Service */
@@ -986,6 +986,11 @@ void APP_COORDINATOR_Tasks ( void )
                 {
                     /* Waiting for device information */
                     appCoordinatorData.state = APP_COORDINATOR_STATE_USI_GET_DEVICES;
+                    if (appCoordinatorData.timer != SYS_TIME_HANDLE_INVALID)
+                    {
+                        SYS_TIME_TimerDestroy(appCoordinatorData.timer);
+                    }
+                    appCoordinatorData.timerExpired = false;
                     appCoordinatorData.timer = SYS_TIME_CallbackRegisterMS(APP_COORDINATOR_SYS_TIME_CallbackSetFlag,
                         (uintptr_t) &appCoordinatorData.timerExpired, appCoordinatorData.timerTimeout_ms, SYS_TIME_SINGLE);
                 }
@@ -994,7 +999,7 @@ void APP_COORDINATOR_Tasks ( void )
         }
 
         case APP_COORDINATOR_STATE_USI_GET_DEVICES:
-        {          
+        {
             if (appCoordinatorData.remoteStatus == APP_COORDINATOR_REMOTE_STATUS_EMERGENCY)
             {
                 /* Emergency */
@@ -1014,21 +1019,21 @@ void APP_COORDINATOR_Tasks ( void )
             }
             break;
         }
-        
+
         case APP_COORDINATOR_STATE_USI_GET_DEVICES_ANSWER:
         {
             if (!appCoordinatorData.transferFlag)
-            {                   
+            {
                 if (appCoordinatorData.transferAnswerOK)
                 {
-                    SYS_DEBUG_MESSAGE(SYS_ERROR_INFO, "[APP COORDINATOR] - Get Devices Answer OK\r\n");                     
-                    
+                    SYS_DEBUG_MESSAGE(SYS_ERROR_INFO, "[APP COORDINATOR] - Get Devices Answer OK\r\n");
+
                     uint16_t numdevices;
                     uint8_t index;
                     uint8_t type;
                     uint8_t alive;
                     uint8_t *pbuffer;
-                    
+
                     pbuffer = appCoordinatorData.transferBuffer;
                     // First Byte is the command itself
                     if (*pbuffer++ == CMD_GET_DEVICES_ANSWER)
@@ -1045,7 +1050,7 @@ void APP_COORDINATOR_Tasks ( void )
                                 SYS_DEBUG_PRINT(SYS_ERROR_INFO, "Index:%d - Type:0x%02X - Alive: %s \r\n", index, type, alive? "yes" : "no");
                                 appCoordinatorDeviceInfo[type - TYPE_LIGHTING_INDOOR].index = index;
                                 appCoordinatorDeviceInfo[type - TYPE_LIGHTING_INDOOR].alive = alive;
-                            }               
+                            }
                         }
                     }
                 }
@@ -1057,9 +1062,9 @@ void APP_COORDINATOR_Tasks ( void )
                 appCoordinatorData.freetransferFlag = true;
                 appCoordinatorData.state = APP_COORDINATOR_STATE_USI_READY;
                 break;
-            }            
+            }
             break;
-        }        
+        }
         case APP_COORDINATOR_STATE_USI_SEND_CMD_EMERGENCY:
         {
             if ((appCoordinatorData.freetransferFlag) && (!appCoordinatorData.transferFlag))
@@ -1082,19 +1087,26 @@ void APP_COORDINATOR_Tasks ( void )
                         appCoordinatorData.state = APP_COORDINATOR_STATE_USI_WAIT_SENT_CMD;
                     }
                 }
+                else
+                {
+                    /* Free transfer flag */
+                    appCoordinatorData.freetransferFlag = true;
+                    appCoordinatorData.remoteStatus = APP_COORDINATOR_REMOTE_STATUS_READY;
+                    appCoordinatorData.state = APP_COORDINATOR_STATE_USI_READY;
+                }
             }
             break;
         }
-        
+
         case APP_COORDINATOR_STATE_USI_WAIT_SENT_CMD:
         {
             if (!appCoordinatorData.transferFlag)
-            {                   
+            {
                 /* Free transfer flag */
                 appCoordinatorData.freetransferFlag = true;
                 appCoordinatorData.remoteStatus = APP_COORDINATOR_REMOTE_STATUS_READY;
                 appCoordinatorData.state = APP_COORDINATOR_STATE_USI_READY;
-            }            
+            }
             break;
         }
         case APP_COORDINATOR_STATE_DELAY:
@@ -1107,11 +1119,11 @@ void APP_COORDINATOR_Tasks ( void )
             }
             break;
         }
-        
+
         case APP_COORDINATOR_STATE_ERROR:
             /* An error has occurred */
             break;
-            
+
         default:
             break;
     }
