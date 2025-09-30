@@ -59,6 +59,8 @@
             <file>file:/C:/Temp/G3_HYBRID_IOT_DEMO_PIC32CZCA80_WINCS02/host_controller_pic32czca80/firmware/src/config/lcc_rgb565_mxt_cz_ca80_cu/initialization.c</file>
             <file>file:/C:/Temp/G3_HYBRID_IOT_DEMO_PIC32CZCA80_WINCS02/host_controller_pic32czca80/firmware/src/config/lcc_rgb565_mxt_cz_ca80_cu/system/wifi/src/sys_wincs_wifi_service.c</file>
             <file>file:/C:/Temp/G3_HYBRID_IOT_DEMO_PIC32CZCA80_WINCS02/host_controller_pic32czca80/firmware/src/config/lcc_rgb565_mxt_cz_ca80_cu/system/debug/src/sys_debug.c</file>
+            <file>file:/C:/Temp/G3_HYBRID_IOT_DEMO_PIC32CZCA80_WINCS02/host_controller_pic32czca80/firmware/src/config/lcc_rgb565_mxt_cz_ca80_cu/system/time/sys_time.h</file>
+            <file>file:/C:/Temp/G3_HYBRID_IOT_DEMO_PIC32CZCA80_WINCS02/host_controller_pic32czca80/firmware/src/config/lcc_rgb565_mxt_cz_ca80_cu/system/time/src/sys_time.c</file>
             <file>file:/C:/Temp/G3_HYBRID_IOT_DEMO_PIC32CZCA80_WINCS02/host_controller_pic32czca80/firmware/src/app_screen_control.c</file>
             <file>file:/C:/Temp/G3_HYBRID_IOT_DEMO_PIC32CZCA80_WINCS02/host_controller_pic32czca80/firmware/src/config/lcc_rgb565_mxt_cz_ca80_cu/system/mqtt/sys_wincs_mqtt_service.h</file>
             <file>file:/C:/Temp/G3_HYBRID_IOT_DEMO_PIC32CZCA80_WINCS02/host_controller_pic32czca80/firmware/src/config/lcc_rgb565_mxt_cz_ca80_cu/system/mqtt/src/sys_wincs_mqtt_service.c</file>

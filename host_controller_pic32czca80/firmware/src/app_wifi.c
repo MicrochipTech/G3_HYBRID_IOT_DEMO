@@ -89,7 +89,8 @@ void APP_WIFI_Initialize ( void )
 {
     /* Place the App state machine in its initial state. */
     app_wifiData.state = APP_WIFI_STATE_WINCS_PRINT;
-
+    app_wifiData.mqttMessCntWifi = 0;
+    app_wifiData.mqttMessCntLtem = 0;
 }
 
 void APP_SYS_TIME_CallbackSetFlag(uintptr_t context)
@@ -111,14 +112,16 @@ void APP_WIFI_PublishData(char *msg)
     SYS_WINCS_MQTT_SrvCtrl(SYS_WINCS_MQTT_PUBLISH, (void *)&mqtt_pub);
 }
 
-void APP_WIFI_PublishDataInit(void)
+static void APP_WIFI_PublishDataInit(void)
 {
     APP_WIFI_PublishData("{\"alarm\": 0}");
     APP_WIFI_PublishData("{\"light_indoor\": 0}");
     APP_WIFI_PublishData("{\"light_outdoor\": 0}");
+    APP_WIFI_PublishData("{\"mqttMessCntWifi\": 0}");
+    APP_WIFI_PublishData("{\"mqttMessCntLtem\": 0}");
 }
 
-void APP_Parse_Rx_Message(SYS_WINCS_MQTT_FRAME_t *mqttRxFrame)
+static void APP_Parse_Rx_Message(SYS_WINCS_MQTT_FRAME_t *mqttRxFrame)
 {
     char *parts[10];
     int count = 0;
@@ -281,44 +284,47 @@ SYS_WINCS_RESULT_t APP_MQTT_Callback
     switch(event)
     {
         case SYS_WINCS_MQTT_CONNECTED:
-        {    
+        {
             SYS_DEBUG_PRINT(SYS_ERROR_INFO, TERM_GREEN"\r\n[APP_WIFI] : MQTT : Connected to broker\r\n"TERM_RESET);
             SYS_DEBUG_PRINT(SYS_ERROR_INFO, "[APP_WIFI] : Subscribing to %s\r\n",SYS_WINCS_MQTT_SUB_TOPIC_0);
-            
+
             //Subscribe to topic 
             SYS_WINCS_MQTT_SrvCtrl(SYS_WINCS_MQTT_SUBS_TOPIC, (SYS_WINCS_MQTT_HANDLE_t)&g_mqttSubsframe);
             break;
         }
-        
-        
+
         case SYS_WINCS_MQTT_SUBCRIBE_ACK:
         {
             SYS_DEBUG_PRINT(SYS_ERROR_INFO, TERM_GREEN"[APP_WIFI] : MQTT Subscription has been acknowledged. \r\n"TERM_RESET);
             APP_WIFI_PublishDataInit();
             break;
         }
-        
+
         case SYS_WINCS_MQTT_SUBCRIBE_MSG:
-        {   
+        {
+            char mqttMessCntWifiString[50];
             SYS_WINCS_MQTT_FRAME_t *mqttRxFrame = (SYS_WINCS_MQTT_FRAME_t *)mqttHandle;
             SYS_DEBUG_PRINT(SYS_ERROR_INFO, TERM_YELLOW"[APP_WIFI] : MQTT RX: From Topic : %s ; Msg -> %s\r\n"TERM_RESET,
                     mqttRxFrame->topic, mqttRxFrame->message);
+            app_wifiData.mqttMessCntWifi++;
+            sprintf(mqttMessCntWifiString, "{\"mqttMessCntWifi\": %d}", app_wifiData.mqttMessCntWifi);
+            APP_WIFI_PublishData(mqttMessCntWifiString);
             APP_Parse_Rx_Message(mqttRxFrame);
             break;
         }
-        
+
         case SYS_WINCS_MQTT_UNSUBSCRIBED:
         {
             SYS_DEBUG_PRINT(SYS_ERROR_INFO, "[APP_WIFI] : MQTT- A topic has been un-subscribed. \r\n");
             break;
         }
-        
+
         case SYS_WINCS_MQTT_PUBLISH_ACK:
         {
             SYS_DEBUG_PRINT(SYS_ERROR_INFO, "[APP_WIFI] : MQTT- Publish has been sent. \r\n");
             break;
         }
-        
+
         case SYS_WINCS_MQTT_DISCONNECTED:
         {            
             SYS_DEBUG_PRINT(SYS_ERROR_WARNING, "[APP_WIFI] :MQTT-  Reconnecting...\r\n");
@@ -330,13 +336,13 @@ SYS_WINCS_RESULT_t APP_MQTT_Callback
             SYS_WINCS_MQTT_SrvCtrl(SYS_WINCS_MQTT_CONNECT, &g_mqttCfg);
             break;            
         }
-        
+
         case SYS_WINCS_MQTT_ERROR:
         {
             SYS_DEBUG_PRINT(SYS_ERROR_ERROR, "[APP_WIFI] : MQTT - ERROR\r\n");
             break;
         }
-        
+
         default:
         break;
     }

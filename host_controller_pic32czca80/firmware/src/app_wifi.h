@@ -134,7 +134,10 @@ typedef struct
     bool lightIndoorStatus;
     /* light_outdoor status */
     bool lightOutdoorStatus;
-
+    /* MQTT message counter received over WiFi */
+    int mqttMessCntWifi;
+    /* MQTT message counter received over LTE-M com */
+    int mqttMessCntLtem; // todo: count when LTE module is implemented
 } APP_WIFI_DATA;
 extern APP_WIFI_DATA app_wifiData;
 
@@ -300,6 +303,8 @@ void APP_WIFI_Initialize ( void );
 void APP_WIFI_Tasks( void );
 
 uint32_t APP_WIFI_GetConnectedCount(void);
+
+void APP_WIFI_PublishData(char *msg);
 
 //DOM-IGNORE-BEGIN
 #ifdef __cplusplus
