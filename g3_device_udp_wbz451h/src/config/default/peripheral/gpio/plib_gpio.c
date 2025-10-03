@@ -67,7 +67,7 @@ void GPIO_Initialize ( void )
     GPIOA_REGS->GPIO_TRISCLR = 0x1f3U; /* Direction Control */
     GPIOA_REGS->GPIO_CNPDSET = 0x8U; /* Pull-Down Enable */
     /* PORTB Initialization */
-    GPIOB_REGS->GPIO_LAT = 0x1040U; /* Initial Latch Value */
+    GPIOB_REGS->GPIO_LAT = 0x40U; /* Initial Latch Value */
     GPIOB_REGS->GPIO_TRISCLR = 0x38c5U; /* Direction Control */
     GPIOB_REGS->GPIO_ANSELCLR = 0xfdU; /* Digital Mode Enable */
     GPIOB_REGS->GPIO_CNPDSET = 0x20U; /* Pull-Down Enable */

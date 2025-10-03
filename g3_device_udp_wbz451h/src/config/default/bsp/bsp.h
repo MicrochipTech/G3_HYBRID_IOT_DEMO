@@ -63,11 +63,7 @@
 #define wbz451hpe_curiosity
 #define BSP_NAME             "wbz451hpe_curiosity"
 
-/*** LED Macros for RGB_LED_RED ***/
-#define RGB_LED_RED_Toggle() (GPIOB_REGS->GPIO_LATINV = (1UL<<0))
-#define RGB_LED_RED_Get() ((GPIOB_REGS->GPIO_PORT >> 0) & 0x1U)
-#define RGB_LED_RED_On() (GPIOB_REGS->GPIO_LATSET = (1UL<<0))
-#define RGB_LED_RED_Off() (GPIOB_REGS->GPIO_LATCLR = (1UL<<0))
+
 
 
 

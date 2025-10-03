@@ -1,17 +1,23 @@
 /*******************************************************************************
-  Board Support Package Implementation
+  Timer/Counter(TC3) PLIB
 
-  Company:
+  Company
     Microchip Technology Inc.
 
-  File Name:
-    bsp.c
+  File Name
+    plib_tc3.h
 
-  Summary:
-    Board Support Package implementation.
+  Summary
+    TC3 PLIB Header File.
 
-  Description:
-    This file contains routines that implement the board support package
+  Description
+    This file defines the interface to the TC peripheral library. This
+    library provides access to and control of the associated peripheral
+    instance.
+
+  Remarks:
+    None.
+
 *******************************************************************************/
 
 // DOM-IGNORE-BEGIN
@@ -39,45 +45,81 @@
 *******************************************************************************/
 // DOM-IGNORE-END
 
+#ifndef PLIB_TC3_H       // Guards against multiple inclusion
+#define PLIB_TC3_H
+
 // *****************************************************************************
 // *****************************************************************************
 // Section: Included Files
 // *****************************************************************************
 // *****************************************************************************
+/* This section lists the other files that are included in this file.
+*/
 
-#include "bsp.h"
+#include "device.h"
+#include "plib_tc_common.h"
+
+// DOM-IGNORE-BEGIN
+#ifdef __cplusplus // Provide C Compatibility
+
+    extern "C" {
+
+#endif
+// DOM-IGNORE-END
 
 // *****************************************************************************
+// *****************************************************************************
+// Section: Data Types
+// *****************************************************************************
+// *****************************************************************************
+/* The following data type definitions are used by the functions in this
+    interface and should be considered part it.
+*/
+
 // *****************************************************************************
 // *****************************************************************************
 // Section: Interface Routines
 // *****************************************************************************
 // *****************************************************************************
-
-// *****************************************************************************
-/* Function:
-    void BSP_Initialize(void)
-
-  Summary:
-    Performs the necessary actions to initialize a board
-
-  Description:
-    This function initializes the LED, Switch and other ports on the board.
-    This function must be called by the user before using any APIs present in
-    this BSP.
-
-  Remarks:
-    Refer to bsp.h for usage information.
+/* The following functions make up the methods (set of possible operations) of
+   this interface.
 */
 
-void BSP_Initialize(void )
-{
+
+void TC3_CompareInitialize( void );
+
+void TC3_CompareStart( void );
+
+void TC3_CompareStop( void );
+
+uint32_t TC3_CompareFrequencyGet( void );
+
+bool TC3_Compare16bitPeriodSet( uint16_t period );
+
+uint16_t TC3_Compare16bitPeriodGet( void );
+
+uint16_t TC3_Compare16bitCounterGet( void );
+
+void TC3_Compare16bitCounterSet( uint16_t count );
+
+bool TC3_Compare16bitMatch0Set( uint16_t compareValue );
+
+bool TC3_Compare16bitMatch1Set( uint16_t compareValue );
 
 
 
+void TC3_CompareCallbackRegister( TC_COMPARE_CALLBACK callback, uintptr_t context );
 
-}
 
-/*******************************************************************************
- End of File
-*/
+void TC3_CompareCommandSet(TC_COMMAND command);
+
+
+// DOM-IGNORE-BEGIN
+#ifdef __cplusplus  // Provide C++ Compatibility
+
+    }
+
+#endif
+// DOM-IGNORE-END
+
+#endif /* PLIB_TC3_H */

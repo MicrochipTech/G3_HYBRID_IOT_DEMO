@@ -266,7 +266,9 @@ static void _LBP_ADP_NetworkJoinConfirm(LBP_ADP_NETWORK_JOIN_CFM_PARAMS* pNetwor
         ADP_SetRequestSync(ADP_IB_PREFIX_TABLE, 0, 27, (const uint8_t*) prefixData, &setConfirm);
       
         /* Identify Registering Process */
+#ifndef PANEL_LED_BLUE_CTRL        
         RGB_LED_RED_On();
+#endif        
         /* Reset Reboot Protection */
         timeoutTraffic = 0;
         
@@ -281,6 +283,7 @@ static void _LBP_ADP_NetworkJoinConfirm(LBP_ADP_NETWORK_JOIN_CFM_PARAMS* pNetwor
 
         SYS_DEBUG_PRINT(SYS_ERROR_INFO, "APP_G3_MANAGEMENT: Joined to the network. "
                 "PAN ID: 0x%04X, Short Address: 0x%04X\r\n", panId, shortAddress);
+        
     }
     else
     {
@@ -1007,8 +1010,12 @@ void APP_G3_MANAGEMENT_Initialize ( void )
 
     SYS_DEBUG_MESSAGE(SYS_ERROR_INFO, APP_G3_MANAGEMENT_STRING_HEADER);
     
+#ifndef PANEL_LED_BLUE_CTRL    
     USER_LED_OutputEnable();
     USER_LED_Set();
+#endif    
+    
+    APP_MATRIX_LED_Initialize();
 }
 
 
@@ -1036,9 +1043,11 @@ void APP_G3_MANAGEMENT_Tasks ( void )
     if (app_g3_managementData.timerLedExpired == true)
     {
         app_g3_managementData.timerLedExpired = false;
-        
+
+#ifndef PANEL_LED_BLUE_CTRL        
         /* Activity */
         USER_BLINK_LED_Toggle();
+#endif        
         
         /* Reboot protection */
         if (app_udp_responderData.dataReceived)
@@ -1058,7 +1067,9 @@ void APP_G3_MANAGEMENT_Tasks ( void )
         if (app_g3_managementData.state < APP_G3_MANAGEMENT_STATE_JOINED)
         {
             /* Registering */
+#ifndef PANEL_LED_BLUE_CTRL
             RGB_LED_RED_Toggle();
+#endif            
         }        
 
 #if 0 //APP_DEV_TYPE == APP_DEV_TYPE_EMERGENCY_BUTTON
@@ -1088,7 +1099,9 @@ void APP_G3_MANAGEMENT_Tasks ( void )
             SRV_PLC_PCOUP_BRANCH plcBranch;
             ADP_BAND plcBand;
 
+#ifndef PANEL_LED_BLUE_CTRL            
             RGB_LED_RED_Off();
+#endif            
             //RGB_LED_GREEN_Off();            
             //RGB_LED_BLUE_Off();
             

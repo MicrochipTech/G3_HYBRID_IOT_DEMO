@@ -282,6 +282,7 @@
             <logicalFolder name="tc" displayName="tc" projectFiles="true">
               <itemPath>../src/config/default/peripheral/tc/plib_tc_common.h</itemPath>
               <itemPath>../src/config/default/peripheral/tc/plib_tc0.h</itemPath>
+              <itemPath>../src/config/default/peripheral/tc/plib_tc3.h</itemPath>
             </logicalFolder>
             <logicalFolder name="trng" displayName="trng" projectFiles="true">
               <itemPath>../src/config/default/peripheral/trng/plib_trng.h</itemPath>
@@ -565,6 +566,11 @@
         </logicalFolder>
       </logicalFolder>
       <logicalFolder name="third_party" displayName="third_party" projectFiles="true">
+        <logicalFolder name="f1" displayName="protomatter" projectFiles="true">
+          <itemPath>../src/third_party/protomatter/arch.h</itemPath>
+          <itemPath>../src/third_party/protomatter/core.h</itemPath>
+          <itemPath>../src/third_party/protomatter/wbz451.h</itemPath>
+        </logicalFolder>
         <logicalFolder name="wolfssl" displayName="wolfssl" projectFiles="true">
           <logicalFolder name="wolfcrypt" displayName="wolfcrypt" projectFiles="true">
             <logicalFolder name="port" displayName="port" projectFiles="true">
@@ -825,6 +831,7 @@
             </logicalFolder>
             <logicalFolder name="tc" displayName="tc" projectFiles="true">
               <itemPath>../src/config/default/peripheral/tc/plib_tc0.c</itemPath>
+              <itemPath>../src/config/default/peripheral/tc/plib_tc3.c</itemPath>
             </logicalFolder>
             <logicalFolder name="trng" displayName="trng" projectFiles="true">
               <itemPath>../src/config/default/peripheral/trng/plib_trng.c</itemPath>
@@ -942,6 +949,9 @@
         </logicalFolder>
       </logicalFolder>
       <logicalFolder name="third_party" displayName="third_party" projectFiles="true">
+        <logicalFolder name="f1" displayName="protomatter" projectFiles="true">
+          <itemPath>../src/third_party/protomatter/core.c</itemPath>
+        </logicalFolder>
         <logicalFolder name="wolfssl" displayName="wolfssl" projectFiles="true">
           <logicalFolder name="wolfcrypt" displayName="wolfcrypt" projectFiles="true">
             <logicalFolder name="port" displayName="port" projectFiles="true">
@@ -1044,6 +1054,7 @@
               <itemPath>../src/third_party/wolfssl/wolfcrypt/src/sp_sm2_c32.c</itemPath>
               <itemPath>../src/third_party/wolfssl/wolfcrypt/src/sp_dsp32.c</itemPath>
               <itemPath>../src/third_party/wolfssl/wolfcrypt/src/ge_low_mem.c</itemPath>
+              <itemPath>../src/third_party/wolfssl/wolfcrypt/src/wc_lms_impl.c</itemPath>
             </logicalFolder>
           </logicalFolder>
           <logicalFolder name="wolfssl" displayName="wolfssl" projectFiles="true">
@@ -1082,12 +1093,12 @@
         <targetPluginBoard></targetPluginBoard>
         <platformTool>pkob4hybrid</platformTool>
         <languageToolchain>XC32</languageToolchain>
-        <languageToolchainVersion>4.60</languageToolchainVersion>
+        <languageToolchainVersion>4.45</languageToolchainVersion>
         <platform>3</platform>
       </toolsSet>
       <packs>
         <pack name="PIC32CX-BZ_DFP" vendor="Microchip" version="1.4.243"/>
-        <pack name="CMSIS" vendor="ARM" version="5.8.0"/>
+        <pack name="CMSIS" vendor="ARM" version="5.9.0"/>
       </packs>
       <ScriptingSettings>
       </ScriptingSettings>
@@ -1124,7 +1135,7 @@
         <makeCustomizationNormalizeHexFile>false</makeCustomizationNormalizeHexFile>
       </makeCustomizationType>
       <C32>
-        <property key="additional-warnings" value="true"/>
+        <property key="additional-warnings" value="false"/>
         <property key="addresss-attribute-use" value="false"/>
         <property key="enable-app-io" value="false"/>
         <property key="enable-omit-frame-pointer" value="false"/>
@@ -1132,17 +1143,17 @@
         <property key="enable-unroll-loops" value="false"/>
         <property key="exclude-floating-point" value="false"/>
         <property key="extra-include-directories"
-                  value="../src;../src/config/default;../src/config/default/crypto/wolfcrypt;../src/config/default/driver//IEEE_802154_PHY/pal/inc;../src/config/default/driver//IEEE_802154_PHY/phy/inc/;../src/config/default/driver//IEEE_802154_PHY/resources/buffer/inc/;../src/config/default/driver//IEEE_802154_PHY/resources/queue/inc/;../src/config/default/library;../src/config/default/library/tcpip/src;../src/config/default/library/tcpip/src/common;../src/packs/CMSIS/;../src/packs/CMSIS/CMSIS/Core/Include;../src/packs/WBZ451H_DFP;../src/third_party/rtos/FreeRTOS/Source/include;../src/third_party/rtos/FreeRTOS/Source/portable/GCC/SAM/ARM_CM4F;../src/third_party/wolfcrypt;../src/third_party/wolfssl;../src/third_party/wolfssl/wolfssl/wolfcrypt"/>
+                  value="../src;../src/config/default;../src/config/default/crypto/wolfcrypt;../src/config/default/driver//IEEE_802154_PHY/pal/inc;../src/config/default/driver//IEEE_802154_PHY/phy/inc/;../src/config/default/driver//IEEE_802154_PHY/resources/buffer/inc/;../src/config/default/driver//IEEE_802154_PHY/resources/queue/inc/;../src/config/default/library;../src/config/default/library/tcpip/src;../src/config/default/library/tcpip/src/common;../src/packs/CMSIS/;../src/packs/CMSIS/CMSIS/Core/Include;../src/packs/WBZ451H_DFP;../src/third_party/rtos/FreeRTOS/Source/include;../src/third_party/rtos/FreeRTOS/Source/portable/GCC/SAM/ARM_CM4F;../src/third_party/wolfcrypt;../src/third_party/wolfssl;../src/third_party/wolfssl/wolfssl/wolfcrypt;../src/third_party/protomatter"/>
         <property key="generate-16-bit-code" value="false"/>
         <property key="generate-micro-compressed-code" value="false"/>
-        <property key="isolate-each-function" value="true"/>
+        <property key="isolate-each-function" value="false"/>
         <property key="make-warnings-into-errors" value="false"/>
-        <property key="optimization-level" value="-O2"/>
-        <property key="place-data-into-section" value="true"/>
+        <property key="optimization-level" value=""/>
+        <property key="place-data-into-section" value="false"/>
         <property key="post-instruction-scheduling" value="default"/>
         <property key="pre-instruction-scheduling" value="default"/>
         <property key="preprocessor-macros"
-                  value="ENABLE_LARGE_BUFFER;ENABLE_QUEUE_CAPACITY;HAVE_CONFIG_H;WOLFSSL_IGNORE_FILE_WARN;WOLFSSL_USER_SETTINGS"/>
+                  value="ENABLE_LARGE_BUFFER;ENABLE_QUEUE_CAPACITY;HAVE_CONFIG_H;WOLFSSL_USER_SETTINGS;WOLFSSL_IGNORE_FILE_WARN"/>
         <property key="strict-ansi" value="false"/>
         <property key="support-ansi" value="false"/>
         <property key="tentative-definitions" value="-fcommon"/>
@@ -1181,7 +1192,7 @@
         <property key="stack-guidance" value="false"/>
       </C32-CO>
       <C32-LD>
-        <property key="additional-options-use-response-files" value="false"/>
+        <property key="additional-options-use-response-files" value="true"/>
         <property key="additional-options-write-sla" value="false"/>
         <property key="allocate-dinit" value="false"/>
         <property key="code-dinit" value="false"/>
@@ -1200,7 +1211,7 @@
         <property key="generate-16-bit-code" value="false"/>
         <property key="generate-cross-reference-file" value="false"/>
         <property key="generate-micro-compressed-code" value="false"/>
-        <property key="heap-size" value="15360"/>
+        <property key="heap-size" value="20000"/>
         <property key="input-libraries" value=""/>
         <property key="kseg-length" value=""/>
         <property key="kseg-origin" value=""/>
@@ -1278,7 +1289,7 @@
         <property key="debugoptions.debug-startup" value="Use system settings"/>
         <property key="debugoptions.reset-behaviour" value="Use system settings"/>
         <property key="debugoptions.simultaneous.debug" value="false"/>
-        <property key="debugoptions.useswbreakpoints" value="false"/>
+        <property key="debugoptions.useswbreakpoints" value="true"/>
         <property key="event.recorder.debugger.behavior" value="Running"/>
         <property key="event.recorder.enabled" value="false"/>
         <property key="event.recorder.scvd.files" value=""/>
@@ -1298,7 +1309,7 @@
         <property key="memories.programmemory" value="true"/>
         <property key="memories.programmemory.ranges" value="1000000-4ffffff"/>
         <property key="programmerToGoFilePath"
-                  value="C:/Data/M43561/projects/G3_HYBRID_IOT_DEMO/g3_device_udp_wbz451h/g3_device_udp_wbz451h_pl460.X/debug/default/g3_device_udp_wbz451h_pl460_ptg"/>
+                  value="C:/Users/M19888/Sergio/RepoGit/G3_HYBRID_IOT_DEMO/G3_HYBRID_IOT_DEMO/g3_device_udp_wbz451h/g3_device_udp_wbz451h_pl460.X/debug/default/g3_device_udp_wbz451h_pl460_ptg"/>
         <property key="programoptions.donoteraseauxmem" value="false"/>
         <property key="programoptions.eraseb4program" value="true"/>
         <property key="programoptions.pgmentry.voltage" value="low"/>
@@ -1336,7 +1347,7 @@
         <property key="debugoptions.debug-startup" value="Use system settings"/>
         <property key="debugoptions.reset-behaviour" value="Use system settings"/>
         <property key="debugoptions.simultaneous.debug" value="false"/>
-        <property key="debugoptions.useswbreakpoints" value="false"/>
+        <property key="debugoptions.useswbreakpoints" value="true"/>
         <property key="event.recorder.debugger.behavior" value="Running"/>
         <property key="event.recorder.enabled" value="false"/>
         <property key="event.recorder.scvd.files" value=""/>
@@ -1355,8 +1366,6 @@
                   value="${memories.instruction.ram.ranges}"/>
         <property key="memories.programmemory" value="true"/>
         <property key="memories.programmemory.ranges" value="1000000-4ffffff"/>
-        <property key="programmerToGoFilePath"
-                  value="C:/Data/M43561/projects/G3_HYBRID_IOT_DEMO/g3_device_udp_wbz451h/g3_device_udp_wbz451h_pl460.X/debug/default/g3_device_udp_wbz451h_pl460_ptg"/>
         <property key="programoptions.donoteraseauxmem" value="false"/>
         <property key="programoptions.eraseb4program" value="true"/>
         <property key="programoptions.pgmentry.voltage" value="low"/>

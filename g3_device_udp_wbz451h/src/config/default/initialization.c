@@ -736,6 +736,8 @@ void SYS_Initialize ( void* data )
 
     TC0_TimerInitialize();
 
+    TC3_CompareInitialize();
+
     NVM_Initialize();
 
 	TRNG_Initialize();
@@ -865,7 +867,6 @@ void SYS_Initialize ( void* data )
     APP_UDP_RESPONDER_Initialize();
     APP_STORAGE_WBZ451H_Initialize();
     APP_TCPIP_MANAGEMENT_Initialize();
-
 
     NVIC_Initialize();
 

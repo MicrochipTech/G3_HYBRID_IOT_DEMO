@@ -70,6 +70,8 @@ typedef enum
     /* Application's state machine's initial state */
     APP_MATRIX_LED_STATE_INIT = 0,
             
+    APP_MATRIX_LED_STATE_BEGIN,
+            
     APP_MATRIX_LED_STATE_WAIT,
 
     APP_MATRIX_LED_STATE_REFRESH,
@@ -101,7 +103,10 @@ typedef struct
     APP_MATRIX_LED_STATES state;
     
     /* Timer Refresh Screen */
-    bool timerRefresh_flag;
+    bool refreshScreen;
+    
+    /* Screen Index to show : 0: Microchip Logo, 1: Alarm */
+    bool screenIndex;
     
     SYS_TIME_HANDLE timerRefresh_handler;
     
@@ -132,6 +137,8 @@ typedef struct
 // *****************************************************************************
 /* These routines are called by drivers when certain events occur.
 */
+
+bool APP_MATRIX_LED_TaskDelay(uint32_t ms, SYS_TIME_HANDLE* handle);
 
 // *****************************************************************************
 // *****************************************************************************

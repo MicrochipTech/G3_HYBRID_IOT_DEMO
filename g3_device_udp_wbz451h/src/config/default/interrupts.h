@@ -72,6 +72,7 @@ void NVM_InterruptHandler (void);
 void DMAC_0_3_InterruptHandler (void);
 void SERCOM1_USART_InterruptHandler (void);
 void TC0_TimerInterruptHandler (void);
+void TC3_CompareInterruptHandler (void);
 
 
 

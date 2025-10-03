@@ -33,10 +33,14 @@ extern "C" {
 // *****************************************************************************
 // *****************************************************************************
 
+#define PANEL_LED_BLUE_CTRL    
+    
+#ifndef PANEL_LED_BLUE_CTRL
 #define USER_BLINK_LED_On()           USER_LED_Set()
 #define USER_BLINK_LED_Off()          USER_LED_Clear()
 #define USER_BLINK_LED_Toggle()       USER_LED_Toggle()
-
+#endif
+    
 #define CLEAR_WATCHDOG()              WDT_Clear()
     
 //DOM-IGNORE-BEGIN

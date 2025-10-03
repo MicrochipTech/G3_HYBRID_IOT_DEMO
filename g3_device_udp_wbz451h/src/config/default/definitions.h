@@ -69,6 +69,7 @@
 #include "stack/g3/adaptation/lbp_defs.h"
 #include "stack/g3/adaptation/lbp_dev.h"
 #include "peripheral/tc/plib_tc0.h"
+#include "peripheral/tc/plib_tc3.h"
 #include "system/time/sys_time.h"
 #include "peripheral/nvm/plib_nvm.h"
 #include "service/log_report/srv_log_report.h"
