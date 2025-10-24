@@ -1376,7 +1376,9 @@
          <key class="com.microchip.mcc.core.tokenManager.CustomKey" moduleName="FreeRTOS" name="FREERTOS_TOTAL_HEAP_SIZE"/>
          <value>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;FreeRTOS&gt;
   &lt;FreeRTOS dnOrder=&quot;0&quot; id=&quot;FREERTOS_TOTAL_HEAP_SIZE&quot;&gt;
-    &lt;Values dnOrder=&quot;0&quot;/&gt;
+    &lt;Values dnOrder=&quot;0&quot;&gt;
+      &lt;User dnOrder=&quot;0&quot; value=&quot;44000&quot;/&gt;
+    &lt;/Values&gt;
   &lt;/FreeRTOS&gt;
 &lt;/FreeRTOS&gt;
 </value>
@@ -35643,7 +35645,7 @@
       </entry>
       <entry>
          <file>..\src\config\default\FreeRTOSConfig.h</file>
-         <hash>5318f45ea90e3d3c051bfaff424aca1ff6cda562392f395ceacb1e4e141dff1c</hash>
+         <hash>bdcc48076811639f7fe1185287b16a312ce79981f2ab4823cd0c2b8e9adcb317</hash>
       </entry>
       <entry>
          <file>..\src\config\default\WBZ451H.ld</file>
@@ -35815,7 +35817,7 @@
       </entry>
       <entry>
          <file>..\src\config\default\definitions.h</file>
-         <hash>3911776e715dc700c31f0990f7a7a797bf1cad2ac0c3b7167811bee537945886</hash>
+         <hash>0d6fd9c28660c2eaf20296629ae2a5894719062ad5e74700c4a517aa9eac4ebe</hash>
       </entry>
       <entry>
          <file>..\src\config\default\device.h</file>

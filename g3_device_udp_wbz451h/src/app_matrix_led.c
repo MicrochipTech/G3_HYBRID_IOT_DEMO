@@ -489,17 +489,16 @@ void APP_MATRIX_LED_Tasks ( void )
         }
 
         case APP_MATRIX_LED_STATE_BEGIN:
-        {
-            
+        { 
             if (app_g3_managementData.state == APP_G3_MANAGEMENT_STATE_JOINED)
             {
 
                 ProtomatterStatus status;
                 status = _PM_begin(_PM_protoPtr);
                 SYS_DEBUG_PRINT(SYS_ERROR_INFO, "APP_MATRIX_LED: Protomatter Begin Status: 0x%X\r\n", status); 
-                app_matrix_ledData.state = APP_MATRIX_LED_STATE_WAIT;
-                break;
+                app_matrix_ledData.state = APP_MATRIX_LED_STATE_WAIT;                
             }
+            break;
         }
         case APP_MATRIX_LED_STATE_WAIT:
         {
