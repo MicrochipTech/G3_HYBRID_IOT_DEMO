@@ -158,6 +158,7 @@
 #include "FreeRTOS.h"
 #include "task.h"
 #include "stack/g3/net/macg3adp/drv_mac_g3adp.h"
+#include "app_matrix_led.h"
 #include "app_g3_management.h"
 #include "app_udp_responder.h"
 #include "app_storage_wbz451h.h"
