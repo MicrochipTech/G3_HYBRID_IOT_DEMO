@@ -35,6 +35,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+#define DEFAULT_VERSION
+
 // Overall matrix refresh rate (frames/second) is a function of matrix width
 // and chain length, number of address lines, number of bit planes, CPU speed
 // and whether or not a GPIO toggle register is available. There is no "this
@@ -49,7 +51,7 @@
 // refresh slower than this, and in many cases will...just need to set an
 // upper limit to avoid excessive CPU load). An incredibly long comment block
 // for a single constant, thank you for coming to my TED talk!
-#define _PM_MAX_REFRESH_HZ 250 ///< Max matrix refresh rate
+#define _PM_MAX_REFRESH_HZ 100 ///< Max matrix refresh rate
 
 // Time (in microseconds) to pause following any change in address lines
 // (individually or collectively). Some matrices respond slowly there...

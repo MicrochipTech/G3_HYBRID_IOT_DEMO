@@ -447,13 +447,13 @@ void _APP_UDP_RESPONDER_UdpRxCallback(UDP_SOCKET hUDP, TCPIP_NET_HANDLE hNet, TC
             {
                 // GPIO off
                 SYS_DEBUG_PRINT(SYS_ERROR_DEBUG, "Logo\r\n");
-                //PANEL_LED_refresh_Logo();
+                APP_MATRIX_LED_RefreshScreen(0);
             }
             else
             {
                 // GPIO on
                 SYS_DEBUG_PRINT(SYS_ERROR_DEBUG, "Alarm\r\n");
-                //PANEL_LED_refresh_Alarm();
+                APP_MATRIX_LED_RefreshScreen(1);
             }
             break;
         }      

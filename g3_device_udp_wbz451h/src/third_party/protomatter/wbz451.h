@@ -19,12 +19,11 @@
 
 #include "definitions.h"
 
-
-#define _PM_portOutRegister(pin)       ((gpio_registers_t*)(GPIOA_BASE_ADDRESS + (0x100U * (pin>>4U))))->GPIO_TRISCLR
-#define _PM_portSetRegister(pin)       ((gpio_registers_t*)(GPIOA_BASE_ADDRESS + (0x100U * (pin>>4U))))->GPIO_LATSET 
-#define _PM_portClearRegister(pin)     ((gpio_registers_t*)(GPIOA_BASE_ADDRESS + (0x100U * (pin>>4U))))->GPIO_LATCLR 
-#define _PM_portToggleRegister(pin)    ((gpio_registers_t*)(GPIOA_BASE_ADDRESS + (0x100U * (pin>>4U))))->GPIO_LATINV 
-#define _PM_delayMicroseconds(usegs)   //   APP_MATRIX_LED_TaskDelay(usegs, NULL)
+#define _PM_portOutRegister(pin)       &((gpio_registers_t*)(GPIOA_BASE_ADDRESS + (0x100U * (pin>>4U))))->GPIO_TRISCLR
+#define _PM_portSetRegister(pin)       &((gpio_registers_t*)(GPIOA_BASE_ADDRESS + (0x100U * (pin>>4U))))->GPIO_LATSET 
+#define _PM_portClearRegister(pin)     &((gpio_registers_t*)(GPIOA_BASE_ADDRESS + (0x100U * (pin>>4U))))->GPIO_LATCLR 
+#define _PM_portToggleRegister(pin)    &((gpio_registers_t*)(GPIOA_BASE_ADDRESS + (0x100U * (pin>>4U))))->GPIO_LATINV 
+#define _PM_delayMicroseconds(us)      APP_MATRIX_LED_TaskDelayUS(us)
         
 #define _PM_pinOutput(pin)      GPIO_PinOutputEnable(pin)
 #define _PM_pinInput(pin)       GPIO_PinInputEnable(pin)
@@ -47,7 +46,7 @@
 
 // CircuitPython implementation is tied to a specific freq (but the counter
 // is dynamically allocated):
-#define _PM_timerFreq 256000
+#define _PM_timerFreq 64000000
 
 // As currently implemented, there can be only one instance of the
 // Protomatter_core struct. This pointer is set up when starting the matrix.
