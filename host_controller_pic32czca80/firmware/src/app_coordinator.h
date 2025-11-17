@@ -1,0 +1,570 @@
+/*******************************************************************************
+  MPLAB Harmony Application Header File
+
+  Company:
+    Microchip Technology Inc.
+
+  File Name:
+    app.h
+
+  Summary:
+    This header file provides prototypes and definitions for the application.
+
+  Description:
+    This header file provides function prototypes and data type definitions for
+    the application.  Some of these are required by the system (such as the
+    "APP_Initialize" and "APP_Tasks" prototypes) and some of them are only used
+    internally by the application (such as the "APP_STATES" definition).  Both
+    are defined here for convenience.
+*******************************************************************************/
+
+//DOM-IGNORE-BEGIN
+/*******************************************************************************
+Copyright (c) 2013-2014 released Microchip Technology Inc.  All rights reserved.
+
+Microchip licenses to you the right to use, modify, copy and distribute
+Software only when embedded on a Microchip microcontroller or digital signal
+controller that is integrated into your product or third party product
+(pursuant to the sublicense terms in the accompanying license agreement).
+
+You should refer to the license agreement accompanying this Software for
+additional information regarding your rights and obligations.
+
+SOFTWARE AND DOCUMENTATION ARE PROVIDED "AS IS" WITHOUT WARRANTY OF ANY KIND,
+EITHER EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION, ANY WARRANTY OF
+MERCHANTABILITY, TITLE, NON-INFRINGEMENT AND FITNESS FOR A PARTICULAR PURPOSE.
+IN NO EVENT SHALL MICROCHIP OR ITS LICENSORS BE LIABLE OR OBLIGATED UNDER
+CONTRACT, NEGLIGENCE, STRICT LIABILITY, CONTRIBUTION, BREACH OF WARRANTY, OR
+OTHER LEGAL EQUITABLE THEORY ANY DIRECT OR INDIRECT DAMAGES OR EXPENSES
+INCLUDING BUT NOT LIMITED TO ANY INCIDENTAL, SPECIAL, INDIRECT, PUNITIVE OR
+CONSEQUENTIAL DAMAGES, LOST PROFITS OR LOST DATA, COST OF PROCUREMENT OF
+SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
+(INCLUDING BUT NOT LIMITED TO ANY DEFENSE THEREOF), OR OTHER SIMILAR COSTS.
+ *******************************************************************************/
+//DOM-IGNORE-END
+
+#ifndef _APP_COORDINATOR_H
+#define _APP_COORDINATOR_H
+
+// *****************************************************************************
+// *****************************************************************************
+// Section: Included Files
+// *****************************************************************************
+// *****************************************************************************
+
+#include <stdint.h>
+#include <stdbool.h>
+#include <stddef.h>
+#include <stdlib.h>
+#include "definitions.h"
+
+// *****************************************************************************
+// *****************************************************************************
+// Section: Type Definitions
+// *****************************************************************************
+// *****************************************************************************
+#define APP_COORDINATOR_HOST_CDC_BAUDRATE_SUPPORTED 115200UL
+#define APP_COORDINATOR_HOST_CDC_PARITY_TYPE        0
+#define APP_COORDINATOR_HOST_CDC_STOP_BITS          1
+#define APP_COORDINATOR_HOST_CDC_NO_OF_DATA_BITS    8
+
+#define APP_COORDINATOR_TIME_DEVICE_GET_REQ_INIT_MS 5000
+#define APP_COORDINATOR_TIME_DEVICE_GET_REQ_MS 30000
+#define APP_COORDINATOR_TIME_KEEP_ALARM_MS 5000
+#define APP_COORDINATOR_TIME_BTW_ALARM_CMDS_MS 4000
+
+// *****************************************************************************
+/* Application States
+
+  Summary:
+    Application states enumeration
+
+  Description:
+    This enumeration defines the valid application states.  These states
+    determine the behavior of the application at various times.
+*/
+
+typedef enum
+{
+    /* Application enabled the bus*/
+    APP_COORDINATOR_STATE_BUS_ENABLE,
+            
+    /* Application waits for bus to be enabled */
+    APP_COORDINATOR_STATE_WAIT_FOR_BUS_ENABLE_COMPLETE,
+
+    /* Application waits for CDC Device Attach */
+    APP_COORDINATOR_STATE_WAIT_FOR_DEVICE_ATTACH,
+
+    /* CDC Device is Attached */
+    APP_COORDINATOR_STATE_OPEN_DEVICE,
+            
+    /* Set the Line Coding */
+    APP_COORDINATOR_STATE_SET_LINE_CODING,
+
+    /* Application waits to get the device line coding */
+    APP_COORDINATOR_STATE_WAIT_FOR_GET_LINE_CODING,
+
+    /* Application sets the line coding */
+    APP_COORDINATOR_STATE_SEND_SET_LINE_CODING,
+
+    /* Appliction waits till set line coding is done */
+    APP_COORDINATOR_STATE_WAIT_FOR_SET_LINE_CODING,
+
+    /* Application sets the contol line state */
+    APP_COORDINATOR_STATE_SEND_SET_CONTROL_LINE_STATE,
+
+    /* Application waits for the set control line state to complete */
+    APP_COORDINATOR_STATE_WAIT_FOR_SET_CONTROL_LINE_STATE,
+
+    /* Application sends the prompt to the device */
+    APP_COORDINATOR_STATE_SEND_PROMPT_TO_DEVICE,
+
+    /* Application waits for prompt send complete */
+    APP_COORDINATOR_STATE_WAIT_FOR_PROMPT_SEND_COMPLETE,
+
+    /* Application request to get data from device */
+    APP_COORDINATOR_STATE_GET_DATA_FROM_DEVICE,
+
+    /* Application waits for data from device */
+    APP_COORDINATOR_STATE_WAIT_FOR_DATA_FROM_DEVICE,
+
+    /* Application has received data from the device */
+    APP_COORDINATOR_STATE_DATA_RECEIVED_FROM_DEVICE,
+            
+    APP_COORDINATOR_STATE_USI_INIT,
+            
+    APP_COORDINATOR_STATE_USI_CONFIG,
+            
+    APP_COORDINATOR_STATE_USI_READY,        
+            
+    APP_COORDINATOR_STATE_USI_GET_DEVICES,
+            
+    APP_COORDINATOR_STATE_USI_GET_DEVICES_ANSWER,
+            
+    APP_COORDINATOR_STATE_USI_SEND_CMD_EMERGENCY,
+            
+    APP_COORDINATOR_STATE_USI_WAIT_SENT_CMD,
+            
+    APP_COORDINATOR_STATE_DELAY,
+
+    /* Application is in error state */
+    APP_COORDINATOR_STATE_ERROR
+
+} APP_COORDINATOR_STATES;
+
+typedef enum
+{
+    APP_COORDINATOR_TRANSFER_STATE_WAIT = 0,
+    APP_COORDINATOR_TRANSFER_STATE_SEND_DATA,
+    APP_COORDINATOR_TRANSFER_STATE_WAIT_DATA,
+
+} APP_COORDINATOR_TRANSFER_STATES;
+
+typedef enum
+{
+    APP_COORDINATOR_REMOTE_STATUS_RESET = 0,
+    APP_COORDINATOR_REMOTE_STATUS_INIT = 1,
+    APP_COORDINATOR_REMOTE_STATUS_READY = 2,
+    APP_COORDINATOR_REMOTE_STATUS_EMERGENCY = 4
+}APP_COORDINATOR_REMOTE_STATUS;
+
+typedef enum
+{
+    APP_COORDINATOR_DEVICE_STATE_OUT = 0,
+    APP_COORDINATOR_DEVICE_STATE_JOINED = 1,
+    APP_COORDINATOR_DEVICE_STATE_ALIVE = 2
+}APP_COORDINATOR_DEVICE_STATE;
+
+typedef enum
+{
+    /* Device Type */
+    TYPE_LIGHTING_INDOOR = 0x10,
+    TYPE_LIGHTING_OUTDOOR,
+    TYPE_LIGHTING_UNKNOWN,
+    TYPE_LIQUID_DETECTION,
+    TYPE_SOLAR_INVERTER,
+    TYPE_BATTERY_CHARGER,
+    TYPE_ENERGY_STORAGE,
+    TYPE_HEAT_PUMP,
+    TYPE_EV_CHARGER,
+    TYPE_ELECTRICITY_METER,
+    TYPE_EMERGENCY_BUTTON,
+    TYPE_PANEL_LED,        
+    TYPE_UNKNOWN = 0xFF
+} APP_COORDINATOR_DEVICE_TYPE;
+
+typedef enum
+{
+    /* Device Type */
+    INDEX_TYPE_LIGHTING_INDOOR,
+    INDEX_TYPE_LIGHTING_OUTDOOR,
+    INDEX_TYPE_LIGHTING_UNKNOWN,
+    INDEX_TYPE_LIQUID_DETECTION,
+    INDEX_TYPE_SOLAR_INVERTER,
+    INDEX_TYPE_BATTERY_CHARGER,
+    INDEX_TYPE_ENERGY_STORAGE,
+    INDEX_TYPE_HEAT_PUMP,
+    INDEX_TYPE_EV_CHARGER,
+    INDEX_TYPE_ELECTRICITY_METER,
+    INDEX_TYPE_EMERGENCY_BUTTON,
+    INDEX_TYPE_PANEL_LED,
+    INDEX_TYPE_MAX            
+} APP_COORDINATOR_DEVICE_TYPE_INDEX;
+
+#define APP_COORDINATOR_MAX_DEVICES INDEX_TYPE_MAX
+
+typedef enum
+{
+    
+    /* Host Commands */
+    CMD_GET_DEVICES = 0xE0,
+    CMD_GET_DEVICES_ANSWER,
+    CMD_DEVICE_NOTIFICATION,
+    CMD_RESET_NOTIFICATION,
+    CMD_HEARTBEAT,
+            
+    /* Coordinator to Device Commands */
+    CMD_GET_METROLOGY_INFO = 0xF0,
+    CMD_SHOW_METROLOGY_INFO = 0xF2,
+    CMD_GET_DEVICE_INFO = 0xF4,
+    CMD_GET_DEVICE_INFO_RESP = 0xF5,
+    CMD_SET_LED_RGB = 0xF6,
+    CMD_SET_LED_RGB_BLINK = 0xF8,
+    CMD_SET_PANEL_LED = 0xFA,
+    CMD_EMERGENCY = 0xFC,
+    CMD_SET_LIGHT = 0xFE            
+            
+} APP_COORDINATOR_CMDS;
+
+#define INDEX_UNKNOWN 255
+
+typedef struct
+{
+    uint8_t index;
+    uint8_t type;
+    uint8_t alive;
+    bool    state;
+} APP_COORDINATOR_DEVICE_INFO;
+
+// COORDINATOR CMDS QUEUE
+#define CMD_DATA_SIZE 16
+typedef struct
+{
+    // USI DATA INFORMATION
+    uint8_t data[CMD_DATA_SIZE];
+    // USI DATA INFORMATION LENGTH
+    uint8_t length;
+    // ANSWER EXPECTED
+    bool answer;
+} APP_COORDINATOR_CMDS_QUEUE_DATA;
+
+#define APP_COORDINATOR_CMDS_QUEUE_DATA_SIZE  16
+
+typedef struct
+{
+  APP_COORDINATOR_CMDS_QUEUE_DATA data[APP_COORDINATOR_CMDS_QUEUE_DATA_SIZE];
+  APP_COORDINATOR_CMDS_QUEUE_DATA * dataRd;
+  APP_COORDINATOR_CMDS_QUEUE_DATA * dataWr;
+  uint8_t dataSize;
+} APP_COORDINATOR_CMDS_QUEUE;
+
+// Events Notification
+#define APP_COORDINATOR_NOTIF_CALLBACK_COUNT 8
+
+typedef enum
+{
+    APP_COORDINATOR_RESET_NOTIFY,         //Coordinator Reset Notification
+    APP_COORDINATOR_HEARTBEAT_NOTIFY,     //Coordinator Heartbeat Notification
+    APP_COORDINATOR_ALARM_NOTIFY,         //Alarm Notification
+    APP_COORDINATOR_DEVICE_JOINED_NOTIFY, //Device joined Notification
+    APP_COORDINATOR_DEVICE_OUT_NOTIFY,    //Device leave Notification
+    APP_COORDINATOR_DEVICE_ALIVE_NOTIFY,  //Device alive change Notification
+    APP_COORDINATOR_DEVICE_STATE_NOTIFY,  //Device state change Notification
+} APP_COORDINATOR_NOTIFY_EVENT;
+
+typedef struct
+{
+    void (*func) (uint32_t event, void *data, uint16_t length);
+} APP_COORDINATOR_NOTIF_CALLBACK;
+
+/******************************************************
+ * The coherent attribute is not available on compilers
+ * for architectures other than MIPS
+ ******************************************************/
+ 
+#define APP_COHERENT_ATTRIBUTE __attribute__((coherent))
+
+typedef void (* APP_COORDINATOR_CMD_CALLBACK) (const char * cmd);
+
+// *****************************************************************************
+/* Application Data
+
+  Summary:
+    Holds application data
+
+  Description:
+    This structure holds the application's data.
+
+  Remarks:
+    Application strings and buffers are be defined outside this structure.
+ */
+
+typedef struct
+{
+    /* First place to be aligned. 
+     * Array to hold read data */
+    uint8_t inDataArray[1024];
+    
+    /* The application's current state */
+    APP_COORDINATOR_STATES state;
+    /* The application's next state */
+    APP_COORDINATOR_STATES nextState;
+    
+    // RELATED TO TRANSFER
+    APP_COORDINATOR_TRANSFER_STATES transferState;
+    
+    /* Allow to transmit */
+    bool freetransferFlag;
+    
+    /* Transfer in progress */
+    bool transferFlag;
+    
+    /* Transfer length */
+    uint16_t transferLength;
+    
+    /* Transfer Buffer */
+    uint8_t transferBuffer[1024];
+    
+    /* Handle for waiting time UDP Data interchange answer */
+    SYS_TIME_HANDLE transferTimeHandle;
+    
+    /* Transfer Buffer */
+    bool transferAnswerFlag;
+    
+    /* Transfer Timeout flag */
+    bool transferTimeExpired;
+    
+    /* Answer OK flag */
+    bool transferAnswerOK;
+    
+    /* Transfer Timeout in ms */
+    uint32_t transferTimeout_ms;
+    
+    bool availableBuffers;
+
+    // RELATED TO USB HOST
+    /* CDC Object */
+    USB_HOST_CDC_OBJ cdcObj;
+    
+    /* True if a device is attached */
+    bool deviceIsAttached;
+    
+    /* True if control request is done */
+    bool controlRequestDone;
+    
+    /* Control Request Result */
+    USB_HOST_CDC_RESULT controlRequestResult;
+
+    /* A CDC Line Coding object */
+    USB_CDC_LINE_CODING cdcHostLineCoding;
+    
+    /* A Control Line State object*/
+    USB_CDC_CONTROL_LINE_STATE controlLineState;
+    
+    /* Handle to the CDC device. */
+    USB_HOST_CDC_HANDLE cdcHostHandle;
+    
+    USB_HOST_CDC_REQUEST_HANDLE  requestHandle;
+    
+    /* True when a write transfer has complete */
+    bool writeTransferDone;
+    
+    /* Write Transfer Result */
+    USB_HOST_CDC_RESULT writeTransferResult;
+    
+     /* True when a read transfer has complete */
+    bool readTransferDone;
+    
+    /* Read Transfer Result */
+    USB_HOST_CDC_RESULT readTransferResult;
+    
+    /* Read Transfer Len */
+    size_t readTransferLength;
+    
+    /* True if device was detached */
+    bool deviceWasDetached;
+
+    /* This variable points to the data that need to send to the attached USB 
+     * CDC Device.  */
+    uint8_t *cdcWriteData;
+
+    /* This variable holds the data size */
+    uint8_t cdcWriteSize;
+    
+    SYS_TIME_HANDLE timer;
+    
+    SYS_TIME_HANDLE alarmTimer;
+    
+    SYS_TIME_HANDLE alarmCmdTimer;
+    
+    uint32_t timerTimeout_ms;
+    
+    bool timerExpired;
+    
+    bool alarmExpired;
+    
+    bool alarmCmdExpired;
+    
+    bool alarmRegistered;
+    
+    uint32_t delayMs;
+    
+    uint32_t heartbeatCounter;
+    
+    APP_COORDINATOR_REMOTE_STATUS remoteStatus;
+    
+    APP_COORDINATOR_CMD_CALLBACK cmdCallback;
+    
+    APP_COORDINATOR_NOTIF_CALLBACK notifCallbacks[APP_COORDINATOR_NOTIF_CALLBACK_COUNT];
+    
+    /* TODO: Define any additional data used by the application. */
+    SRV_USI_HANDLE srvUSIHandle;
+
+} APP_COORDINATOR_DATA;
+
+
+// *****************************************************************************
+// *****************************************************************************
+// Section: Application Callback Routines
+// *****************************************************************************
+// *****************************************************************************
+/* These routines are called by drivers when certain events occur.
+*/
+USB_HOST_EVENT_RESPONSE APP_USBHostEventHandler 
+(
+    USB_HOST_EVENT event, 
+    void * eventData,
+    uintptr_t context
+);
+
+void APP_USBHostCDCAttachEventListener
+(
+    USB_HOST_CDC_OBJ cdcObj, 
+    uintptr_t context
+);
+
+USB_HOST_CDC_EVENT_RESPONSE APP_USBHostCDCEventHandler
+(
+    USB_HOST_CDC_HANDLE cdcHandle,
+    USB_HOST_CDC_EVENT event,
+    void * eventData,
+    uintptr_t context
+);
+
+// *****************************************************************************
+// *****************************************************************************
+// Section: Application Initialization and State Machine Functions
+// *****************************************************************************
+// *****************************************************************************
+
+uint32_t APP_COORDINATOR_GetHeartbeatCount(void);
+uint8_t APP_COORDINATOR_deviceIndexByType(uint8_t type);
+uint8_t APP_COORDINATOR_deviceTypeByIndex(uint8_t index);
+bool APP_COORDINATOR_deviceSetAlive (uint8_t type, uint8_t alive);
+bool APP_COORDINATOR_deviceGetAlive (uint8_t type, uint8_t *alive);
+bool APP_COORDINATOR_deviceSetState (uint8_t type, bool state);
+bool APP_COORDINATOR_deviceGetState (uint8_t type, bool *state);
+bool APP_COORDINATOR_deviceDoSnapshot ( APP_COORDINATOR_DEVICE_INFO *device_info );
+uint8_t APP_COORDINATOR_deviceGetAliveSnapshot ( APP_COORDINATOR_DEVICE_INFO *device_info, uint8_t type );
+uint8_t APP_COORDINATOR_deviceGetStateSnapshot ( APP_COORDINATOR_DEVICE_INFO *device_info, uint8_t type );
+uint8_t APP_COORDINATOR_deviceGetIndexSnapshot ( APP_COORDINATOR_DEVICE_INFO *device_info, uint8_t type );
+
+bool APP_COORDINATOR_GetAlarmStatus(void);
+
+bool APP_COORDINATOR_CheckCoordCmdsQueue();
+
+bool APP_COORDINATOR_PushCoordCmdsQueue(APP_COORDINATOR_CMDS_QUEUE_DATA *cmdData);
+
+int32_t APP_COORDINATOR_RegisterNotification(void (*func)(uint32_t, void *, uint32_t));
+
+APP_RESULT APP_COORDINATOR_UnregisterNotification(uint32_t idx);
+
+void APP_COORDINATOR_handleEmergency ( uint32_t time_keep_alarm_ms );
+
+/*******************************************************************************
+  Function:
+    void APP_Initialize ( void )
+
+  Summary:
+     MPLAB Harmony application initialization routine.
+
+  Description:
+    This function initializes the Harmony application.  It places the 
+    application in its initial state and prepares it to run so that its 
+    APP_Tasks function can be called.
+
+  Precondition:
+    All other system initialization routines should be called before calling
+    this routine (in "SYS_Initialize").
+
+  Parameters:
+    None.
+
+  Returns:
+    None.
+
+  Example:
+    <code>
+    APP_Initialize();
+    </code>
+
+  Remarks:
+    This routine must be called from the SYS_Initialize function.
+*/
+
+void APP_COORDINATOR_Initialize ( void );
+
+
+/*******************************************************************************
+  Function:
+    void APP_Tasks ( void )
+
+  Summary:
+    MPLAB Harmony Demo application tasks function
+
+  Description:
+    This routine is the Harmony Demo application's tasks function.  It
+    defines the application's state machine and core logic.
+
+  Precondition:
+    The system and application initialization ("SYS_Initialize") should be
+    called before calling this.
+
+  Parameters:
+    None.
+
+  Returns:
+    None.
+
+  Example:
+    <code>
+    APP_Tasks();
+    </code>
+
+  Remarks:
+    This routine must be called from SYS_Tasks() routine.
+ */
+
+void APP_COORDINATOR_Tasks( void );
+
+
+bool APP_COORDINATOR_deviceInit ( void );
+
+bool APP_COORDINATOR_deviceGetInfoSnap ( uint8_t type, uint8_t *index );
+
+bool APP_COORDINATOR_Prepare2Send_Message(uint8_t index, uint8_t *buffer, uint16_t length, bool answerFlag);
+
+#endif /* _APP_H */
+/*******************************************************************************
+ End of File
+ */
