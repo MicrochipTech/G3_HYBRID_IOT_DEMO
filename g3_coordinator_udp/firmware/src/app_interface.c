@@ -623,20 +623,21 @@ static void _commandGetPIB(SYS_CMD_DEVICE_NODE* pCmdIO, int argc, char** argv)
     {
         // Check password from parameters
         uint32_t level = atoi(argv[1]);               
-        if ((level >= 0) && (level <= 3))
+        if ((level >= 0) && (level <= 4))
         {            
             SYS_CMD_PRINT("Getting PIB of %d level\r\n",level);
         }
         else
         {
             // Invalid password
-            SYS_CMD_MESSAGE("Invalid level, 0:PHY 1:MAC 2:ADP 3:LBP\r\n");
+            SYS_CMD_MESSAGE("Invalid level, 0:PHY_PLC 1:PHY_RF 2:MAC 3:ADP 4:LBP\r\n");
         }
         
         uint32_t pib;
         uint16_t convertResult=COMMON_U32AsciiToHex(argv[2], &pib);
         
-        ADP_GET_CFM_PARAMS getConfirm;
+        ADP_GET_CFM_PARAMS getAdpConfirm;
+        ADP_MAC_GET_CFM_PARAMS getMacConfirm;
         
         if (convertResult == APP_RES_SUCCESS)
         {
@@ -645,34 +646,59 @@ static void _commandGetPIB(SYS_CMD_DEVICE_NODE* pCmdIO, int argc, char** argv)
             
             switch (level)
             {
-                case 0: // PHY
-                    ADP_MacGetRequestSync(MAC_WRP_PIB_MANUF_PHY_PARAM, pib, &getConfirm);
-                    if (getConfirm.status == G3_SUCCESS)
+                case 0: // PHY PLC
+                    ADP_MacGetRequestSync(MAC_WRP_PIB_MANUF_PHY_PARAM, pib, &getMacConfirm);
+                    if (getMacConfirm.status == G3_SUCCESS)
                     {                                        
                         SYS_CMD_MESSAGE("Value: 0x");
-                        for (int i=0; i<getConfirm.attributeLength; i++)
-                            SYS_CMD_PRINT("%02X", getConfirm.attributeValue[i]);
+                        for (int i=0; i<getMacConfirm.attributeLength; i++)
+                            SYS_CMD_PRINT("%02X", getMacConfirm.attributeValue[i]);
                         SYS_CMD_MESSAGE("\r\n");
+                    }else
+                    {
+                        SYS_CMD_PRINT("Error: 0x%04X",getMacConfirm.status);
                     }
                     break;
-                case 1:
-                    ADP_MacGetRequestSync(pib, index, &getConfirm);
-                    if (getConfirm.status == G3_SUCCESS)
+                case 1: // PHY RF
+                    ADP_MacGetRequestSync(MAC_WRP_PIB_MANUF_PHY_PARAM_RF, pib, &getMacConfirm);
+                    if (getMacConfirm.status == G3_SUCCESS)
                     {                                        
                         SYS_CMD_MESSAGE("Value: 0x");
-                        for (int i=0; i<getConfirm.attributeLength; i++)
-                            SYS_CMD_PRINT("%02X", getConfirm.attributeValue[i]);
+                        for (int i=0; i<getMacConfirm.attributeLength; i++)
+                            SYS_CMD_PRINT("%02X", getMacConfirm.attributeValue[i]);
                         SYS_CMD_MESSAGE("\r\n");
+                    }
+                    else
+                    {
+                        SYS_CMD_PRINT("Error: 0x%04X",getMacConfirm.status);
                     }
                     break;
                 case 2:                                        
-                    ADP_GetRequestSync(pib, index, &getConfirm);
-                    if (getConfirm.status == G3_SUCCESS)
+                    ADP_MacGetRequestSync(pib, index, &getMacConfirm);
+                    if (getMacConfirm.status == G3_SUCCESS)
                     {                                        
                         SYS_CMD_MESSAGE("Value: 0x");
-                        for (int i=0; i<getConfirm.attributeLength; i++)
-                            SYS_CMD_PRINT("%02X", getConfirm.attributeValue[i]);
+                        for (int i=0; i<getMacConfirm.attributeLength; i++)
+                            SYS_CMD_PRINT("%02X", getMacConfirm.attributeValue[i]);
                         SYS_CMD_MESSAGE("\r\n");
+                    }
+                    else
+                    {
+                        SYS_CMD_PRINT("Error: 0x%04X",getMacConfirm.status);
+                    }
+                    break;
+                case 3:                                        
+                    ADP_GetRequestSync(pib, index, &getAdpConfirm);
+                    if (getAdpConfirm.status == G3_SUCCESS)
+                    {                                        
+                        SYS_CMD_MESSAGE("Value: 0x");
+                        for (int i=0; i<getAdpConfirm.attributeLength; i++)
+                            SYS_CMD_PRINT("%02X", getAdpConfirm.attributeValue[i]);
+                        SYS_CMD_MESSAGE("\r\n");
+                    }
+                    else
+                    {
+                        SYS_CMD_PRINT("Error: 0x%04X",getAdpConfirm.status);
                     }
                     break;
                 default:
@@ -700,14 +726,14 @@ static void _commandSetPIB(SYS_CMD_DEVICE_NODE* pCmdIO, int argc, char** argv)
     if (argc == 6)
     {
         level = atoi(argv[1]);               
-        if ((level >= 0) && (level <= 3))
+        if ((level >= 0) && (level <= 4))
         {            
             SYS_CMD_PRINT("Setting PIB of %d level\r\n",level);
         }
         else
         {
             // Invalid password
-            SYS_CMD_MESSAGE("Invalid level, 0:PHY 1:MAC 2:ADP 3:LBP\r\n");
+            SYS_CMD_MESSAGE("Invalid level, 0:PHY_PLC 1:PHY_RF 2:MAC 3:ADP 4:LBP\r\n");
         }        
         convertResult = COMMON_U32AsciiToHex(argv[2], &pib);
         
@@ -727,20 +753,43 @@ static void _commandSetPIB(SYS_CMD_DEVICE_NODE* pCmdIO, int argc, char** argv)
                         {                                        
                             SYS_CMD_MESSAGE("OK\r\n");
                         }
+                        else
+                        {
+                            SYS_CMD_PRINT("Error: 0x%04X",setConfirm.status);
+                        }   
                         break;
-                    case 1:
+                    case 1: // PHY_RF
+                        ADP_MacSetRequestSync(MAC_WRP_PIB_MANUF_PHY_PARAM_RF, pib, length, values, &setConfirm);
+                        if (setConfirm.status == G3_SUCCESS)
+                        {                                        
+                            SYS_CMD_MESSAGE("OK\r\n");
+                        }
+                        else
+                        {
+                            SYS_CMD_PRINT("Error: 0x%04X",setConfirm.status);
+                        }  
+                        break;
+                    case 2:
                         ADP_MacSetRequestSync(pib, index, length, values, &setConfirm);
                         if (setConfirm.status == G3_SUCCESS)
                         {                                        
                             SYS_CMD_MESSAGE("OK\r\n");
                         }
+                        else
+                        {
+                            SYS_CMD_PRINT("Error: 0x%04X",setConfirm.status);
+                        }  
                         break;
-                    case 2:                                        
+                    case 3:                                        
                         ADP_SetRequestSync(pib, index, length, values, &setConfirm);
                         if (setConfirm.status == G3_SUCCESS)
                         {                                        
                             SYS_CMD_MESSAGE("OK\r\n");
                         }
+                        else
+                        {
+                            SYS_CMD_PRINT("Error: 0x%04X",setConfirm.status);
+                        }  
                         break;
                     default:
                         break;

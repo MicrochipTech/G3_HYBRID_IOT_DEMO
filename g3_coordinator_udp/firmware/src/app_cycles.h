@@ -55,11 +55,11 @@ extern "C" {
 //#define APP_CYCLES_METROLOGY_DATA_REQUEST
 
 /* Time to wait before start cycling in ms */
-#define APP_CYCLES_TIME_WAIT_FIRST_CYCLE_MS 60000
+#define APP_CYCLES_TIME_WAIT_FIRST_CYCLE_MS 120000
 #define APP_CYCLES_TIME_WAIT_CYCLE_MS 60000
 
 /* Time between device cycles in ms */
-#define APP_CYCLES_TIME_BTW_DEVICE_CYCLES_MS 500
+#define APP_CYCLES_TIME_BTW_DEVICE_CYCLES_MS 3000
 
 /* Timeout in ms to consider reply not received - 6500 msec > 2 * net_traversal_time (3000 msecs) */
 /* RREP_WAIT (2) < ADP_NET_TRAVERSAL_TIME (3) */
@@ -199,7 +199,7 @@ typedef struct
 
 #define APP_COORDINATOR_MAX_DEVICES 12   // TYPE_PANEL_LED - TYPE_LIGHTING_INDOOR + 1
 
-#define APP_COORDINATOR_ALIVE_TRIES 3
+#define APP_COORDINATOR_ALIVE_TRIES 4
 
 #define INDEX_UNKNOWN 255
 

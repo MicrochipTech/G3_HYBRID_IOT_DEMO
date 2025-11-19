@@ -748,9 +748,10 @@ void APP_CYCLES_TRANSFER_Tasks()
                 app_cyclesData.numUdpReplies++;
                 if (app_cyclesData.pStatsEntry != NULL)
                     app_cyclesData.pStatsEntry->numUdpReplies++;
-
-                SYS_DEBUG_PRINT(SYS_ERROR_DEBUG, "APP_CYCLES: UDP Device Info reply received (%u ms)\r\n",
-                        SYS_TIME_CountToMS(elapsedTimeCount));
+                // Refresh tries for this short address == type
+                APP_COORDINATOR_deviceSetTriesByType(app_cyclesData.shortAddress, APP_COORDINATOR_ALIVE_TRIES);
+                SYS_DEBUG_PRINT(SYS_ERROR_DEBUG, "APP_CYCLES: UDP Device Info reply received from 0x%04X (%u ms)\r\n", 
+                        app_cyclesData.shortAddress, SYS_TIME_CountToMS(elapsedTimeCount));
             }
             else
             {
