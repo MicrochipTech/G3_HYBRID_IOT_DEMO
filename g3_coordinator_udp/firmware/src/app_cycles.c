@@ -858,14 +858,20 @@ void APP_CYCLES_Tasks ( void )
             {
                 /* Check number of joined devices */
                 uint16_t numDevicesJoined = APP_EAP_SERVER_GetNumDevicesJoined();
+                if (numDevicesJoined == 0)
+                {
+                    app_cyclesData.state = APP_CYCLES_STATE_WAIT_FIRST_JOIN;
+                    break;
+                }
+                
                 if (numDevicesJoined != app_cyclesData.numDevicesJoined)
                 {
                     SYS_DEBUG_MESSAGE(SYS_ERROR_ERROR, "APP_CYCLES: New devices on the network\r\n");
                     /* New device(s) joined or left the G3 network. Reload the
                      * timer to wait before first cycle */
+                    app_cyclesData.numDevicesJoined = numDevicesJoined;
                     SYS_TIME_TimerReload(app_cyclesData.timeCycleHandle, 0, SYS_TIME_MSToCount(APP_CYCLES_TIME_WAIT_FIRST_CYCLE_MS),
                             APP_SYS_TIME_CallbackSetFlag, (uintptr_t) &app_cyclesData.timeCycleExpired, SYS_TIME_SINGLE);
-                    app_cyclesData.numDevicesJoined = numDevicesJoined;
                 }
             }
             else
