@@ -425,6 +425,8 @@ void APP_EAP_SERVER_KickDevice(uint16_t shortAddress)
             {
                 /* Remove the device from the joined devices list */
                 memset(pExtAddr->value, 0, ADP_ADDRESS_64BITS);
+                SYS_DEBUG_PRINT(SYS_ERROR_DEBUG, "APP_EAP_SERVER: Device 0x%04X kicked\r\n", shortAddress);
+                app_eap_serverData.numDevicesJoined--;
             }
         }
     }
