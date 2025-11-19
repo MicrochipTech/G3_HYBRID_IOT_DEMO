@@ -72,6 +72,7 @@ static const APP_G3_MANAGEMENT_CONSTANTS app_g3_managementConst = {
     .rrepWait = APP_G3_MANAGEMENT_RREP_WAIT,
     .rreqWait = APP_G3_MANAGEMENT_RREQ_WAIT,
     .netTraversalTime = APP_G3_MANAGEMENT_NET_TRAVERSAL_TIME,
+    .blacklistTableEntryTTL = APP_G3_MANAGEMENT_BLACKLIST_TABLE_ENTRY_TTL,
 
     /* G3 Conformance parameters */
     .pskConformance = APP_G3_MANAGEMENT_PSK_KEY_CONFORMANCE,
@@ -420,6 +421,11 @@ static void _APP_G3_MANAGEMENT_InitializeParameters(void)
     
     ADP_SetRequestSync(ADP_IB_NET_TRAVERSAL_TIME, 0, 1, 
             (const uint8_t*) &app_g3_managementConst.netTraversalTime, &setConfirm);
+    
+    /* Set ADP parameters needed for Conformance Test */
+    ADP_SetRequestSync(ADP_IB_BLACKLIST_TABLE_ENTRY_TTL, 0, 2,
+            (const uint8_t*) &app_g3_managementConst.blacklistTableEntryTTL,
+            &setConfirm);
 
     if (app_g3_managementData.conformanceTest == true)
     {

@@ -184,6 +184,7 @@ extern "C" {
 #define APP_G3_MANAGEMENT_RREP_WAIT 2
 #define APP_G3_MANAGEMENT_NET_TRAVERSAL_TIME 3
 #define APP_G3_MANAGEMENT_RREQ_WAIT 2
+#define APP_G3_MANAGEMENT_BLACKLIST_TABLE_ENTRY_TTL 0
     
 /* Period to blink LED in milliseconds */
 #define APP_G3_MANAGEMENT_LED_BLINK_PERIOD_MS 500
@@ -440,6 +441,8 @@ typedef struct
     const uint8_t rrepWait;
     
     const uint8_t rreqWait;
+    
+    const uint16_t blacklistTableEntryTTL;
 
 } APP_G3_MANAGEMENT_CONSTANTS;
 

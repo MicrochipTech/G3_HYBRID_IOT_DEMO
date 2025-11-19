@@ -606,6 +606,9 @@ void APP_CYCLES_Initialize ( void )
     app_cyclesData.availableBuffers = true;
     app_cyclesData.packetPending = false;
     app_cyclesData.freetransferFlag = true;
+    // Timers
+    app_cyclesData.timeDataHandle = SYS_TIME_HANDLE_INVALID;
+    app_cyclesData.timeCycleHandle = SYS_TIME_HANDLE_INVALID;
     
     //SYS_CONSOLE_HANDLE myConsoleHandle;
     //myConsoleHandle = SYS_CONSOLE_HandleGet(SYS_CONSOLE_INDEX_1);
@@ -820,6 +823,9 @@ void APP_CYCLES_Tasks ( void )
                 /* First device joined the G3 network. Start timer to wait
                  * before first cycle */
                 app_cyclesData.state = APP_CYCLES_STATE_START_CYCLE;
+                if (app_cyclesData.timeCycleHandle != SYS_TIME_HANDLE_INVALID){
+                    SYS_TIME_TimerDestroy(app_cyclesData.timeCycleHandle);
+                }                    
                 app_cyclesData.timeCycleHandle = SYS_TIME_CallbackRegisterMS(APP_SYS_TIME_CallbackSetFlag,
                         (uintptr_t) &app_cyclesData.timeCycleExpired, APP_CYCLES_TIME_WAIT_FIRST_CYCLE_MS,
                         SYS_TIME_SINGLE);
