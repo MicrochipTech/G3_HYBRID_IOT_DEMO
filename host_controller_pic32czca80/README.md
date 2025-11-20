@@ -113,7 +113,6 @@ The G3 devices connected into the G3 coordinator managed by the host controller 
 | :- | :- | :- | :- |
 |Indoor Lighting|0x10|Smart Lighting Demo|Controls the indoor light state|
 |Outdoor Lighting|0x11|Smart Lighting Demo|Controls the outdoor light state|
-|LED Panel|0x12|Hybrid IoT BP|Controls LED Panel state|
 |Liquid Detector|0x13|Sustainability Wall Demo|Keep availability|
 |Solar Inverter|0x14|Sustainability Wall Demo|Keep availability|
 |Battery Charger|0x15|Sustainability Wall Demo|Keep availability|
@@ -122,6 +121,7 @@ The G3 devices connected into the G3 coordinator managed by the host controller 
 |EV Charger|0x18|Sustainability Wall Demo|Keep availability|
 |Electricity Meter|0x19|Sustainability Wall Demo|Keep availability|
 |Emergency Button|0x1A|Hybrid IoT BP|Generate Alarms|
+|LED Panel|0x1B|Hybrid IoT BP|Controls LED Panel state|
 
 ### Host Controller applications
 
@@ -176,6 +176,31 @@ The project includes a CLI with these commands:
 |POWER|<0-1>| Coordinator Power 0:off, 1:on |
 |SET_WIFI|<SSID> <PASS> <SEC>| Sets WiFi Parameters ssid, pass and security (0-5)|
 |GET_WIFI|None| Gets WiFi Parameters ssid, pass and security|
+
+where:
+| Device | X(dest)
+| :- | :- |
+|Indoor Lighting|0|
+|Outdoor Lighting|1|
+|Liquid Detector|3|
+|Solar Inverter|4|
+|Battery Charger|5|
+|Energy Storage|6|
+|Heat Pump|7|
+|EV Charger|8|
+|Electricity Meter|9|
+|Emergency Button|10|
+|LED Panel|11|
+
+| Color | X(H)
+| :- | :- |
+|Red|00|
+|Yellow|2B|
+|Green|55|
+|Cyan|80|
+|Blue|AA|
+|Magenta|D5|
+
 
 ### LCD Graphics Interface
 The graphic interface is based on these elements:
