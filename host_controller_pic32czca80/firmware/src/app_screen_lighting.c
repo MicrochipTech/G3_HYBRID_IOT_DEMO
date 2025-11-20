@@ -359,7 +359,7 @@ void event_LightControlScreen_LightingOutdoorRefreshButtonWidget_OnPressed(leBut
     uint8_t index;
     
     index = APP_COORDINATOR_deviceIndexByType(TYPE_LIGHTING_OUTDOOR);
-    APP_COORDINATOR_deviceGetAlive(TYPE_LIGHTING_INDOOR, &alive);    
+    APP_COORDINATOR_deviceGetAlive(TYPE_LIGHTING_OUTDOOR, &alive);    
     SYS_DEBUG_PRINT(SYS_ERROR_DEBUG, "[APP_SLIGHT]: Lighting Outdoor refresh - index=0x%02X alive=%s\r\n", index, alive? "true":"false");
     if ((index != INDEX_UNKNOWN) && (alive))
     {

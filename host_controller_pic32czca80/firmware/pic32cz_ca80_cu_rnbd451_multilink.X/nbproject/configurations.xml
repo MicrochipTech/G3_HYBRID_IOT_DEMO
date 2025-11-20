@@ -115,6 +115,8 @@
                 <itemPath>../src/config/lcc_rgb565_mxt_cz_ca80_cu/driver/wifi/wincs02/include/wdrv_winc_dhcps.h</itemPath>
               </logicalFolder>
             </logicalFolder>
+            <itemPath>../src/config/lcc_rgb565_mxt_cz_ca80_cu/driver/driver.h</itemPath>
+            <itemPath>../src/config/lcc_rgb565_mxt_cz_ca80_cu/driver/driver_common.h</itemPath>
           </logicalFolder>
           <logicalFolder name="f1" displayName="gfx" projectFiles="true">
             <logicalFolder name="f1" displayName="driver" projectFiles="true">
@@ -470,6 +472,7 @@
             <itemPath>../src/config/lcc_rgb565_mxt_cz_ca80_cu/system/system_common.h</itemPath>
             <itemPath>../src/config/lcc_rgb565_mxt_cz_ca80_cu/system/system_module.h</itemPath>
             <itemPath>../src/config/lcc_rgb565_mxt_cz_ca80_cu/system/sys_wincs_system_service.h</itemPath>
+            <itemPath>../src/config/lcc_rgb565_mxt_cz_ca80_cu/system/system_media.h</itemPath>
           </logicalFolder>
           <logicalFolder name="usb" displayName="usb" projectFiles="true">
             <logicalFolder name="src" displayName="src" projectFiles="true">
