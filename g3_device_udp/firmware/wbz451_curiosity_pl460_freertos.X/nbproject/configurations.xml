@@ -1049,6 +1049,7 @@
               <itemPath>../src/third_party/wolfssl/wolfcrypt/src/hmac.c</itemPath>
               <itemPath>../src/third_party/wolfssl/wolfcrypt/src/pwdbased.c</itemPath>
               <itemPath>../src/third_party/wolfssl/wolfcrypt/src/camellia.c</itemPath>
+              <itemPath>../src/third_party/wolfssl/wolfcrypt/src/wc_lms_impl.c</itemPath>
             </logicalFolder>
           </logicalFolder>
           <logicalFolder name="wolfssl" displayName="wolfssl" projectFiles="true">

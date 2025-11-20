@@ -84,7 +84,7 @@ extern "C" {
 #define APP_G3_MANAGEMENT_MAX_JOIN_WAIT_TIME_CONFORMANCE 20
 
 /* Maximum Hops: 10 */
-#define APP_G3_MANAGEMENT_MAX_HOPS 10
+#define APP_G3_MANAGEMENT_MAX_HOPS 5
 
 /* Maximum Hops for Conformance: 8 */
 #define APP_G3_MANAGEMENT_MAX_HOPS_CONFORMANCE 8
@@ -204,16 +204,20 @@ extern "C" {
 #define APP_G3_MANAGEMENT_ROUTE_COST_COORD_MAX 0x7FFF
 
 /* Back-off delay times for network discovery in milliseconds */
-#define APP_G3_MANAGEMENT_JOIN_BACKOFF_LOW_MIN  100
-#define APP_G3_MANAGEMENT_JOIN_BACKOFF_LOW_MAX  2000
-#define APP_G3_MANAGEMENT_JOIN_BACKOFF_HIGH_MIN 2500
-#define APP_G3_MANAGEMENT_JOIN_BACKOFF_HIGH_MAX 10000
+#define APP_G3_MANAGEMENT_JOIN_BACKOFF_LOW_MIN  500
+#define APP_G3_MANAGEMENT_JOIN_BACKOFF_LOW_MAX  10000
+#define APP_G3_MANAGEMENT_JOIN_BACKOFF_HIGH_MIN 5000
+#define APP_G3_MANAGEMENT_JOIN_BACKOFF_HIGH_MAX 20000
+
+#define APP_G3_MANAGEMENT_RREQ_WAIT           5    
+#define APP_G3_MANAGEMENT_RREP_WAIT           5
+#define APP_G3_MANAGEMENT_NET_TRAVERSAL_TIME  10
 
 /* Period to blink LED in milliseconds */
 #define APP_G3_MANAGEMENT_LED_BLINK_PERIOD_MS 500
 
 /* Period to check if network is alive */
-#define APP_G3_MANAGEMENT_NTW_ALIVE_CHECK_PERIOD_MS 180000 // 3 minutes
+#define APP_G3_MANAGEMENT_NTW_ALIVE_CHECK_PERIOD_MS 360000 // 5 minutes
 
 /* String header to print after reset */
 #define APP_G3_MANAGEMENT_STRING_HEADER "\r\n-- MCHP G3 Device UDP Responder application --\r\n" \
@@ -419,6 +423,15 @@ typedef struct
 
     /* ADP_IB_MAX_HOPS */
     const uint8_t maxHops;
+    
+    /* ADP_IB_NET_TRAVERSAL_TIME */
+    const uint8_t netTraversalTime;
+    
+    /* ADP_IB_RREP_WAIT */
+    const uint8_t rrepWait;
+    
+    /* ADP_IB_RREQ_WAIT */
+    const uint8_t rreqWait;
 
     /* ADP_IB_MAX_HOPS for Conformance */
     const uint8_t maxHopsConformance;

@@ -133,9 +133,11 @@ static const APP_G3_MANAGEMENT_CONSTANTS app_g3_managementConst = {
 static void _APP_G3_MANAGEMENT_TimeExpiredSetFlag(uintptr_t context);
 static void _APP_G3_MANAGEMENT_Reboot(void);
 
-uint32_t timeoutTraffic = 0;
 /* Time waiting for G3/UDP responder traffic before to reboot - Safety Mechanism */    
-#define TIMEOUT_WAIT_TRAFFIC_BLINK 600  // 5 minutes without traffic (tick is 500ms)
+#define TIMEOUT_WAIT_TRAFFIC_BLINK_FIRST 1800         // 15 minutes without traffic (tick is 500ms) after joining
+#define TIMEOUT_WAIT_TRAFFIC_BLINK       1200         // 10 minutes without traffic (tick is 500ms) after data traffic
+
+uint32_t timeoutTraffic = TIMEOUT_WAIT_TRAFFIC_BLINK;
 
 static void _ADP_DiscoveryConfirm(uint8_t status)
 {
@@ -216,7 +218,6 @@ static void _LBP_ADP_NetworkJoinConfirm(LBP_ADP_NETWORK_JOIN_CFM_PARAMS* pNetwor
         uint8_t prefixData[27];
 
         /* Successful join */
-        app_g3_managementData.state = APP_G3_MANAGEMENT_STATE_JOINED;
         shortAddress = pNetworkJoinCfm->networkAddress;
         panId = pNetworkJoinCfm->panId;
 
@@ -284,8 +285,6 @@ static void _LBP_ADP_NetworkJoinConfirm(LBP_ADP_NETWORK_JOIN_CFM_PARAMS* pNetwor
 
 		/* Identify Registering Process */
         //RGB_LED_GREEN_On();
-        /* Reset Reboot Protection */
-        timeoutTraffic = 0;
         
         if ((app_g3_managementData.bestNetwork.mediaType == MAC_WRP_MEDIA_TYPE_REQ_PLC_BACKUP_RF) ||
             (app_g3_managementData.bestNetwork.mediaType == MAC_WRP_MEDIA_TYPE_REQ_PLC_NO_BACKUP))
@@ -298,6 +297,12 @@ static void _LBP_ADP_NetworkJoinConfirm(LBP_ADP_NETWORK_JOIN_CFM_PARAMS* pNetwor
 
         SYS_DEBUG_PRINT(SYS_ERROR_INFO, "APP_G3_MANAGEMENT: Joined to the network. "
                 "PAN ID: 0x%04X, Short Address: 0x%04X\r\n", panId, shortAddress);
+        
+        /* Reset Reboot Protection */
+        timeoutTraffic = (TIMEOUT_WAIT_TRAFFIC_BLINK_FIRST >> (blink_rate_factor - 1));
+        
+        app_g3_managementData.state = APP_G3_MANAGEMENT_STATE_JOINED;
+        
     }
     else
     {
@@ -539,6 +544,17 @@ static void _APP_G3_MANAGEMENT_InitializeParameters(void)
     ADP_MacSetRequestSync(MAC_WRP_PIB_DUTY_CYCLE_LIMIT_RF, 0, 2,
             (const uint8_t*) &app_g3_managementConst.dutyCycleLimitRF, &setConfirm);
 
+    /* Set user-specific ADP parameters */
+    
+    ADP_SetRequestSync(ADP_IB_RREQ_WAIT, 0, 1,
+            (const uint8_t*) &app_g3_managementConst.rreqWait, &setConfirm);
+    
+    ADP_SetRequestSync(ADP_IB_RREP_WAIT, 0, 1,
+            (const uint8_t*) &app_g3_managementConst.rrepWait, &setConfirm);
+    
+    ADP_SetRequestSync(ADP_IB_NET_TRAVERSAL_TIME, 0, 1,
+            (const uint8_t*) &app_g3_managementConst.netTraversalTime, &setConfirm);
+    
     if (app_g3_managementData.conformanceTest == true)
     {
         _APP_G3_MANAGEMENT_SetConformanceParameters();
@@ -1047,34 +1063,25 @@ void APP_G3_MANAGEMENT_Tasks ( void )
         /* Activity */
         USER_BLINK_LED_Toggle();
         
-        /* Reboot protection */
+        if (app_g3_managementData.state == APP_G3_MANAGEMENT_STATE_JOINED)
+        {
+            /* Reboot protection after joining */
         if (app_udp_responderData.dataReceived)
         {
             app_udp_responderData.dataReceived = false;
-            timeoutTraffic = 0;
-        }else {
-        	timeoutTraffic++;
-        	if (timeoutTraffic == (TIMEOUT_WAIT_TRAFFIC_BLINK >> (blink_rate_factor - 1)))
+                timeoutTraffic = (TIMEOUT_WAIT_TRAFFIC_BLINK >> (blink_rate_factor - 1));
+            }else 
+            {
+                timeoutTraffic--;
+                if (!timeoutTraffic)
         	{
             	// Leave and Reboot
                 app_g3_managementData.ntwAliveCheckExpired = true;
         	}
         }
-        
-        // Make actions according with commands received or events        
-        //if (app_g3_managementData.state < APP_G3_MANAGEMENT_STATE_JOINED)
-        //{
-        //    /* Registering */
-        //    RGB_LED_GREEN_Toggle();
-        //}
-        
-
-#if APP_DEV_TYPE == APP_DEV_TYPE_EMERGENCY_BUTTON
-        if (app_g3_managementData.state == APP_G3_MANAGEMENT_STATE_JOINED)
-        {           
+            /* User Button Handler */
             _APP_G3_MANAGEMENT_button_handle();
     	}
-#endif
     }
 
     /* RBG LED handling */
