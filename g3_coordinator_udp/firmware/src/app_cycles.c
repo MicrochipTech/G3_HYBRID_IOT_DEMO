@@ -83,6 +83,30 @@ static OSAL_MUTEX_DECLARE(appCoordInfoMutex);
 // *****************************************************************************
 // *****************************************************************************
 
+static bool APP_COORDINATOR_TaskDelay(uint32_t ms, SYS_TIME_HANDLE* handle)
+{
+    // Check if there is the timer has been created and running
+    if (*handle == SYS_TIME_HANDLE_INVALID)
+    {
+        // Create timer
+        if (SYS_TIME_DelayMS(ms, handle) != SYS_TIME_SUCCESS)
+        {
+            return false;
+        }
+    }
+    else
+    {
+        // Check timer
+        if (SYS_TIME_DelayIsComplete(*handle) == true)
+        {
+            *handle = SYS_TIME_HANDLE_INVALID;
+            return true;
+        }
+    }
+
+    return false;
+}
+
 uint8_t APP_COORDINATOR_deviceByType(uint8_t type)
 {
     return (uint8_t) (type - TYPE_LIGHTING_INDOOR);
@@ -110,7 +134,7 @@ bool _APP_COORDINATOR_deviceInit ( void )
     
     if (OSAL_MUTEX_Lock(&appCoordInfoMutex, OSAL_WAIT_FOREVER) == OSAL_RESULT_FAIL)
     {
-        SYS_DEBUG_MESSAGE(SYS_ERROR_ERROR, "[APP COORDINATOR] - appCoordInfoMutex mutex lock FAILED\r\n");
+        SYS_DEBUG_MESSAGE(SYS_ERROR_ERROR, "[APP_COORD] - appCoordInfoMutex mutex lock FAILED\r\n");
         return false;
     }
     
@@ -137,7 +161,7 @@ bool APP_COORDINATOR_deviceDoSnapshot(APP_COORDINATOR_DEVICE_INFO device_info[])
 {
     if (OSAL_MUTEX_Lock(&appCoordInfoMutex, OSAL_WAIT_FOREVER) == OSAL_RESULT_FAIL)
     {
-        SYS_DEBUG_MESSAGE(SYS_ERROR_INFO, "[APP COORDINATOR] - appCoordInfoMutex mutex lock FAILED\r\n");
+        SYS_DEBUG_MESSAGE(SYS_ERROR_INFO, "[APP_COORD] - appCoordInfoMutex mutex lock FAILED\r\n");
         return false;
     }
     for (uint8_t i=0; i<APP_COORDINATOR_MAX_DEVICES; i++)
@@ -155,7 +179,7 @@ bool APP_COORDINATOR_deviceSetStateByType(uint8_t type, bool state )
     
     if (OSAL_MUTEX_Lock(&appCoordInfoMutex, OSAL_WAIT_FOREVER) == OSAL_RESULT_FAIL)
     {
-        SYS_DEBUG_MESSAGE(SYS_ERROR_ERROR, "[APP COORDINATOR] - appCoordInfoMutex mutex lock FAILED\r\n");
+        SYS_DEBUG_MESSAGE(SYS_ERROR_ERROR, "[APP_COORD] - appCoordInfoMutex mutex lock FAILED\r\n");
         return false;
     }
     
@@ -178,7 +202,7 @@ bool APP_COORDINATOR_deviceGetStateByType(uint8_t type, bool *state)
     
     if (OSAL_MUTEX_Lock(&appCoordInfoMutex, OSAL_WAIT_FOREVER) == OSAL_RESULT_FAIL)
     {
-        SYS_DEBUG_MESSAGE(SYS_ERROR_ERROR, "[APP COORDINATOR] - appCoordInfoMutex mutex lock FAILED\r\n");
+        SYS_DEBUG_MESSAGE(SYS_ERROR_ERROR, "[APP_COORD] - appCoordInfoMutex mutex lock FAILED\r\n");
         return false;
     }
     
@@ -194,7 +218,7 @@ bool APP_COORDINATOR_deviceSetAliveByType(uint8_t type, bool joined, bool alive)
 
     if (OSAL_MUTEX_Lock(&appCoordInfoMutex, OSAL_WAIT_FOREVER) == OSAL_RESULT_FAIL)
     {
-        SYS_DEBUG_MESSAGE(SYS_ERROR_ERROR, "[APP COORDINATOR] - appCoordInfoMutex mutex lock FAILED\r\n");
+        SYS_DEBUG_MESSAGE(SYS_ERROR_ERROR, "[APP_COORD] - appCoordInfoMutex mutex lock FAILED\r\n");
         return false;
     }
     
@@ -217,7 +241,7 @@ bool APP_COORDINATOR_deviceGetAliveByType(uint8_t type, bool *alive)
 
     if (OSAL_MUTEX_Lock(&appCoordInfoMutex, OSAL_WAIT_FOREVER) == OSAL_RESULT_FAIL)
     {
-        SYS_DEBUG_MESSAGE(SYS_ERROR_ERROR, "[APP COORDINATOR] - appCoordInfoMutex mutex lock FAILED\r\n");
+        SYS_DEBUG_MESSAGE(SYS_ERROR_ERROR, "[APP_COORD] - appCoordInfoMutex mutex lock FAILED\r\n");
         return false;
     }
     
@@ -234,7 +258,7 @@ bool APP_COORDINATOR_deviceSetTriesByType(uint8_t type, uint8_t tries)
 
     if (OSAL_MUTEX_Lock(&appCoordInfoMutex, OSAL_WAIT_FOREVER) == OSAL_RESULT_FAIL)
     {
-        SYS_DEBUG_MESSAGE(SYS_ERROR_ERROR, "[APP COORDINATOR] - appCoordInfoMutex mutex lock FAILED\r\n");
+        SYS_DEBUG_MESSAGE(SYS_ERROR_ERROR, "[APP_COORD] - appCoordInfoMutex mutex lock FAILED\r\n");
         return false;
     }
     
@@ -251,7 +275,7 @@ bool APP_COORDINATOR_deviceGetTriesByType(uint8_t type, uint8_t *tries)
 
     if (OSAL_MUTEX_Lock(&appCoordInfoMutex, OSAL_WAIT_FOREVER) == OSAL_RESULT_FAIL)
     {
-        SYS_DEBUG_MESSAGE(SYS_ERROR_ERROR, "[APP COORDINATOR] - appCoordInfoMutex mutex lock FAILED\r\n");
+        SYS_DEBUG_MESSAGE(SYS_ERROR_ERROR, "[APP_COORD] - appCoordInfoMutex mutex lock FAILED\r\n");
         return false;
     }
     
@@ -271,7 +295,7 @@ bool APP_COORDINATOR_deviceInfoRefresh(uint16_t eap_index, uint8_t *extAddr, uin
 
     if (OSAL_MUTEX_Lock(&appCoordInfoMutex, OSAL_WAIT_FOREVER) == OSAL_RESULT_FAIL)
     {
-        SYS_DEBUG_MESSAGE(SYS_ERROR_ERROR, "[APP COORDINATOR] - appCoordInfoMutex mutex lock FAILED\r\n");
+        SYS_DEBUG_MESSAGE(SYS_ERROR_ERROR, "[APP_COORD] - appCoordInfoMutex mutex lock FAILED\r\n");
         return false;
     }
     
@@ -293,6 +317,8 @@ bool APP_COORDINATOR_deviceInfoRefresh(uint16_t eap_index, uint8_t *extAddr, uin
     
     // Notify Device Status Change
     APP_USI_DEVICE_notifyDeviceStatusChange(type, joined, false, state);
+    
+    app_cyclesData.delayCmds = true;
     
     OSAL_MUTEX_Unlock(&appCoordInfoMutex);
     return true;
@@ -334,7 +360,7 @@ uint8_t APP_COORDINATOR_deviceRefreshCycle()
     
     if (OSAL_MUTEX_Lock(&appCoordInfoMutex, OSAL_WAIT_FOREVER) == OSAL_RESULT_FAIL)
     {
-        SYS_DEBUG_MESSAGE(SYS_ERROR_ERROR, "[APP COORDINATOR] - appCoordInfoMutex mutex lock FAILED\r\n");
+        SYS_DEBUG_MESSAGE(SYS_ERROR_ERROR, "[APP_COORD] - appCoordInfoMutex mutex lock FAILED\r\n");
         return 0;
     }
     
@@ -607,8 +633,11 @@ void APP_CYCLES_Initialize ( void )
     app_cyclesData.packetPending = false;
     app_cyclesData.freetransferFlag = true;
     // Timers
+    app_cyclesData.timeHandle = SYS_TIME_HANDLE_INVALID;
     app_cyclesData.timeDataHandle = SYS_TIME_HANDLE_INVALID;
     app_cyclesData.timeCycleHandle = SYS_TIME_HANDLE_INVALID;
+    app_cyclesData.delayCmds = false;
+    app_cyclesData.delayCmds_ms = APP_CYCLES_DELAY_ROUTE_REQUEST_AFTER_JOIN;
     
     //SYS_CONSOLE_HANDLE myConsoleHandle;
     //myConsoleHandle = SYS_CONSOLE_HandleGet(SYS_CONSOLE_INDEX_1);
@@ -837,6 +866,13 @@ void APP_CYCLES_Tasks ( void )
         /* State to wait for UDP cycle */
         case APP_CYCLES_STATE_START_CYCLE:
         {
+            if (app_cyclesData.delayCmds)
+            {
+                app_cyclesData.delayCmds = false;
+                app_cyclesData.state = APP_CYCLES_STATE_DELAY;
+                app_cyclesData.next_state = APP_CYCLES_STATE_START_CYCLE;
+                break;
+            }
             /* If pending packets, send it */
             if ((app_cyclesData.freetransferFlag) && (!app_cyclesData.transferFlag))
             {
@@ -872,7 +908,7 @@ void APP_CYCLES_Tasks ( void )
                 
                 if (numDevicesJoined != app_cyclesData.numDevicesJoined)
                 {
-                    SYS_DEBUG_MESSAGE(SYS_ERROR_ERROR, "APP_CYCLES: New devices on the network\r\n");
+                    SYS_DEBUG_PRINT(SYS_ERROR_INFO, "APP_CYCLES: New devices (%d) on the network\r\n", numDevicesJoined);
                     /* New device(s) joined or left the G3 network. Reload the
                      * timer to wait before first cycle */
                     app_cyclesData.numDevicesJoined = numDevicesJoined;
@@ -903,6 +939,13 @@ void APP_CYCLES_Tasks ( void )
         
         case APP_CYCLES_STATE_START_DEVICE_CYCLE:        
             
+            if (app_cyclesData.delayCmds)
+            {
+                app_cyclesData.delayCmds = false;
+                app_cyclesData.state = APP_CYCLES_STATE_DELAY;
+                app_cyclesData.next_state = APP_CYCLES_STATE_START_DEVICE_CYCLE;
+                break;
+            }
             // Check first if any additional message into the queue
             if ((app_cyclesData.freetransferFlag) && (!app_cyclesData.transferFlag))
             {
@@ -971,7 +1014,7 @@ void APP_CYCLES_Tasks ( void )
                     if (appCoordinatorDeviceInfo[app_cyclesData.deviceIndex].tries == 0)
                     {
                         /* Device not alive */
-                        SYS_DEBUG_PRINT(SYS_ERROR_INFO, "[APP COORDINATOR] - Device type 0x%02X not alive (tries=0)\r\n", appCoordinatorDeviceInfo[app_cyclesData.deviceIndex].type);
+                        SYS_DEBUG_PRINT(SYS_ERROR_INFO, "[APP_COORD] - Device type 0x%02X not alive (tries=0)\r\n", appCoordinatorDeviceInfo[app_cyclesData.deviceIndex].type);
                         APP_EAP_SERVER_KickDevice(appCoordinatorDeviceInfo[app_cyclesData.deviceIndex].sa);
                         APP_COORDINATOR_deviceSetAliveByType(appCoordinatorDeviceInfo[app_cyclesData.deviceIndex].type, false, false);                        
                     }
@@ -1013,6 +1056,18 @@ void APP_CYCLES_Tasks ( void )
                         
             break;
         }            
+        
+        case APP_CYCLES_STATE_DELAY:
+        {
+            // Wait delay time
+            if (APP_COORDINATOR_TaskDelay(app_cyclesData.delayCmds_ms, &app_cyclesData.timeHandle))
+            {
+                // Set next app state                
+                app_cyclesData.state = app_cyclesData.next_state;
+            }
+            break;
+        }
+        
         /* Conformance state: Cycling disabled */
         case APP_CYCLES_STATE_CONFORMANCE:
         {

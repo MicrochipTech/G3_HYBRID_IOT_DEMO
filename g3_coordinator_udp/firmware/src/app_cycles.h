@@ -55,15 +55,16 @@ extern "C" {
 //#define APP_CYCLES_METROLOGY_DATA_REQUEST
 
 /* Time to wait before start cycling in ms */
-#define APP_CYCLES_TIME_WAIT_FIRST_CYCLE_MS 120000
-#define APP_CYCLES_TIME_WAIT_CYCLE_MS 60000
+#define APP_CYCLES_TIME_WAIT_FIRST_CYCLE_MS 180000
+#define APP_CYCLES_TIME_WAIT_CYCLE_MS 120000
 
 /* Time between device cycles in ms */
-#define APP_CYCLES_TIME_BTW_DEVICE_CYCLES_MS 3000
+#define APP_CYCLES_TIME_BTW_DEVICE_CYCLES_MS 5000
 
-/* Timeout in ms to consider reply not received - 6500 msec > 2 * net_traversal_time (3000 msecs) */
-/* RREP_WAIT (2) < ADP_NET_TRAVERSAL_TIME (3) */
+/* Timeout in ms to consider reply not received */
 #define APP_CYCLES_TIMEOUT_MS 8000
+
+#define APP_CYCLES_DELAY_ROUTE_REQUEST_AFTER_JOIN 10000 // 10 seconds
 
 #ifndef APP_CYCLES_METROLOGY_DATA_REQUEST
     /* UDP packet size in bytes */
@@ -124,6 +125,8 @@ typedef enum
     /* Conformance state: Cycling disabled */
     APP_CYCLES_STATE_CONFORMANCE,
 
+    APP_CYCLES_STATE_DELAY,
+            
     /* Error state */
     APP_CYCLES_STATE_ERROR,
 
@@ -256,6 +259,9 @@ typedef struct
     /* Handle for waiting time UDP Data interchange answer */
     SYS_TIME_HANDLE timeDataHandle;
 
+    /* Handle for waiting time */
+    SYS_TIME_HANDLE timeHandle;
+
     /* UDP socket handle */
     UDP_SOCKET socket;
 
@@ -321,11 +327,16 @@ typedef struct
     /* Answer Timeout */
     uint32_t answerTimeout_ms;
     
+    /* Delay in ms */
+    uint32_t delayCmds_ms;
+    
     /* Target Address */
     uint16_t shortAddress;
     
     /* Target Address */
     IPV6_ADDR targetAddress;
+    
+    bool delayCmds;
     
 } APP_CYCLES_DATA;
 

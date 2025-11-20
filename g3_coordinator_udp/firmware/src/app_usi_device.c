@@ -122,7 +122,7 @@ void APP_USI_DEVICE_ProtocolEventHandler(uint8_t *pData, size_t length)
         return;
     }
 
-    SYS_DEBUG_PRINT(SYS_ERROR_DEBUG, "[APP_USI_DEVICE] Received USI message: 0x%02X, 0x%02X, 0x%02X\r\n",pData[0], pData[1], pData[2]);
+    //SYS_DEBUG_PRINT(SYS_ERROR_DEBUG, "[APP_USI] Received USI message: 0x%02X, 0x%02X, 0x%02X\r\n",pData[0], pData[1], pData[2]);
     
     //pData_t++ ; // Ignore Protocol ID
     //pData_t++ ; // Ignore USI Frame length
@@ -138,7 +138,7 @@ void APP_USI_DEVICE_ProtocolEventHandler(uint8_t *pData, size_t length)
             uint8_t buffer[USI_MESSAGE_LENGTH_MAX];
             uint8_t *pbuffer;
             
-            SYS_DEBUG_PRINT(SYS_ERROR_INFO, "[APP_USI_DEVICE] Get Devices Info\r\n");
+            SYS_DEBUG_PRINT(SYS_ERROR_INFO, "[APP_USI] Get Devices Info\r\n");
             
             // Do SnapShot of information
             APP_COORDINATOR_deviceDoSnapshot(&device_info_usi);
@@ -172,7 +172,7 @@ void APP_USI_DEVICE_ProtocolEventHandler(uint8_t *pData, size_t length)
         }
         case CMD_GET_DEVICE_INFO:
         {
-            SYS_DEBUG_PRINT(SYS_ERROR_INFO, "[APP_USI_DEVICE] Get Device Info\r\n");         
+            SYS_DEBUG_PRINT(SYS_ERROR_INFO, "[APP_USI] Get Device Info\r\n");         
             index = *pData++ ;
             type = APP_COORDINATOR_deviceTypeByIndex(index);
             numdevices = APP_EAP_SERVER_GetNumDevicesJoined();
@@ -188,13 +188,13 @@ void APP_USI_DEVICE_ProtocolEventHandler(uint8_t *pData, size_t length)
             else
             {
                 // Invalid password
-                SYS_DEBUG_PRINT(SYS_ERROR_ERROR, "[APP_USI_DEVICE] Invalid Index\r\n");
+                SYS_DEBUG_PRINT(SYS_ERROR_ERROR, "[APP_USI] Invalid Index\r\n");
             }
             break;
         }
         case CMD_SET_LED_RGB:
         {
-            SYS_DEBUG_PRINT(SYS_ERROR_INFO, "[APP_USI_DEVICE] Set LED RGB\r\n");      
+            SYS_DEBUG_PRINT(SYS_ERROR_INFO, "[APP_USI] Set LED RGB\r\n");      
             index = *pData++ ;
             type = APP_COORDINATOR_deviceTypeByIndex(index);
             if ((type >= TYPE_LIGHTING_INDOOR) || (type <= TYPE_PANEL_LED))
@@ -214,19 +214,19 @@ void APP_USI_DEVICE_ProtocolEventHandler(uint8_t *pData, size_t length)
                 }
                 else
                 {
-                    SYS_DEBUG_PRINT(SYS_ERROR_DEBUG, "[APP_USI_DEVICE] Device Type 0x%02X not joined\r\n", type);
+                    SYS_DEBUG_PRINT(SYS_ERROR_DEBUG, "[APP_USI] Device Type 0x%02X not joined\r\n", type);
                 }
             }
             else
             {
                 // Invalid password
-                SYS_DEBUG_PRINT(SYS_ERROR_DEBUG, "[APP_USI_DEVICE] Invalid Type 0x%02X\r\n", type);
+                SYS_DEBUG_PRINT(SYS_ERROR_DEBUG, "[APP_USI] Invalid Type 0x%02X\r\n", type);
             }
             break;  
         }
         case CMD_SET_LED_RGB_BLINK:
         {    
-            SYS_DEBUG_PRINT(SYS_ERROR_INFO, "[APP_USI_DEVICE] Set LED RGB Extended\r\n");      
+            SYS_DEBUG_PRINT(SYS_ERROR_INFO, "[APP_USI] Set LED RGB Extended\r\n");      
             index = *pData++ ;
             type = APP_COORDINATOR_deviceTypeByIndex(index);
             if ((type >= TYPE_LIGHTING_INDOOR) || (type <= TYPE_PANEL_LED))
@@ -251,13 +251,13 @@ void APP_USI_DEVICE_ProtocolEventHandler(uint8_t *pData, size_t length)
                 }
                 else
                 {
-                    SYS_DEBUG_PRINT(SYS_ERROR_DEBUG, "[APP_USI_DEVICE] Device Type 0x%02X not joined\r\n", type);
+                    SYS_DEBUG_PRINT(SYS_ERROR_DEBUG, "[APP_USI] Device Type 0x%02X not joined\r\n", type);
                 }
             }
             else
             {
                 // Invalid password
-                SYS_DEBUG_PRINT(SYS_ERROR_DEBUG, "[APP_USI_DEVICE] Invalid Type 0x%02X\r\n", type);
+                SYS_DEBUG_PRINT(SYS_ERROR_DEBUG, "[APP_USI] Invalid Type 0x%02X\r\n", type);
             }        
             break;
         }
@@ -265,7 +265,7 @@ void APP_USI_DEVICE_ProtocolEventHandler(uint8_t *pData, size_t length)
         {
             bool onoff;
             
-            SYS_DEBUG_PRINT(SYS_ERROR_INFO, "[APP_USI_DEVICE] Set PANEL LED\r\n");
+            SYS_DEBUG_PRINT(SYS_ERROR_INFO, "[APP_USI] Set PANEL LED\r\n");
             index = *pData++ ;
             type = APP_COORDINATOR_deviceTypeByIndex(index);
 
@@ -287,13 +287,13 @@ void APP_USI_DEVICE_ProtocolEventHandler(uint8_t *pData, size_t length)
                 }
                 else
                 {
-                    SYS_DEBUG_PRINT(SYS_ERROR_ERROR, "[APP_USI_DEVICE] Device Type 0x%02X not joined\r\n", type);
+                    SYS_DEBUG_PRINT(SYS_ERROR_ERROR, "[APP_USI] Device Type 0x%02X not joined\r\n", type);
                 }
             }
             else
             {
                 // Invalid password
-                SYS_DEBUG_PRINT(SYS_ERROR_ERROR, "[APP_USI_DEVICE] Invalid Type 0x%02X\r\n", type);
+                SYS_DEBUG_PRINT(SYS_ERROR_ERROR, "[APP_USI] Invalid Type 0x%02X\r\n", type);
             }   
             break;
         }
@@ -305,7 +305,7 @@ void APP_USI_DEVICE_ProtocolEventHandler(uint8_t *pData, size_t length)
             if ((type == TYPE_LIGHTING_INDOOR) || (type == TYPE_LIGHTING_OUTDOOR))
             {
                 onoff = *pData++;
-                SYS_DEBUG_PRINT(SYS_ERROR_INFO, "[APP_USI_DEVICE] Set Light 0x%02X - %s\r\n", type, onoff? "true" : "false");
+                SYS_DEBUG_PRINT(SYS_ERROR_INFO, "[APP_USI] Set Light 0x%02X - %s\r\n", type, onoff? "true" : "false");
                 APP_COORDINATOR_deviceDoSnapshot(&device_info_usi);            
                 bool joined = APP_COORDINATOR_deviceGetJoinedSnapshot(device_info_usi, type);
                 if (joined)
@@ -321,13 +321,13 @@ void APP_USI_DEVICE_ProtocolEventHandler(uint8_t *pData, size_t length)
                 }
                 else
                 {
-                    SYS_DEBUG_PRINT(SYS_ERROR_ERROR, "[APP_USI_DEVICE] Device Type 0x%02 not joined\r\n", type);
+                    SYS_DEBUG_PRINT(SYS_ERROR_ERROR, "[APP_USI] Device Type 0x%02 not joined\r\n", type);
                 }
             }
             else
             {
                 // Invalid password
-                SYS_DEBUG_PRINT(SYS_ERROR_ERROR, "[APP_USI_DEVICE] Invalid Type 0x%02X\r\n", type);
+                SYS_DEBUG_PRINT(SYS_ERROR_ERROR, "[APP_USI] Invalid Type 0x%02X\r\n", type);
             }  
             break;
         }            
@@ -356,7 +356,7 @@ void APP_USI_DEVICE_Initialize ( void )
     app_usi_deviceData.state = APP_USI_DEVICE_STATE_INIT;
     app_usi_deviceData.timerDelay = SYS_TIME_HANDLE_INVALID;
     
-    SYS_DEBUG_PRINT(SYS_ERROR_INFO, "[APP_USI_DEVICE] Init\r\n");
+    SYS_DEBUG_PRINT(SYS_ERROR_INFO, "[APP_USI] Init\r\n");
 
 }
 
@@ -384,7 +384,7 @@ void APP_USI_DEVICE_Tasks ( void )
             {
                 /* Set Application to next state */
                 app_usi_deviceData.state = APP_USI_DEVICE_STATE_CONFIG;
-                SYS_DEBUG_MESSAGE(SYS_ERROR_INFO, "[APP_USI_DEVICE] USI Opened\r\n");
+                SYS_DEBUG_MESSAGE(SYS_ERROR_INFO, "[APP_USI] USI Opened\r\n");
             }
             else
             {
@@ -398,7 +398,7 @@ void APP_USI_DEVICE_Tasks ( void )
         {
             if (SRV_USI_Status(app_usi_deviceData.srvUSIHandle) == SRV_USI_STATUS_CONFIGURED)
             {
-                SYS_DEBUG_MESSAGE(SYS_ERROR_DEBUG, "[APP_USI_DEVICE] USI Configured\r\n");
+                SYS_DEBUG_MESSAGE(SYS_ERROR_DEBUG, "[APP_USI] USI Configured\r\n");
                 /* Register USI callback */
                 SRV_USI_CallbackRegister(app_usi_deviceData.srvUSIHandle,
                         SRV_USI_PROT_ID_USED, APP_USI_DEVICE_ProtocolEventHandler);
@@ -406,7 +406,7 @@ void APP_USI_DEVICE_Tasks ( void )
                 /* Set Application to next state */
                 app_usi_deviceData.state = APP_USI_DEVICE_STATE_READY;
                 APP_USI_DEVICE_Send_ResetNotification();
-                SYS_DEBUG_MESSAGE(SYS_ERROR_DEBUG, "[APP_USI_DEVICE] USI Reset Notification sent\r\n");
+                SYS_DEBUG_MESSAGE(SYS_ERROR_INFO, "[APP_USI] USI Reset Notification sent\r\n");
                 app_usi_deviceData.timeHeartbeatHandle = SYS_TIME_CallbackRegisterMS(APP_SYS_TIME_CallbackSetFlag,
                         (uintptr_t) &app_usi_deviceData.timeHeartbeatExpired, APP_USI_DEVICE_TIME_HEARTBEAT_MS,
                         SYS_TIME_PERIODIC);
@@ -426,7 +426,7 @@ void APP_USI_DEVICE_Tasks ( void )
             {
                 app_usi_deviceData.timeHeartbeatExpired = false;
                 APP_USI_DEVICE_Send_Heartbeat();
-                SYS_DEBUG_MESSAGE(SYS_ERROR_DEBUG, "[APP_USI_DEVICE] USI Heartbeat sent\r\n");
+                SYS_DEBUG_MESSAGE(SYS_ERROR_DEBUG, "[APP_USI] USI Heartbeat sent\r\n");
             }
             break;
         }

@@ -169,8 +169,8 @@ static void _LBP_COORD_JoinCompleteIndication(uint8_t* pLbdAddress, uint16_t ass
     
     APP_COORDINATOR_deviceInfoRefresh(index, pLbdAddress, assignedAddress, true);
             
-    SYS_DEBUG_PRINT(SYS_ERROR_DEBUG, "APP_EAP_SERVER: New device joined (Short Address: 0x%04X,"
-            " EUI64: 0x%02X%02X%02X%02X%02X%02X%02X%02X)\r\n", assignedAddress,
+    SYS_DEBUG_PRINT(SYS_ERROR_INFO, "APP_EAP_SERVER: New device (%d) joined (Short Address: 0x%04X,"
+            " EUI64: 0x%02X%02X%02X%02X%02X%02X%02X%02X)\r\n", app_eap_serverData.numDevicesJoined, assignedAddress,
             pLbdAddress[0], pLbdAddress[1], pLbdAddress[2], pLbdAddress[3],
             pLbdAddress[4], pLbdAddress[5], pLbdAddress[6], pLbdAddress[7]);
     
@@ -265,8 +265,8 @@ static void _LBP_COORD_LeaveIndication(uint16_t networkAddress)
         memset(app_eap_serverExtAddrList[index].value, 0, ADP_ADDRESS_64BITS);
         app_eap_serverData.numDevicesJoined--;
         
-        SYS_DEBUG_PRINT(SYS_ERROR_DEBUG, "APP_EAP_SERVER: Device left "
-                "(Short Address: 0x%04X)\r\n", networkAddress);
+        SYS_DEBUG_PRINT(SYS_ERROR_INFO, "APP_EAP_SERVER: Device (%d) left "
+                "(Short Address: 0x%04X)\r\n", app_eap_serverData.numDevicesJoined, networkAddress);
     }
 }
 
@@ -425,7 +425,7 @@ void APP_EAP_SERVER_KickDevice(uint16_t shortAddress)
             {
                 /* Remove the device from the joined devices list */
                 memset(pExtAddr->value, 0, ADP_ADDRESS_64BITS);
-                SYS_DEBUG_PRINT(SYS_ERROR_DEBUG, "APP_EAP_SERVER: Device 0x%04X kicked\r\n", shortAddress);
+                SYS_DEBUG_PRINT(SYS_ERROR_INFO, "APP_EAP_SERVER: Device (%d) 0x%04X kicked\r\n", app_eap_serverData.numDevicesJoined, shortAddress);
                 app_eap_serverData.numDevicesJoined--;
             }
         }
