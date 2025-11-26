@@ -27,8 +27,14 @@ Checkout the <a href="https://microchipsupport.force.com/s/" target="_blank">Tec
     - [MCC Content Libraries](#mcc-content-libraries)
     - [Harmony MCC Configuration](#harmony-mcc-configuration)
 - [Application](#application)
+  - [G3 Hybrid devices](#g3-hybrid-devices)
+  - [Host Controller applications](#host-controller-applications)
   - [Communication Protocol between Host and G3 coordinator](#communication-protocol-between-host-and-g3-coordinator)
+  - [Command Line Interface](#command-line-interface)
+  - [LCD Graphics Interface](#lcd-graphics-interface)
   - [Cloud Connection](#cloud-connection)
+    - [WiFi Connection](#wifi-connection)
+    - [LTE Connection](#lte-connection)
 - [Board Programming](#board-programming)
 - [Run the demo](#run-the-demo)
 
@@ -40,7 +46,8 @@ PIC32CZCA80 host controller receives network data from the coordinator via USI i
 | TOOLS                                                                                                                                     | QUANTITY |
 | :---------------------------------------------------------------------------------------------------------------------------------------- | :------- |
 | [PIC32CZ CA80 Curiosity Ultra Development Board](https://www.microchip.com/en-us/development-tool/ev51s73a)                               | 1        |
-| [LCD Display](https://www.digikey.de/en/products/detail/precision-design-associates-inc/TM7000B/5799782)                                  | 1        |
+| [WVGA LCD Display with MaxTouch](https://www.microchip.com/en-us/development-tool/ac320005-5)| 1 |
+[SSD1963 LCD Controller Graphics Card](https://www.microchip.com/en-us/development-tool/ac320214) | 1 |
 | [WINCS02 Add-on Board](https://www.microchip.com/en-us/development-tool/ev68g27a)                                                         | 1        |
 | [MIKROBUS XPLAINED PRO](https://www.microchip.com/en-us/development-tool/atmbusadapter-xpro)                                              | 1        |
 | [LTE IoT 10 Click](https://www.mikroe.com/lte-iot-10-click)              | 1        |
@@ -52,11 +59,11 @@ PIC32CZCA80 host controller receives network data from the coordinator via USI i
 - Connect the power supply on J100
 - Connect Debug USB (J200) to PC
 - Connect USI interface to coordinator
-  - Connect PD24 and PD25 available on J401 to PB13 and PB12 (available on test point array J9 Pin 7 and 6) on WBZ451
+  - Connect PD24 and PD25 available on J401 to PB13 and PB12 (available on test point array J9 Pin 7 and 6) on WBZ451 acting like coordinator 
 - Connect the SSD1963 LCD Controller Card to the Graphics Connector
 - Connect the WVGA LCD Display to the SSD1963 LCD Controller Card
 - Connect the WINCS02 Add-on Board on microBUS header using the stacking header
-  - connect mikroBus pins: 2-10, 15
+  - connect mikroBus pins: 2-10 and 15, avoiding SERCOM0 (PC0-PC1 pins) and SERCOM1 (PC4-PC7 pins)
 - Connect the MIKROBUS XPLAINED PRO on EXT2 header
   - connect +5V and +3.3V at External Power Header of mikroBUS Xplained Pro, remove voltage selection jumper
 - Connect the LTE IoT 10 Click on microBus of the MIKROBUS XPLAINED PRO using the stacking header
@@ -66,14 +73,15 @@ PIC32CZCA80 host controller receives network data from the coordinator via USI i
 [TOP](#contents)
 
 ## Software Setup
-#### Development Tools
+### Development Tools
   - MPLAB® X IDE v6.20
   - MPLAB® X IDE plug-ins: MPLAB® Code Configurator (MCC) v5.7.1 and above
   - MPLAB® XC32 C/C++ Compiler v4.60
   - MPLAB® Harmony v3
-  - Device Pack: PIC32CZ-CA80_DFP (1.4.158)
+  - Device Library: 1.5.5
+  - Device Pack: PIC32CZ-CA80_DFP (1.6.163)
 
-#### MCC Content Libraries
+### MCC Content Libraries
 | Harmony V3 component | version |
 | :------------------- | :------ |
 | core                 | v3.15.3 |
@@ -89,61 +97,128 @@ PIC32CZCA80 host controller receives network data from the coordinator via USI i
 | bsp                  | v3.22.0 |
 
 
-#### Harmony MCC Configuration
-<img src="../images/MCCconfigurationHost.png" width=1000>
+### Harmony MCC Configuration
 
-## Application
+#### Full Configuration
+![Host Controller MCC Full Configuration](docs/MCCFullConfiguration.png)
 
-<b>The main functionalities of the host controller are:</b>
-- receive/request G3 network data from the G3 Coordinator
-- make G3 network data visible on the touch screen
-- control G3 devices from touch screen
-- make connection with the Cloud through Wi-Fi or LTE on the touch screen
-- make G3 network data visible on IoT dashboard via Wi-Fi and/or LTE connection
-- control G3 devices from IoT dashboard via Wi-Fi and/or LTE connection
-- make G3 network data visible on the command line interface
-- control G3 coordinator and devices from the command line interface
-- printout debug data on UART interface
+#### System Console, Debugging and Command Line Interface
+The system console is configured to use SERCOM1 in USART mode and is accessible via the DEBUG USB connector.
+![Host Controller MCC SERCOM1 Configuration](docs/MCCSERCOM1console.png)
 
-### G3 Hybrid devices
+In addition to standard console functions, it supports debugging and provides a command line interface for direct interaction with the board.
 
-The G3 devices connected into the G3 coordinator managed by the host controller and their functionalties are:
+![Host Controller MCC Console+Debug+CmdLine Configuration](docs/MCCConsoleDebugCmdLine.png)
 
-| NAME | DEVICE_TYPE | DEMO | FEATURE |
-| :- | :- | :- | :- |
-|Indoor Lighting|0x10|Smart Lighting Demo|Controls the indoor light state|
-|Outdoor Lighting|0x11|Smart Lighting Demo|Controls the outdoor light state|
-|Liquid Detector|0x13|Sustainability Wall Demo|Keep availability|
-|Solar Inverter|0x14|Sustainability Wall Demo|Keep availability|
-|Battery Charger|0x15|Sustainability Wall Demo|Keep availability|
-|Energy Storage|0x16|Sustainability Wall Demo|Keep availability|
-|Heat Pump|0x17|Sustainability Wall Demo|Keep availability|
-|EV Charger|0x18|Sustainability Wall Demo|Keep availability|
-|Electricity Meter|0x19|Sustainability Wall Demo|Keep availability|
-|Emergency Button|0x1A|Hybrid IoT BP|Generate Alarms|
-|LED Panel|0x1B|Hybrid IoT BP|Controls LED Panel state|
+#### LCD Screen and Max Touch
+The application manages an LCD screen connected via the EBI interface through an SD1369 controller. Touch functionality is enabled and controlled using SERCOM0 configured in I2C mode.
 
-### Host Controller applications
+![Host Controller MCC LCD+Touch Screen Configuration](docs/MCC_LCD_MaxTouch_Configuration.png)
 
-The Host Controller is based on different application files:
-- app_coordinator: implements the features related with the interaction and information management of G3 Network through a USI serialization with the G3 Coordinator.
-- app_wifi: implements the features related with the connection to Internet and the Cloud throught a WiFi network using the Microchip WINCS02 device. 
-- app_lte: implements the features related with the connection to Internet and the Cloud throught a WiFi network using a LTE-M/NB-IoT module from Sequans.
-- app_ui: implements the interface between the differents applications and the applications related with the graphics. The communication is bases on registering notifications and a messages queue.
-- app_screen_main: implements the features related with the OnShow, OnHide and OnUpdate events on the touch screen related with the main screen
-- app_screen_swall: implements the features related with the OnShow, OnHide and OnUpdate events on the touch screen related with devices taking part of the Sustainability Wall Demo
-- app_screen_lighting: implements the features related with the OnShow, OnHide and OnUpdate events on the touch screen related with devices taking part of the Smart Lighting Demo
-- app_interface: implements a command line mechanism to interface with the G3 coordinator and the G3 network (through a queue implemented in the app_coordinator) and manage local information and features (like registered devices information)
+#### MicroSD Storage System
+The application includes a mechanism to store information on a microSD card connected to the designated connector.
 
-### Communication Protocol between Host and G3 coordinator
+![Host Controller MCC uSD Storage Configuration](docs/MCCuSDstorage.png)
+
+As a result of this configuration, SERCOM6 is dedicated to microSD communication and is not available for other purposes. The FAT file system has been selected for data storage.
+
+#### WINCS02 Configuration
+The application configures the WINCS02 module using SERCOM3 in SPI mode.
+
+![Host Controller MCC SERCOM3 configuration](docs/MCC_SERCOM3_wifi.png)
+
+The WINCS02 module provides the following services:
+
+- Wi-Fi connectivity for network access
+- Wi-Fi provisioning (Access Point mode) to configure Wi-Fi connection parameters
+- MQTT protocol support for connecting to cloud services
+
+![Host Controller MCC WINCS02 configuration](docs/MCC_WINCS02.png)
+
+![Host Controller MCC WINCS02 WiFi service configuration](docs/MCC_WiFi_Service.png)
+
+#### LTE Module Configuration
+The application is able to configure a Sequance LTE module using the SERCOM4 in Serial Port mode.
+
+![Host Controller MCC SERCOM4 configuration](docs/MCC_SERCOM4_lte.png)
+
+#### USI Serialization with WBZ451 Coordinator
+The application manages communication with the WBZ451 Coordinator by utilizing SERCOM8 in Serial Port mode.
+
+![Host Controller MCC SERCOM8 configuration](docs/MCC_SERCOM8_usi.png)
+
+This communication is based on the USI (Universal Serial Interface) Service from Smart Energy. 
+
+![Host Controller MCC USI service configuration](docs/MCC_USI.png)
+
+#### USB Host to supply power to WBZ451 Coordinator
+The application is capable of supplying power to the WBZ451 Coordinator via the USB-C connector (USB1), which operates as a USB Host with VBUS support.
+
+![Host Controller MCC USB configuration](docs/MCC_USB1_Host_configuration.png)
+![Host Controller MCC USB VBUS enable configuration](docs/MCC_USB_Host_Vbus.png)
+
+There is also an option, not currently implemented, to transfer the USI communication from SERCOM8 to the USB connection. To enable this functionality, HUB support must be activated in accordance with the hardware configuration of the WBZ451 Curiosity board.
+
+![Host Controller MCC USB HOST enable configuration](docs/MCC_USB_Host_Vbus.png)
+
+[TOP](#contents)
+
+### Application
+
+<b>The main functionalities of the host controller include:</b>
+- Receiving and requesting G3 network data from the G3 Coordinator
+- Displaying G3 network data on the touch screen
+- Controlling G3 devices via the touch screen interface
+- Establishing cloud connectivity through Wi-Fi or LTE, accessible from the touch screen
+- Presenting G3 network data on the IoT dashboard via Wi-Fi and/or LTE connection
+- Controlling G3 devices from the IoT dashboard through Wi-Fi and/or LTE connection
+- Displaying G3 network data on the command line interface
+- Managing the G3 Coordinator and devices from the command line interface
+- Printing debug data on the UART interface
+
+#### G3 Hybrid devices
+
+The G3 devices connected to the G3 Coordinator and managed by the host controller, along with their functionalities, are as follows::
+
+| NAME            | DEVICE_TYPE | DEMO                   | FEATURE                        |
+| :-              | :-          | :-                     | :-                             |
+|Indoor Lighting  |0x10         |Smart Lighting Demo     |Controls the indoor light state |
+|Outdoor Lighting |0x11         |Smart Lighting Demo     |Controls the outdoor light state|
+|Liquid Detector  |0x13         |Sustainability Wall Demo|Monitors availability           |
+|Solar Inverter   |0x14         |Sustainability Wall Demo|Monitors availability           |
+|Battery Charger  |0x15         |Sustainability Wall Demo|Monitors availability           |
+|Energy Storage   |0x16         |Sustainability Wall Demo|Monitors availability           |
+|Heat Pump        |0x17         |Sustainability Wall Demo|Monitors availability           |
+|EV Charger       |0x18         |Sustainability Wall Demo|Monitors availability           |
+|Electricity Meter|0x19         |Sustainability Wall Demo|Monitors availability           |
+|Emergency Button |0x1A         |Hybrid IoT BP           |Generate Alarms                 |
+|LED Panel        |0x1B         |Hybrid IoT BP           |Controls LED Panel state        |
+
+Each device is integrated into the G3 network and provides specific control or monitoring features as outlined above.
+
+#### Host Controller applications
+
+The Host Controller is structured around several application files, each responsible for specific functionalities:
+
+- <b>app_coordinator</b>: Manages interaction and information exchange with the G3 Network via USI serialization with the G3 Coordinator.
+- <b>app_wifi</b>: Handles Internet and Cloud connectivity over Wi-Fi using the Microchip WINCS02 device. 
+- <b>app_lte</b>: Manages Internet and Cloud connectivity through an LTE-M/NB-IoT module from Sequans.
+- <b>app_ui</b>: Serves as the interface between various applications and graphics-related modules, utilizing notification registration and a message queue for communication.
+- <b>app_screen_main</b>:  Implements OnShow, OnHide, and OnUpdate event handling for the main touch screen interface.
+- <b>app_screen_signaling</b>: Manages OnShow, OnHide, and OnUpdate events for the touch screen interfaces related to Emergency Button and LED Panel devices.
+- <b>app_screen_swall</b>: Handles OnShow, OnHide, and OnUpdate events for devices featured in the Sustainability Wall Demo on the touch screen.
+- <b>app_screen_lighting</b>: Manages OnShow, OnHide, and OnUpdate events for devices included in the Smart Lighting Demo on the touch screen.
+- <b>app_interface</b>: Provides a command line interface for interacting with the G3 Coordinator and G3 network (via a queue in app_coordinator), and manages local information and features such as registered device data.
+
+#### Communication Protocol between Host and G3 coordinator
 
 The communication protocol between host and G3 coodinator runs over the USI Service serialization from <a href="https://github.com/Microchip-MPLAB-Harmony/smartenergy" target="_blank">Microhip MPLAB Harmony smartenergy repository</a>.
 
-The communication starts with the notification from the G3 Coordinator of a reset (in a typical situation) or a heartbeat (if unmanaged reset happens on the host). After that event, the host will start requesting the full device information in a cycling way (each minute in a normal situation) to keep their availability. The ping mechanism is based on the request of the device type and the answer from the device. When a device is alive, any additional command to interact with it can be sent.
+Communication is initiated when the G3 Coordinator sends a notification of a reset (under normal conditions) or a heartbeat (if an unmanaged reset occurs on the host). Following this event, the host controller begins to periodically request complete device information, typically every minute, to monitor device availability.
 
-The ping mechanism is based on the request of the device type and the answer from the device. When a device is alive, any additional command to interact with it can be sent.
+The ping mechanism operates by requesting the device type and awaiting a response from the device. If the device responds, it is considered active, and the host can then send additional commands to interact with it.
 
-The communication protocol commands implemented are based on the G3 coordinator commands to interact with G3 devices on the network and additional commands to handle/notify information/events available on G3 Coordinator.
+The communication protocol utilizes G3 Coordinator commands to manage and interact with G3 devices on the network. It also includes supplementary commands to handle and notify information or events reported by the G3 Coordinator.
 
 | ID   | NAME                    | SOURCE | DESTINATION | FEATURE                                      |
 | :--- | :---------------------- | :----- | :---------- | :------------------------------------------- |
@@ -159,125 +234,140 @@ The communication protocol commands implemented are based on the G3 coordinator 
 | 0xE3 | CMD_RESET_NOTIFICATION  | COORD  | HOST        | Coordinator reset occured                    |
 | 0xE4 | CMD_HEARTBEAT           | COORD  | HOST        | Coordinator heartbeat, received periodically |
 
-### Command Line Interface
+#### Command Line Interface
 
 The project includes a CLI with these commands:
 
-| COMMAND | PARAMS | Description |
-| :- | :- | :- | 
-|SET_LIGHT|<X(dest)> <0-1>|Set light 0:off, 1:on|
-|SET_PANEL_INFO|<X(dest)> <0-1>|Set Panel Led (0:Logo, 1:Alarm)|
-|SET_RGB|<X(dest)> <X(H)> <X(S)> <X(V)>|Set RGB Led colour - HSV Format|
-|SET_RGBB|<X(dest)> <X(H)> <X(S)> <X(V)> <X(freq)> <X(time)>|Set RGB Led Colour, Blink and Duration|
-|PING|<X(dest)>| Ping device X|
-|REGDEV|None|Show registered G3 devices|
-|DBGLVL|<0-4>|Debug Level <Fatal,Error,Warning,Info,Debug>|
-|CRST|None|Resets the G3 Coordinator|
-|POWER|<0-1>| Coordinator Power 0:off, 1:on |
-|SET_WIFI|<SSID> <PASS> <SEC>| Sets WiFi Parameters ssid, pass and security (0-5)|
-|GET_WIFI|None| Gets WiFi Parameters ssid, pass and security|
+| COMMAND      | PARAMS                                           | Description                                       |
+| :-           | :-                                               | :-                                                |
+|SET_LIGHT     |<X(dest)> <0-1>                                   |Set light 0:off, 1:on                              |
+|SET_PANEL_INFO|<X(dest)> <0-1>                                   |Set Panel Led (0:Logo, 1:Alarm)                    |
+|SET_RGB       |<X(dest)> <X(H)> <X(S)> <X(V)>                    |Set RGB Led colour - HSV Format                    |
+|SET_RGBB      |<X(dest)> <X(H)> <X(S)> <X(V)> <X(freq)> <X(time)>|Set RGB Led Colour, Blink and Duration             |
+|PING          |<X(dest)>                                         |Ping device X                                      |
+|REGDEV        |None                                              |Show registered G3 devices                         |
+|DBGLVL        |<0-4>                                             |Debug Level <Fatal,Error,Warning,Info,Debug>       |
+|CRST          |None                                              |Resets the G3 Coordinator                          |
+|POWER         |<0-1>                                             |Coordinator Power 0:off, 1:on                      |
+|SET_WIFI      |<X(SSID)> <X(PWD)> <X(SEC)>                       |Sets WiFi Parameters ssid, pass and security (0-5) |
+|GET_WIFI      |None                                              |Gets WiFi Parameters ssid, pass and security       |
 
 where:
-| Device | X(dest)
-| :- | :- |
-|Indoor Lighting|0|
-|Outdoor Lighting|1|
-|Liquid Detector|3|
-|Solar Inverter|4|
-|Battery Charger|5|
-|Energy Storage|6|
-|Heat Pump|7|
-|EV Charger|8|
-|Electricity Meter|9|
-|Emergency Button|10|
-|LED Panel|11|
+| Device          | X(dest) |
+| :-              | :-      |
+|Indoor Lighting  |0        |
+|Outdoor Lighting |1        |
+|Liquid Detector  |3        |
+|Solar Inverter   |4        |
+|Battery Charger  |5        |
+|Energy Storage   |6        |
+|Heat Pump        |7        |
+|EV Charger       |8        |
+|Electricity Meter|9        |
+|Emergency Button |10       |
+|LED Panel        |11       |
 
-| Color | X(H)
-| :- | :- |
-|Red|00|
-|Yellow|2B|
-|Green|55|
-|Cyan|80|
-|Blue|AA|
-|Magenta|D5|
+| Color | X(H) |
+| :-    | :-   |
+|Red    |00    |
+|Yellow |2B    |
+|Green  |55    |
+|Cyan   |80    |
+|Blue   |AA    |
+|Magenta|D5    |
 
 
-### LCD Graphics Interface
+#### LCD Graphics Interface
 The graphic interface is based on these elements:
 
-#### System Status Icons
+##### System Status Icons
 
-The system status is shown the upper-right part of the screen. It is based on 4 icons related with:
-- Alarm Status: appears when a alarm occurs
+The system status is displayed in the upper-right corner of the screen and is represented by four icons, each indicating a specific operational status:
+
+- <b>Alarm Status</b>: This icon appears when an alarm event occurs.
 
 ![Hybrid IoT System Status](docs/SystemStatus.png)
 
-- G3 Coordinator Status: on "red" or "green" depending on if G3 coordinator is ready or not
+- <b>G3 Coordinator Status</b>: The icon displays "red" when the G3 Coordinator is not ready and "green" when it is operational.
 
 ![Hybrid IoT System Status](docs/SystemStatusG3ready.png)
 
-- Wifi Connection Status: on "red" if WINCS02 is not ready, "yellow" when looking for a WiFi network or "green" when connected.
+- <b>Wifi Connection Status</b>: The icon is "red" if the WINCS02 module is not ready, "yellow" when searching for a Wi-Fi network, and "green" when a connection is established.
 
 ![Hybrid IoT System Status](docs/SystemStatusWifiready.png)
 
-- Cloud Connection Status: on "red" while the WiFi is not ready, switching to "yellow" when WiFi is ready and the application is trying to connect to the Cloud and "green" when connected.
+- <b>Cloud Connection Status</b>: The icon is "red" when Wi-Fi is not ready, "yellow" when Wi-Fi is ready and the system is attempting to connect to the cloud, and "green" when the cloud connection is established.
 
 ![Hybrid IoT System Status](docs/SystemStatusCloudready.png)
 
-#### Main Screen
-On start-up the main screen is shown. Press Start Button to pass to the next screen.
+##### Main Screen
+At start-up, the main screen is displayed. To proceed to the next screen, press the Start button.
 
 ![Hybrid IoT Main Screen](docs/MainScreen.png)
 
-#### Sustainability Wall Screen
-The Sustainability Wall Screen allows to interact with devices on the Sustainability Wall Demo. 
+#### Emergency Systems Screen
+The Emergency System screen provides controls for the Emergency Button and Panel LED devices.
+
+![Hybrid IoT Emergency Systems Screen](docs/SignalingScreenGreenAlarm.png)
+
+Device availability is indicated by the color of the small circle next to each device:
+
+- <b>Red</b>: device is disconnected
+- <b>Yellow</b>: device has joined but its type has not yet been received
+- <b>Green</b>: device is available
+
+When the device picture button is pressed, the system sends a command to the corresponding device (if available) to activate the LED and initiate blinking for 10 seconds.
+
+Pressing the pressed-released switch generates an Alarm command, simulating the action of pressing the Emergency Button.
+
+To navigate to the next screen, press the "Next" button.
+
+##### Sustainability Wall Screen
+The Sustainability Wall screen enables interaction with devices featured in the Sustainability Wall Demo.
 
 ![Hybrid IoT Smart Lighting Screen](docs/SWallScreenMix.png)
 
-For each device, the small circle colour represents the availability:
+By pressing a device picture button, the system sends a command to the selected device (if available) to activate the RGB LED in cyan and initiate blinking for 10 seconds.
 
-- Red: device disconnected
-- Yellow: device joined but still not received the device type
-- Green: device available
+To proceed to the next screen, press the "Next" button.
 
-Pressing the device picture button, the system sends a command to the corresponding device (if available) to set the RGB LED on cyan and blinking during 10 seconds.
+##### Smart Lighting Screen
 
-#### Smart Lighting Screen
-The Smart Lighting Screen allows to interact with devices on the Smart Lighting Demo:
+The Smart Lighting screen provides control over devices included in the Smart Lighting Demo:
 
 - Indoor Lighting
 - Outdoor Lighting
 
 ![Hybrid IoT Smart Lighting Screen](docs/LightingScreenOffOn.png)
 
-Pressing the device picture button, the system sends a command to the corresponding device to set the RGB LED on cyan and blinking during 10 seconds.
+Pressing a device picture button sends a command to the selected device to activate the RGB LED in cyan and initiate blinking for 10 seconds.
 
-Pressing the on-off switch, the system sends a command to the corresponding device to switch on-off the light.
+Using the on-off switch, you can send a command to the corresponding device to toggle the light on or off.
 
-Pressing th "Next" button, the screen is replaced by the next screen.
+To move to the next screen, press the "Next" button.
 
-### Cloud Connection
+#### Cloud Connection
 The MQTT broker used for this demo is KaaIoT, and the corresponding dashboard is shown below:
 <img src="../images/KaaIoTdashboard.png" width=1000>
 
 All the MQTT connection parameters (including the broker URL, authentication credentials and topics for subscription and publication) are configured in [configuration.h](./firmware/src/config/lcc_rgb565_mxt_cz_ca80_cu/configuration.h#L92).
 
-#### Wi-Fi Connection
+##### Wi-Fi Connection
 
-Wi-Fi connection is established using the WINCS02 Add On Board. After powering up the host, the device initializes automatically, establishes a Wi-Fi connection and connects to the MQTT broker. By subscribing to relevant topics, the device can receive data from the broker, while publishing topics allows it to send data.  
+Wi-Fi connectivity is managed using the WINCS02 Add-On Board. Upon powering up the host, the device automatically initializes, establishes a Wi-Fi connection, and connects to the MQTT broker. By subscribing to relevant topics, the device can receive data from the broker, while publishing topics enables it to send data.  
 
-To change Wi-Fi credentials there are different ways:
-- Change hard coded default credentials in [configuration.h](./firmware/src/config/lcc_rgb565_mxt_cz_ca80_cu/configuration.h#L320)
-- Use Wi-Fi provisioning (started automatically in case connection with default credentials can`t be established)
-  - connect to SSID 'AP_HYBRID_IOT' and password 'microchip' via mobile phone
-  - use App 'Wi-Fi Provisioning' from Microchip
-  - enter Server IP Address: 192.168.1.1, Port: 80 -> connect
-  - choose WiFi network, enter password and send
-- use microSD card containing a file called wifiCfg.txt with content "ssid=XXX,key=XXX,sec=X"
+Wi-Fi credentials can be updated using the following methods:
+- Modify the hard-coded default credentials [configuration.h](./firmware/src/config/lcc_rgb565_mxt_cz_ca80_cu/configuration.h#L320)
+- Use Wi-Fi provisioning, which starts automatically if the connection with default credentials cannot be established:
+  - connect to the SSID 'AP_HYBRID_IOT' with the password 'microchip' using a mobile phone
+  - use the 'Wi-Fi Provisioning' app from Microchip
+  - enter the Server IP Address: 192.168.1.1 and Port: 80, then connect
+  - Select the desired Wi-Fi network, enter the password, and submit.
+- Insert a microSD card containing a file named wifiCfg.txt with the format: "ssid=XXX,key=XXX,sec=X".
   
-In case microSD card is plugged, the credentials given on Wi-Fi provisioning are also stored on microSD card and are used on next reset.
+If a microSD card is present, any credentials entered during Wi-Fi provisioning are also saved to the microSD card and will be used on the next system reset.
 
-#### LTE Connection
+##### LTE Connection
 
 LTE connection is established using the LTE IoT 10 Click board. After powering up the host, the device initializes automatically, registers on the network and connects to the MQTT broker. By subscribing to relevant topics, the device can receive data from the broker, while publishing topics allows it to send data.
 
@@ -300,6 +390,12 @@ USART configuration:
 - Parity mode: no parity
 - Stop bit mode: 1 Stop bit
 
+Connect all devices to the G3 network and switch on the Blue Panel power supply.
+Wait for the devices to register; the connection icon will turn green for each device as it becomes available on the network.
+
+You can interact with the devices by pressing their icons, toggling lighting devices on or off, or generating alarms by pressing the Emergency Button or the corresponding button on the screen.
+
+[TOP](#contents)
 
 ## Links
 
