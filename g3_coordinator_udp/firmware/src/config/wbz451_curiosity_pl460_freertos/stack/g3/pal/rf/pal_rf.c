@@ -94,6 +94,8 @@ static PAL_RF_PHY_STATUS palRfPhyStatus[] = {
 /* Define a semaphore to signal the PAL RF Tasks to process Tx/Rx packets */
 static OSAL_SEM_DECLARE(palRFSemID);
 
+static uint8_t maxPower = 12;
+
 // *****************************************************************************
 // *****************************************************************************
 // Section: File Scope Functions
@@ -178,26 +180,26 @@ static void lPAL_RF_ReportResultTX(PAL_RF_PHY_STATUS status, uint64_t timeStamp,
 
 }
 
-static PAL_RF_PIB_RESULT lPAL_RF_setRFNetworkParameters(void)
+static PAL_RF_PIB_RESULT lPAL_RF_setRFNetworkParameters(uint8_t channel, uint8_t channel_page, uint8_t cca_mode)
 {
     PibValue_t pibValue;
     PHY_Retval_t attributeStatus;
 
-    pibValue.pib_value_8bit = (uint8_t)CHANNEL_TRANSMIT_RECEIVE;
+    pibValue.pib_value_8bit = channel;
     attributeStatus = PHY_PibSet(phyCurrentChannel, &pibValue);
     if (attributeStatus != PHY_SUCCESS)
     {
         return PAL_RF_PIB_INVALID_PARAM;
     }
 
-    pibValue.pib_value_8bit = (uint8_t)CHANNEL_PAGE_TRANSMIT_RECEIVE;
+    pibValue.pib_value_8bit = channel_page;
     attributeStatus = PHY_PibSet(phyCurrentPage, &pibValue);
     if (attributeStatus != PHY_SUCCESS)
     {
         return PAL_RF_PIB_INVALID_PARAM;
     }
 
-    pibValue.pib_value_8bit = (uint8_t)CCA_MODE;
+    pibValue.pib_value_8bit = cca_mode;
     attributeStatus = PHY_PibSet(phyCCAMode, &pibValue);
     if (attributeStatus != PHY_SUCCESS)
     {
@@ -376,7 +378,7 @@ SYS_MODULE_OBJ PAL_RF_Initialize(const SYS_MODULE_INDEX index,
     palRfData.txTimer = SYS_TIME_HANDLE_INVALID;
 
     /* Set RF Network Parameters */
-    if (lPAL_RF_setRFNetworkParameters() != PAL_RF_PIB_SUCCESS)
+    if (lPAL_RF_setRFNetworkParameters(CHANNEL_TRANSMIT_RECEIVE, CHANNEL_PAGE_TRANSMIT_RECEIVE, CCA_MODE) != PAL_RF_PIB_SUCCESS)
     {
         return SYS_MODULE_OBJ_INVALID;
     }
@@ -552,11 +554,18 @@ PAL_RF_TX_HANDLE PAL_RF_TxRequest(PAL_RF_HANDLE handle, uint8_t *pData,
         palRfData.csmaMode = NO_CSMA_NO_IFS;
     }
 
+    if (maxPower > 12)
+    {
+        pwrDbm = 12;
+    }
+    else
+    {
     /* Set Tx Power (Power value in dBm (-14dBm to 12dBm))*/
-    pwrDbm = 12 - (int16_t)txParameters->txPowerAttenuation;
+        pwrDbm = maxPower - (int16_t)txParameters->txPowerAttenuation;
     if (pwrDbm < -14)
     {
         pwrDbm = -14;
+    }
     }
 #endif
 
@@ -797,7 +806,7 @@ PAL_RF_PIB_RESULT PAL_RF_GetRfPhyPib(PAL_RF_HANDLE handle, PAL_RF_PIB_OBJ *pibOb
     }
 
     case PAL_RF_PIB_PHY_MAX_TX_POWER:
-        *((int8_t *)pData) = 12;
+        *((int8_t *)pData) = maxPower;
         break;
 
     case PAL_RF_PIB_PHY_TURNAROUND_TIME:
@@ -1040,6 +1049,11 @@ PAL_RF_PIB_RESULT PAL_RF_SetRfPhyPib(PAL_RF_HANDLE handle, PAL_RF_PIB_OBJ *pibOb
         break;
     }
 
+    case PAL_RF_PIB_PHY_MAX_TX_POWER:
+    {
+        maxPower = pibObj->pData[0];
+        break;
+    }            
     case PAL_RF_PIB_PHY_CCA_ED_THRESHOLD_DBM:
     case PAL_RF_PIB_PHY_CCA_ED_THRESHOLD_SENSITIVITY:
     case PAL_RF_PIB_PHY_CCA_ED_SAMPLE:

@@ -9653,7 +9653,9 @@
          <key class="com.microchip.mcc.core.tokenManager.CustomKey" moduleName="g3PalRf" name="G3_PAL_RF_PHY_CHANNEL"/>
          <value>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;g3PalRf&gt;
   &lt;g3PalRf dnOrder=&quot;0&quot; id=&quot;G3_PAL_RF_PHY_CHANNEL&quot;&gt;
-    &lt;Values dnOrder=&quot;0&quot;/&gt;
+    &lt;Values dnOrder=&quot;0&quot;&gt;
+      &lt;User dnOrder=&quot;0&quot; value=&quot;26&quot;/&gt;
+    &lt;/Values&gt;
   &lt;/g3PalRf&gt;
 &lt;/g3PalRf&gt;
 </value>

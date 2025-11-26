@@ -41,8 +41,17 @@ According with G3 technologies[*](#links) each G3 network requires the existence
 | TOOLS | QUANTITY |
 | :- | :- |
 | [PIC32CX-BZ2 and WBZ451 Curiosity Development Board](https://www.microchip.com/en-us/development-tool/EV96B94A) | 1 |
-| [PL460 Evaluation Kit](https://www.microchip.com/en-us/development-tool/ev13l63a) | 1 |
+| [PL460 Evaluation Kit (rev4)](https://www.microchip.com/en-us/development-tool/ev13l63a) | 1 |
 | [MikroBUS to PL460-EK adaptation board](docs/WBZ451mikroBUStoPL460EKadapter.png) | 1 |
+
+## Hardware Setup
+- Connect the power supply on J7
+- Connect a USB cable on J7 for device programming and debugging with terminal program
+- Connect PB13 and PB12 (available removing R11 and R16) on WBZ451 acting like coordinator to PD24 and PD25 available on J401 of PIC32CZCA80 Host Controller.
+- The PL460-EK rev4 need to be modified with these changes:
+  - Replace C9 by a 10K Pull Down resistor to GND (PL460_NRST)
+  - Include 10K Pull Up resistor to 3V3 on PL460_ENABLE and cut trace to XPLAINED PRO connector
+  - Include 10K Pull Down resistor to GND on PL460_STBY and cut trace to XPLAINED PRO connector
 
 
 ## Software Setup
@@ -55,22 +64,76 @@ According with G3 technologies[*](#links) each G3 network requires the existence
 ## MCC Content Libraries
 
 | Harmony MCC dependencies | version |
-| :- | :- |
-| bsp | v3.22.0 |
-| csp | v3.22.0 |
-| core | v3.15.0 |
-| CMSIS_5 | v5.9.0 |
-| wireless_pic32cxbz_wbz | v1.6.0 |
-| wolfssl | v5.4.0 |
-| crypto | v3.8.1 |
-| wireless_phy | v1.4.0 |
-| wireless_mac | v1.2.0 |
-| CMSIS-FreeRTOS | v10.4.6 |
+| :-                       | :-      |
+| bsp                      | v3.22.0 |
+| csp                      | v3.22.0 |
+| core                     | v3.15.0 |
+| CMSIS_5                  | v5.9.0  |
+| wireless_pic32cxbz_wbz   | v1.6.0  |
+| wolfssl                  | v5.4.0  |
+| crypto                   | v3.8.1  |
+| wireless_phy             | v1.4.0  |
+| wireless_mac             | v1.2.0  |
+| CMSIS-FreeRTOS           | v10.4.6 |
 
 ## Harmony MCC Configuration
 
+### Full Configuration
+
 The full MCC configuration is:
 ![G3 coordinator MCC configuraion](docs/MCCconfiguration.png)
+
+### System Console, Debugging and Command Line Interface
+The system console is configured to use SERCOM1 in USART mode and is accessible via the DEBUG USB connector.
+
+![G3 Coordinator MCC SERCOM1 Configuration](docs/MCC_SERCOM1_console_cmdline.png)
+![G3 Coordinator MCC SERCOM1 Pins Configuration](docs/MCC_Pins_SERCOM1.png)
+
+In addition to standard console functions, it supports debugging and provides a command line interface for direct interaction with the board.
+
+![G3 Coordinator MCC Console+Debug+CmdLine Configuration](docs/MCCConsoleDebugCmdLine.png)
+
+### G3 and PL460-EK interface
+
+The G3 coordinator is configured to use SERCOM0 in SPI mode to access the PL460-EK.
+
+![G3 Coordinator MCC SERCOM0 Configuration](docs/MCC_SERCOM0_spi_pl460.png)
+
+The project uses MAC real time features on FCC band with default values for PLC PHY coupling. 
+
+![G3 Coordinator MACrt for FCC band Configuration](docs/MCC_G3macrt.png)
+
+The PIN configuration for the PL460 interface is:
+
+![G3 Coordinator PL460 Interface Pin Configuration](docs/MCC_Pins_PL460.png)
+
+The G3 stack full configuration is:
+
+![G3 Coordinator Stack Full Configuration](docs/MCC_G3stack_main.png)
+
+The G3 stack is configured in mode Hybrid PLC & RF with PAN Coordinator as role.
+
+![G3 Coordinator Stack Configuration](docs/MCC_G3stack.png)
+
+### USI Serialization with Host Controller
+The application manages communication with the PIC32CZCA Host Controller by utilizing SERCOM3 in Serial Port mode.
+
+![G3 Coordinator MCC SERCOM3 Configuration](docs/MCC_SERCOM3_usi.png)
+![G3 Coordinator MCC SERCOM3 Pins Configuration](docs/MCC_Pins_SERCOM3.png)
+
+This communication is based on the USI (Universal Serial Interface) Service from Smart Energy. 
+
+![G3 Coordinator MCC USI service Configuration](docs/MCC_USI.png)
+
+### RGB Led Configuration
+The application identify some events acting over the RGB Led. Its configuration is:
+
+![G3 Coordinator MCC RGB Led Pin Configuration](docs/MCC_Pins_LedRGB.png)
+
+### Watchdog Configuration
+The Watchdog is enabled to avoid any unhandled situation on the application.
+
+![G3 Coordinator MCC Watchdog Configuration](docs/MCC_FusesWatchdog.png)
 
 [TOP](#contents)
 
@@ -86,24 +149,25 @@ The full MCC configuration is:
 
 The G3 devices able to connect into the G3 coordinator and their functionalties are:
 
-| NAME | DEVICE_TYPE | DEMO | FEATURE |
-| :- | :- | :- | :- |
-|Indoor Lighting|0x10|Smart Lighting Demo|Controls the indoor light state|
-|Outdoor Lighting|0x11|Smart Lighting Demo|Controls the outdoor light state|
-|Liquid Detector|0x13|Sustainability Wall Demo|Keep availability|
-|Solar Inverter|0x14|Sustainability Wall Demo|Keep availability|
-|Battery Charger|0x15|Sustainability Wall Demo|Keep availability|
-|Energy Storage|0x16|Sustainability Wall Demo|Keep availability|
-|Heat Pump|0x17|Sustainability Wall Demo|Keep availability|
-|EV Charger|0x18|Sustainability Wall Demo|Keep availability|
-|Electricity Meter|0x19|Sustainability Wall Demo|Keep availability|
-|Emergency Button|0x1A|Hybrid IoT BP|Generate Alarms|
-|LED Panel|0x1B|Hybrid IoT BP|Controls LED Panel state|
+| NAME            | DEVICE_TYPE | DEMO                   | FEATURE                        |
+| :-              | :-          | :-                     | :-                             |
+|Indoor Lighting  |0x10         |Smart Lighting Demo     |Controls the indoor light state |
+|Outdoor Lighting |0x11         |Smart Lighting Demo     |Controls the outdoor light state|
+|Liquid Detector  |0x13         |Sustainability Wall Demo|Monitors availability           |
+|Solar Inverter   |0x14         |Sustainability Wall Demo|Monitors availability           |
+|Battery Charger  |0x15         |Sustainability Wall Demo|Monitors availability           |
+|Energy Storage   |0x16         |Sustainability Wall Demo|Monitors availability           |
+|Heat Pump        |0x17         |Sustainability Wall Demo|Monitors availability           |
+|EV Charger       |0x18         |Sustainability Wall Demo|Monitors availability           |
+|Electricity Meter|0x19         |Sustainability Wall Demo|Monitors availability           |
+|Emergency Button |0x1A         |Hybrid IoT BP           |Generate Alarms                 |
+|LED Panel        |0x1B         |Hybrid IoT BP           |Controls LED Panel state        |
 
 ### G3 Hybrid coordinator specific configuration  
 
 The G3 Hybrid coordinator has been configured fixing some parameters:
-- Short Address: assigned short address is fixed according with the device type functionality of the G3 device
+- Short Address: assigned short address is fixed according with the device type functionality of the G3 device.
+- Black List Table Entry TTL: fixed to zero as the short address is fixed by device type. It avoids issues with joins from the same device.
 - PAN_ID: PAN ID identifies the G3 network in use. It is masked to be on 0x782X range. 
 - PSK: Pre-shared Key used on the registering process. Avoids to register any unexpected G3 device. A fixed value different from default used on G3 certification has been configured.
 - ADP PIBs: These ADP Pibs have been set according with the network: MaxHops, RrepWait and NetTraversalTime.
@@ -130,21 +194,43 @@ The communication protocol starts with the G3 registering process interchange. A
 
 ### G3 Device Commands Interchange
 
-| ID | NAME | SOURCE | DESTINATION | FEATURE |
-| :- | :- | :- | :- | :- |
-|0xF4|GET_DEVICE_INFO|COORD|ANY DEVICE|Get the Device Type Information|
-|0xF5|GET_DEVICE_INFO_ANSWER|DEVICE|COORD|Provides the Device Type Information|
-|0xF6|SET_RGB_LED|COORD|ANY DEVICE|Set the RGB LED colour|
-|0xF8|SET_RGB_LED_BLINK|ANY DEVICE|Set the RGB LED colour with a frequency during a time|
-|0xFA|SET_PANEL_INFO|COORD|PANEL LED|Set the information shown in the Panel LED|
-|0xFC|EMERGENCY|EMERGENCY BUTTON|COORD|Emergency alarm after pressing the Emergency Button|
-|0xFE|SET_LIGHT|COORD|LIGHTING DEVICE|Set the light state of a Lighting Device|
+| ID | NAME                 | SOURCE         | DESTINATION   | FEATURE                                             |
+| :- | :-                   | :-             | :-            | :-                                                  |
+|0xF4|GET_DEVICE_INFO       |COORD           |ANY DEVICE     |Get the Device Type Information                      |
+|0xF5|GET_DEVICE_INFO_ANSWER|DEVICE          |COORD          |Provides the Device Type Information                 |
+|0xF6|SET_RGB_LED           |COORD           |ANY DEVICE     |Set the RGB LED colour                               |
+|0xF8|SET_RGB_LED_BLINK     |COORD           |ANY DEVICE     |Set the RGB LED colour with a frequency during a time|
+|0xFA|SET_PANEL_INFO        |COORD           |PANEL LED      |Set the information shown in the Panel LED           |
+|0xFC|EMERGENCY             |EMERGENCY BUTTON|COORD          |Emergency alarm after pressing the Emergency Button  |
+|0xFE|SET_LIGHT             |COORD           |LIGHTING DEVICE|Set the light state of a Lighting Device             |
 
 ### G3 Cycling State Machine
 
 The state machine of the G3 Coordinator cycling can be summarize on:
 
 ![G3 cycling state machine](docs/G3coordinatorCyclingStateMachine.png)
+
+#### Communication Protocol between G3 Coordinator and Host Controller
+
+The communication protocol between the G3 coodinator and the Host Controller runs over the USI Service serialization from <a href="https://github.com/Microchip-MPLAB-Harmony/smartenergy" target="_blank">Microhip MPLAB Harmony smartenergy repository</a>.
+
+Communication is initiated when the G3 Coordinator sends a notification of a reset (under normal conditions) or a heartbeat (if an unmanaged reset occurs on the host). Following this event, the host controller begins to periodically request complete device information, typically every minute, to monitor device availability.
+
+The communication protocol utilizes G3 Coordinator commands to manage and interact with G3 devices on the network. It also includes supplementary commands to handle and notify information or events reported by the G3 Coordinator.
+
+| ID   | NAME                    | SOURCE | DESTINATION | FEATURE                                      |
+| :--- | :---------------------- | :----- | :---------- | :------------------------------------------- |
+| 0xF4 | GET_DEVICE_INFO         | HOST   | COORD       | Get the Device Type Information              |
+| 0xF6 | SET_RGB_LED             | HOST   | COORD       | Set the RGB LED colour                       |
+| 0xF8 | SET_RGB_LED_BLINK       | HOST   | COORD       | As previous blinking with a freq a while     |
+| 0xFA | SET_PANEL_INFO          | HOST   | COORD       | Set the information shown in the Panel LED   |
+| 0xFC | EMERGENCY               | COORD  | HOST        | Emergency Alarm received                     |
+| 0xFE | SET_LIGHT               | HOST   | COORD       | Set the light state of a Lighting Device     |
+| 0xE0 | CMD_GET_DEVICES         | HOST   | COORD       | Request Registered Devices to Coordinator    |
+| 0xE1 | CMD_GET_DEVICES_ANSWER  | COORD  | HOST        | Answer to request                            |
+| 0xE2 | CMD_DEVICE_NOTIFICATION | COORD  | HOST        | Change of device information                 |
+| 0xE3 | CMD_RESET_NOTIFICATION  | COORD  | HOST        | Coordinator reset occured                    |
+| 0xE4 | CMD_HEARTBEAT           | COORD  | HOST        | Coordinator heartbeat, received periodically |
 
 ### G3 Command Line Interface
 
@@ -160,6 +246,8 @@ The project includes a CLI with these commands:
 |REGDEV|None|Show G3 registered devices|
 |DBGLVL|<0-4>|Debug Level <Fatal,Error,Warning,Info,Debug>|
 |RST|None|Resets the board|
+|GET_PIB|<LVL(0-3)> <PIB(hex)> <INDEX(hex)>| Get G3 Stack PIB|
+|SET_PIB|<LVL(0-3)> <PIB(hex)> <INDEX(hex)> <LEN> <VALUE(hex)| Set G3 Stack PIB|
 
 where:
 | Device | X(dest)
@@ -185,12 +273,16 @@ where:
 |Blue|AA|
 |Magenta|D5|
 
+[TOP](#contents)
+
 ## Board Programming
 
 Programming the application can be done using MPLAB X IDE
 - Open the given project using MPLAB X IDE
 - Select the connected hardware tool in the project properties
 - Make and program device
+
+[TOP](#contents)
 
 ## Links
 
@@ -215,6 +307,8 @@ More information about the Sustainability Wall reference designs configured as G
 - [Heat Pump Reference Design](https://www.microchip.com/en-us/tools-resources/reference-designs/11-kw-totem-pole-demonstration-application)
 - [EV Charger Reference Design](https://www.microchip.com/en-us/tools-resources/reference-designs/three-phase-ac-commercial-with-ocpp-and-display-electric-vehicle-charger-reference-design)
 - [Electricity Meter Reference Design](https://www.microchip.com/en-us/development-tool/EV58E84A)
+
+[TOP](#contents)
 
 [![Follow us on Youtube](https://img.shields.io/badge/Youtube-Follow%20us%20on%20Youtube-red.svg)](https://www.youtube.com/user/MicrochipTechnology)
 [![Follow us on LinkedIn](https://img.shields.io/badge/LinkedIn-Follow%20us%20on%20LinkedIn-blue.svg)](https://www.linkedin.com/company/microchip-technology)

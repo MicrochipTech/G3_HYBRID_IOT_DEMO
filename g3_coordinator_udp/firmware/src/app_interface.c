@@ -574,12 +574,14 @@ static void _commandREGDEV(SYS_CMD_DEVICE_NODE* pCmdIO, int argc, char** argv)
         {
             APP_COORDINATOR_deviceDoSnapshot(&device_info_interface);
             
-            app_interfaceData.state = APP_INTERFACE_STATE_PRINT_REG_DEVICES;
             app_interfaceData.cmdNumToShowHelp = APP_COORDINATOR_MAX_DEVICES;
+            app_interfaceData.state = APP_INTERFACE_STATE_DELAY;
+            app_interfaceData.nextState = APP_INTERFACE_STATE_PRINT_REG_DEVICES;
+            app_interfaceData.delayMs = APP_INTERFACE_TASK_DFLT_DELAY_MS_BETWEEN_STATES;
             // Remove Prompt symbol
             _removePrompt();
-            SYS_CMD_MESSAGE("Index   SA    Type  Alive State\r\n");
-            SYS_CMD_MESSAGE("----- ------ ------ ----- -----\r\n");
+            SYS_CMD_MESSAGE("Index   SA    Type  Alive UdpReq UdpRes NumCyc\r\n");
+            SYS_CMD_MESSAGE("----- ------ ------ ----- ------ ------ ------\r\n");
         }
         else
         {
@@ -619,10 +621,17 @@ static void _commandDBGLVL(SYS_CMD_DEVICE_NODE* pCmdIO, int argc, char** argv)
 
 static void _commandGetPIB(SYS_CMD_DEVICE_NODE* pCmdIO, int argc, char** argv)
 {
+    ADP_GET_CFM_PARAMS getAdpConfirm;
+    ADP_MAC_GET_CFM_PARAMS getMacConfirm;
+    uint32_t level;
+    uint32_t pib;
+    uint16_t index;
+    uint16_t convertResult;
+    
     if (argc == 4)
     {
         // Check password from parameters
-        uint32_t level = atoi(argv[1]);               
+        level = atoi(argv[1]);               
         if ((level >= 0) && (level <= 4))
         {            
             SYS_CMD_PRINT("Getting PIB of %d level\r\n",level);
@@ -633,16 +642,12 @@ static void _commandGetPIB(SYS_CMD_DEVICE_NODE* pCmdIO, int argc, char** argv)
             SYS_CMD_MESSAGE("Invalid level, 0:PHY_PLC 1:PHY_RF 2:MAC 3:ADP 4:LBP\r\n");
         }
         
-        uint32_t pib;
-        uint16_t convertResult=COMMON_U32AsciiToHex(argv[2], &pib);
-        
-        ADP_GET_CFM_PARAMS getAdpConfirm;
-        ADP_MAC_GET_CFM_PARAMS getMacConfirm;
+        convertResult = COMMON_U32AsciiToHex(argv[2], &pib);
+        convertResult |= COMMON_U16AsciiToHex(argv[3], &index);
         
         if (convertResult == APP_RES_SUCCESS)
         {
-            uint16_t index = (uint16_t) atoi(argv[3]);            
-            SYS_CMD_PRINT("Getting PIB 0x%08X - level %d - index %d\r\n", pib, level, index);
+            SYS_CMD_PRINT("Getting level %d - PIB 0x%08X - index 0x%04X\r\n", level, pib, index);
             
             switch (level)
             {
@@ -736,13 +741,10 @@ static void _commandSetPIB(SYS_CMD_DEVICE_NODE* pCmdIO, int argc, char** argv)
             SYS_CMD_MESSAGE("Invalid level, 0:PHY_PLC 1:PHY_RF 2:MAC 3:ADP 4:LBP\r\n");
         }        
         convertResult = COMMON_U32AsciiToHex(argv[2], &pib);
-        
-        if (convertResult == APP_RES_SUCCESS)
-        {
-            index = (uint16_t) atoi(argv[3]);            
+        convertResult |= COMMON_U16AsciiToHex(argv[3], &index);
             length = atoi(argv[4]);                      
-            SYS_CMD_PRINT("Setting PIB 0x%08X - level %d - index %d - len %d\r\n", pib, level, index, length);
-            convertResult = COMMON_StringToHex(argv[5], values, length);
+        SYS_CMD_PRINT("Setting level %d - PIB 0x%08X - index %d - len %d\r\n", level, pib, index, length);
+        convertResult |= COMMON_StringToHex(argv[5], values, length);
             if (convertResult == APP_RES_SUCCESS)
             {
                 switch (level)
@@ -796,11 +798,10 @@ static void _commandSetPIB(SYS_CMD_DEVICE_NODE* pCmdIO, int argc, char** argv)
                 }
             }
         }
-    }
     else
     {
         // Incorrect parameter number
-        SYS_CMD_MESSAGE("Incorrect param number -> SET_PIB <LVL(0-3)> <PIB(hex)> <INDEX> <LEN> <VALUE>\r\n");
+        SYS_CMD_MESSAGE("Incorrect param number -> SET_PIB <LVL(0-3)> <PIB(hex)> <INDEX(hex)> <LEN> <VALUE(hex)>\r\n");
     }
 }
 
@@ -930,7 +931,14 @@ void APP_INTERFACE_Tasks ( void )
 
                 for (idx = 1; idx <= idxMax; idx++)
                 {
-                    SYS_CMD_PRINT("0x%02X  0x%04X 0x%04X 0x%04X %d\r\n",app_interfaceData.cmdNumToShowHelp - idx, device_info_interface[app_interfaceData.cmdNumToShowHelp - idx].sa, device_info_interface[app_interfaceData.cmdNumToShowHelp - idx].type, (device_info_interface[app_interfaceData.cmdNumToShowHelp - idx].alive << 1) + device_info_interface[app_interfaceData.cmdNumToShowHelp - idx].joined , device_info_interface[app_interfaceData.cmdNumToShowHelp - idx].state);
+                    SYS_CONSOLE_Print(SYS_CONSOLE_INDEX_0, "0x%02X  0x%04X 0x%04X 0x%02X  %06u %06u %06u\r\n",    \
+                        app_interfaceData.cmdNumToShowHelp - idx,                               \
+                        device_info_interface[app_interfaceData.cmdNumToShowHelp - idx].sa,     \
+                        device_info_interface[app_interfaceData.cmdNumToShowHelp - idx].type,   \
+                        (device_info_interface[app_interfaceData.cmdNumToShowHelp - idx].alive << 1) + device_info_interface[app_interfaceData.cmdNumToShowHelp - idx].joined , \
+                        device_info_interface[app_interfaceData.cmdNumToShowHelp - idx].stats.numUdpRequests , \
+                        device_info_interface[app_interfaceData.cmdNumToShowHelp - idx].stats.numUdpReplies ,  \
+                        device_info_interface[app_interfaceData.cmdNumToShowHelp - idx].stats.numCycles);
                 }
                 app_interfaceData.cmdNumToShowHelp-=idxMax;
             }
@@ -952,7 +960,7 @@ void APP_INTERFACE_Tasks ( void )
             /* Wait time to show message through the Console */
             app_interfaceData.nextState = app_interfaceData.state;
             app_interfaceData.state = APP_INTERFACE_STATE_DELAY;
-            app_interfaceData.delayMs = 100;
+            app_interfaceData.delayMs = 250;
             break;
         }
 

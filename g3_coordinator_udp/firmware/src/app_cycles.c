@@ -723,12 +723,13 @@ void APP_CYCLES_TRANSFER_Tasks()
                 currentTimeCount = SYS_TIME_Counter64Get();
                 elapsedTimeCount = currentTimeCount - app_cyclesData.timeCountUdpRequest;
                 if (app_cyclesData.pStatsEntry != NULL)
-                    app_cyclesData.pStatsEntry->timeCountTotal += elapsedTimeCount;
-                app_cyclesData.timeCountTotal += elapsedTimeCount;
-                app_cyclesData.timeCountTotalCycle += elapsedTimeCount;
+                    app_cyclesData.pStatsEntry->timeCountTotal += SYS_TIME_CountToMS((uint32_t)elapsedTimeCount);
+                app_cyclesData.timeCountTotal += SYS_TIME_CountToMS((uint32_t)elapsedTimeCount);
+                app_cyclesData.timeCountTotalCycle += SYS_TIME_CountToMS((uint32_t)elapsedTimeCount);
                 
-                SYS_DEBUG_PRINT(SYS_ERROR_ERROR, "APP_CYCLES: UDP Device Info reply not received (timeout %u ms)\r\n",
-                        SYS_TIME_CountToMS(elapsedTimeCount));
+                APP_COORDINATOR_deviceGetTriesByType(app_cyclesData.shortAddress, &tries);
+                SYS_DEBUG_PRINT(SYS_ERROR_ERROR, "APP_CYCLES: UDP Device Info reply not received (timeout %u ms - tries %d)\r\n",
+                        SYS_TIME_CountToMS(elapsedTimeCount), tries);
 
                 /* Free Transfer State */
                 app_cyclesData.transferFlag = false;
@@ -754,9 +755,9 @@ void APP_CYCLES_TRANSFER_Tasks()
             /* UDP frame received. Compute round-trip time. */
             elapsedTimeCount = SYS_TIME_Counter64Get() - app_cyclesData.timeCountUdpRequest;
             if (app_cyclesData.pStatsEntry != NULL)
-                app_cyclesData.pStatsEntry->timeCountTotal += elapsedTimeCount;
-            app_cyclesData.timeCountTotal += elapsedTimeCount;
-            app_cyclesData.timeCountTotalCycle += elapsedTimeCount;
+                app_cyclesData.pStatsEntry->timeCountTotal += SYS_TIME_CountToMS((uint32_t)elapsedTimeCount);
+            app_cyclesData.timeCountTotal += SYS_TIME_CountToMS((uint32_t)elapsedTimeCount);
+            app_cyclesData.timeCountTotalCycle += SYS_TIME_CountToMS((uint32_t)elapsedTimeCount);
             SYS_TIME_TimerDestroy(app_cyclesData.timeDataHandle);
 
             /* Read first received byte (protocol) */
@@ -889,7 +890,7 @@ void APP_CYCLES_Tasks ( void )
                     app_cyclesData.answerOK = false;
                     app_cyclesData.answerTimeout_ms = APP_CYCLES_TIMEOUT_MS;
                     // No stats
-                    app_cyclesData.pStatsEntry = NULL;
+                    app_cyclesData.pStatsEntry = &appCoordinatorDeviceInfo[cmd.index].stats;
                     app_cyclesData.state = APP_CYCLES_STATE_WAIT_QUEUE_CMD;
                     app_cyclesData.next_state = APP_CYCLES_STATE_START_CYCLE;
                     break;
@@ -962,7 +963,7 @@ void APP_CYCLES_Tasks ( void )
                     app_cyclesData.answerOK = false;
                     app_cyclesData.answerTimeout_ms = APP_CYCLES_TIMEOUT_MS;
                     // No stats
-                    app_cyclesData.pStatsEntry = NULL;
+                    app_cyclesData.pStatsEntry = &appCoordinatorDeviceInfo[cmd.index].stats;
                     app_cyclesData.state = APP_CYCLES_STATE_WAIT_QUEUE_CMD;
                     app_cyclesData.next_state = APP_CYCLES_STATE_START_DEVICE_CYCLE;
                     break;
