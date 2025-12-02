@@ -45,12 +45,12 @@ By combining wired (G3-PLC) and wireless (15.4 RF Mesh) communication technologi
 [TOP](#contents)
 
 ## Solution Diagram
-<img src="images/SmartLightingSolution.png" width=1000>
+<img src="images/SmartSystemsSolution.png" width=1000>
 
 ## Run the demo
 ### Roles <!-- omit in toc -->
-- WBZ451 is used as coordinator creating the G3 network with hybrid connectivity (PLC + RF)
-- WBZ451/WBZ451HPE are used as end devices with hybrid or RF only connectivity
+- WBZ451+PL460 is used as coordinator creating the G3 network with hybrid connectivity (PLC + RF)
+- WBZ451/WBZ451HPE+PL460 are used as end devices with hybrid or RF only connectivity
 - PIC32CZ CA80 Curiosity Ultra is used as host device, getting network data from the coordinator to showcase it on the display as well as an IoT Dashboard hosted on the Cloud updated via Wi-Fi and LTE-M connectivity
 
 After powering up the demo, the coordinator is creating the G3 Network. G3 devices start to discover networks around and join the network offering the best link quality. The Host MCU device should receive the network data from the coordinator and make them available locally on the display and remotely by publishing MQTT messages to the IoT Dashboard.
@@ -113,5 +113,16 @@ The following end devices are part of the demo:
 
 ### LTE IoT 10 Click  <!-- omit in toc -->
 - [LTE IoT 10 Click](https://www.mikroe.com/lte-iot-10-click?srsltid=AfmBOopZ0oW30uIoPkGGfvCQr_8gme9cHlPF3eoJpJZLG1BN1LyVjCXD)
+
+### Sustainability Wall <!-- omit in toc -->
+
+- [Liquid Detection Reference Design](https://www.microchip.com/en-us/development-tool/EV24U22A)
+- [Solar Microinverter Reference Design](https://www.microchip.com/en-us/tools-resources/reference-designs/grid-connected-solar-microinverter)
+- [Solar MPPT Battery charger Reference Design](https://www.microchip.com/en-us/tools-resources/reference-designs/solar-mppt-battery-charger-reference-design)
+- [Energy Storage Reference Design](https://www.microchip.com/en-us/tools-resources/reference-designs/high-voltage-auxiliary-e-fuse-reference-design)
+- [Heat Pump Reference Design](https://www.microchip.com/en-us/tools-resources/reference-designs/11-kw-totem-pole-demonstration-application)
+- [EV Charger Reference Design](https://www.microchip.com/en-us/tools-resources/reference-designs/three-phase-ac-commercial-with-ocpp-and-display-electric-vehicle-charger-reference-design)
+- [Electricity Meter Reference Design](https://www.microchip.com/en-us/development-tool/EV58E84A)
+
 
 [TOP](#contents)
