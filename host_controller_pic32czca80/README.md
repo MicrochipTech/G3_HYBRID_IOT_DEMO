@@ -56,7 +56,10 @@ PIC32CZCA80 host controller receives network data from the coordinator via USI i
 [TOP](#contents)
 
 ## Hardware Setup
-- Connect the power supply on J100
+- Connect the WVGA LCD Display to the SSD1963 LCD Controller Graphics Card throught a flat cable
+- Connect the SSD1963 LCD Controller Graphics Card to the GFX Connector on PIC32CZCA Curiosity Board
+- Connect the WINCS02 Add on board into the MikroBUS connector on PIC32CZCA Curiosity Board
+- Connect the power supply on J100 (+9V)
 - Connect Debug USB (J200) to PC
 - Connect USI interface to coordinator
   - Connect PD24 and PD25 available on J401 to PB13 and PB12 (available on test point array J9 Pin 7 and 6) on WBZ451 acting like coordinator 
@@ -69,6 +72,8 @@ PIC32CZCA80 host controller receives network data from the coordinator via USI i
 - Connect the LTE IoT 10 Click on microBus of the MIKROBUS XPLAINED PRO using the stacking header
   - connect mikroBus pins: 1, 2, 7, 8, 9, 10, 13, 14
 - Connect PKoB USB to PC for device programming and debugging with terminal program
+
+![Host Controller Design](docs/PIC32CZCA_host_controller.png)  
 
 [TOP](#contents)
 
@@ -290,15 +295,15 @@ The system status is displayed in the upper-right corner of the screen and is re
 
 - <b>G3 Coordinator Status</b>: The icon displays "red" when the G3 Coordinator is not ready and "green" when it is operational.
 
-![Hybrid IoT System Status](docs/SystemStatusG3ready.png)
+![Hybrid IoT Coordinator Status](docs/SystemStatusG3ready.png)
 
 - <b>Wifi Connection Status</b>: The icon is "red" if the WINCS02 module is not ready, "yellow" when searching for a Wi-Fi network, and "green" when a connection is established.
 
-![Hybrid IoT System Status](docs/SystemStatusWifiready.png)
+![Hybrid IoT Wi-Fi Status](docs/SystemStatusWifiready.png)
 
 - <b>Cloud Connection Status</b>: The icon is "red" when Wi-Fi is not ready, "yellow" when Wi-Fi is ready and the system is attempting to connect to the cloud, and "green" when the cloud connection is established.
 
-![Hybrid IoT System Status](docs/SystemStatusCloudready.png)
+![Hybrid IoT Cloud Status](docs/SystemStatusCloudready.png)
 
 ##### Main Screen
 At start-up, the main screen is displayed. To proceed to the next screen, press the Start button.
@@ -382,6 +387,12 @@ Programming the application can be done using MPLAB X IDE
 [TOP](#contents)
 
 ## Run the demo
+
+Connect all devices to the G3 network and switch on the Blue Panel power supply.
+Wait for the devices to register; the connection icon will turn green for each device as it becomes available on the network.
+
+You can interact with the devices by pressing their icons, toggling lighting devices on or off, or generating alarms by pressing the Emergency Button or the corresponding button on the screen.
+
 <b>UART interface</b>  
 For debugging purposes and access to the command line, a UART interface to the PC is implemented. A serial port terminal (e.g. PuTTY) can be used to open a connection to the device.  
   
@@ -389,11 +400,6 @@ USART configuration:
 - Baud rate: 115 200 Hz
 - Parity mode: no parity
 - Stop bit mode: 1 Stop bit
-
-Connect all devices to the G3 network and switch on the Blue Panel power supply.
-Wait for the devices to register; the connection icon will turn green for each device as it becomes available on the network.
-
-You can interact with the devices by pressing their icons, toggling lighting devices on or off, or generating alarms by pressing the Emergency Button or the corresponding button on the screen.
 
 [TOP](#contents)
 

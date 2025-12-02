@@ -367,7 +367,7 @@ void event_SignalingControl_PanelLedRefreshButtonWidget_OnPressed(leButtonWidget
     if ((index != INDEX_UNKNOWN) && (alive))
     {
         // Prepare command
-        APP_SCREEN_SIGNALING_Prepare2Send_SetRgbMessage(index);
+        APP_SCREEN_SIGNALING_Prepare2Send_SetPanelLedMessage(index, 0);
     }
 }
 

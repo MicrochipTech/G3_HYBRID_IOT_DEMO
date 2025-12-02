@@ -611,7 +611,9 @@ static void _commandREGDEV(SYS_CMD_DEVICE_NODE* pCmdIO, int argc, char** argv)
         {
             APP_COORDINATOR_deviceDoSnapshot(&device_info_interface);
             
-            app_interfaceData.state = APP_INTERFACE_STATE_PRINT_REG_DEVICES;
+            app_interfaceData.state = APP_INTERFACE_STATE_DELAY;
+            app_interfaceData.nextState = APP_INTERFACE_STATE_PRINT_REG_DEVICES;
+            app_interfaceData.delayMs = APP_INTERFACE_TASK_DFLT_DELAY_MS_BETWEEN_STATES;
             app_interfaceData.cmdNumToShowHelp = numdevices;
             // Remove Prompt symbol
             _removePrompt();
