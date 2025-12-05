@@ -196,6 +196,8 @@ The communication protocol starts with the G3 device registering process interch
 |0xFC|EMERGENCY             |EMERGENCY BUTTON|COORD          |Emergency alarm after pressing the Emergency Button  |
 |0xFE|SET_LIGHT             |COORD           |LIGHTING DEVICE|Set the light state of a Lighting Device             |
 
+[TOP](#contents)
+
 ## Board Programming
 Programming the application can be done using MPLAB X IDE
 - Open the given project using MPLAB X IDE
@@ -219,6 +221,8 @@ USART configuration:
 - Baud rate: 115 200 Hz
 - Parity mode: no parity
 - Stop bit mode: 1 Stop bit
+
+[TOP](#contents)
 
 ## Links
 
@@ -244,9 +248,10 @@ More information about the Sustainability Wall reference designs configured as G
 - [EV Charger Reference Design](https://www.microchip.com/en-us/tools-resources/reference-designs/three-phase-ac-commercial-with-ocpp-and-display-electric-vehicle-charger-reference-design)
 - [Electricity Meter Reference Design](https://www.microchip.com/en-us/development-tool/EV58E84A)
 
+[TOP](#contents)
+
 [![Follow us on Youtube](https://img.shields.io/badge/Youtube-Follow%20us%20on%20Youtube-red.svg)](https://www.youtube.com/user/MicrochipTechnology)
 [![Follow us on LinkedIn](https://img.shields.io/badge/LinkedIn-Follow%20us%20on%20LinkedIn-blue.svg)](https://www.linkedin.com/company/microchip-technology)
 [![Follow us on Facebook](https://img.shields.io/badge/Facebook-Follow%20us%20on%20Facebook-blue.svg)](https://www.facebook.com/microchiptechnology/)
 [![Follow us on Twitter](https://img.shields.io/twitter/follow/MicrochipTech.svg?style=social)](https://twitter.com/MicrochipTech)
 
-[TOP](#contents)
