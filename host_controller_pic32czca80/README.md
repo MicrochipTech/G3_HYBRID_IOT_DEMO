@@ -330,7 +330,7 @@ To navigate to the next screen, press the "Next" button.
 ##### Sustainability Wall Screen
 The Sustainability Wall screen enables interaction with devices featured in the Sustainability Wall Demo.
 
-![Hybrid IoT Smart Lighting Screen](docs/SWallScreenMix.png)
+![Hybrid IoT Sustainability Wall Screen](docs/SWallScreenMix.png)
 
 By pressing a device picture button, the system sends a command to the selected device (if available) to activate the RGB LED in cyan and initiate blinking for 10 seconds.
 
