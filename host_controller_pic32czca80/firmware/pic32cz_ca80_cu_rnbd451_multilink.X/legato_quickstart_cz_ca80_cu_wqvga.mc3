@@ -28069,6 +28069,7 @@
   &lt;le_gfx_driver_external dnOrder=&quot;0&quot; id=&quot;ControllerName&quot;&gt;
     &lt;Values dnOrder=&quot;0&quot;&gt;
       &lt;Dynamic dnOrder=&quot;0&quot; id=&quot;le_gfx_driver_external&quot; value=&quot;SSD1963&quot;/&gt;
+      &lt;User dnOrder=&quot;1&quot; value=&quot;SSD1963&quot;/&gt;
     &lt;/Values&gt;
   &lt;/le_gfx_driver_external&gt;
 &lt;/le_gfx_driver_external&gt;

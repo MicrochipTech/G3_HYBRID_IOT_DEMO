@@ -4,7 +4,7 @@
 
 > "IoT Made Easy!" - This is an application using the unified G3-Hybrid PLC+RF protocol.
 
-Devices: **| PIC32CZ-CA80 |**<br>
+Devices: **| PIC32CZ-CA80 | WINCS02 | SSD1963 |**<br>
 Features: **| LCD Display, USI, Wi-Fi, LTE |**
 
 
@@ -18,7 +18,7 @@ For additional Microchip repos, see: <a href="https://github.com/Microchip-MPLAB
 Checkout the <a href="https://microchipsupport.force.com/s/" target="_blank">Technical support portal</a> to access our knowledge base, community forums or submit support ticket requests.
 </span></p></b>
 
-## Contents <!-- omit in toc -->
+## Contents 
 - [Introduction](#introduction)
 - [Bill of materials](#bill-of-materials)
 - [Hardware Setup](#hardware-setup)
