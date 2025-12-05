@@ -555,7 +555,7 @@ static void _APP_G3_MANAGEMENT_InitializeParameters(void)
     ADP_SetRequestSync(ADP_IB_RREP_WAIT, 0, 1,
             (const uint8_t*) &app_g3_managementConst.rrepWait, &setConfirm);
     
-    ADP_SetRequestSync(ADP_IB_ROUTING_TABLE_ENTRY_TTL, 0, 2,
+    ADP_SetRequestSync(ADP_IB_BLACKLIST_TABLE_ENTRY_TTL, 0, 2,
             (const uint8_t*) &app_g3_managementConst.blacklistTableEntryTTL, &setConfirm);
     
     ADP_SetRequestSync(ADP_IB_NET_TRAVERSAL_TIME, 0, 1,
