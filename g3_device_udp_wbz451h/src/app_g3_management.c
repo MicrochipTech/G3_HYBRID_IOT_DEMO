@@ -40,7 +40,6 @@
 
 /* UDP socket handle */
 UDP_SOCKET coord_socket = INVALID_SOCKET;    
-static int times = 0;
 int flag_send_alarm = false;
 int blink_rate_factor = 1;
 
@@ -81,6 +80,10 @@ static const APP_G3_MANAGEMENT_CONSTANTS app_g3_managementConst = {
     .maxHops = APP_G3_MANAGEMENT_MAX_HOPS,
     .dutyCycleLimitRF = APP_G3_MANAGEMENT_DUTY_CYCLE_LIMIT_RF,
     .defaultCoordRouteEnabled = APP_G3_MANAGEMENT_DEFAULT_COORD_ROUTE_ENABLED,
+    .rrepWait = APP_G3_MANAGEMENT_RREP_WAIT,
+    .rreqWait = APP_G3_MANAGEMENT_RREQ_WAIT,
+    .netTraversalTime = APP_G3_MANAGEMENT_NET_TRAVERSAL_TIME,    
+    .blacklistTableEntryTTL = APP_G3_MANAGEMENT_BLACKLIST_TABLE_ENTRY_TTL,
 
     /* G3 Conformance parameters */
     .pskConformance = APP_G3_MANAGEMENT_PSK_KEY_CONFORMANCE,
@@ -135,9 +138,11 @@ static const APP_G3_MANAGEMENT_CONSTANTS app_g3_managementConst = {
 static void _APP_G3_MANAGEMENT_TimeExpiredSetFlag(uintptr_t context);
 static void _APP_G3_MANAGEMENT_Reboot(void);
 
-uint32_t timeoutTraffic = 0;
 /* Time waiting for G3/UDP responder traffic before to reboot - Safety Mechanism */    
-#define TIMEOUT_WAIT_TRAFFIC_BLINK 600  // 5 minutes without traffic (tick is 500ms)
+#define TIMEOUT_WAIT_TRAFFIC_BLINK_FIRST 1800         // 15 minutes without traffic (tick is 500ms) after joining
+#define TIMEOUT_WAIT_TRAFFIC_BLINK       1200         // 10 minutes without traffic (tick is 500ms) after data traffic
+
+uint32_t timeoutTraffic = TIMEOUT_WAIT_TRAFFIC_BLINK;
 
 static void _ADP_DiscoveryConfirm(uint8_t status)
 {
@@ -218,7 +223,6 @@ static void _LBP_ADP_NetworkJoinConfirm(LBP_ADP_NETWORK_JOIN_CFM_PARAMS* pNetwor
         uint8_t prefixData[27];
 
         /* Successful join */
-        app_g3_managementData.state = APP_G3_MANAGEMENT_STATE_JOINED;
         shortAddress = pNetworkJoinCfm->networkAddress;
         panId = pNetworkJoinCfm->panId;
 
@@ -265,12 +269,30 @@ static void _LBP_ADP_NetworkJoinConfirm(LBP_ADP_NETWORK_JOIN_CFM_PARAMS* pNetwor
         memcpy(&prefixData[11], &networkPrefix, 16);
         ADP_SetRequestSync(ADP_IB_PREFIX_TABLE, 0, 27, (const uint8_t*) prefixData, &setConfirm);
       
+        SYS_DEBUG_PRINT(SYS_ERROR_INFO, "APP_G3_MANAGEMENT: Joined to the network. "
+                "PAN ID: 0x%04X, Short Address: 0x%04X, Media: 0x%04X\r\n", panId, shortAddress, app_g3_managementData.bestNetwork.mediaType);
+        /* RGB - green for 30 seconds */
+        //app_g3_rgbData.rgbValues[0] = 0x55; // hue - green
+        //app_g3_rgbData.rgbValues[1] = 0xFF; // saturation
+        //app_g3_rgbData.rgbValues[2] = 0xFF; // value
+        //app_g3_rgbData.blinkFreq = 0;       // ms, no blinking
+        //app_g3_rgbData.blinkTime = 30000;   // ms
+        //app_g3_rgbData.newData = true;
+
+        //if (app_g3_managementData.metworkAliveHandle == SYS_TIME_HANDLE_INVALID)
+        //{
+        //    /* Register timer callback for network alive check */
+        //    app_g3_managementData.metworkAliveHandle = SYS_TIME_CallbackRegisterMS(
+        //            _APP_G3_MANAGEMENT_TimeExpiredSetFlag,
+        //            (uintptr_t) &app_g3_managementData.ntwAliveCheckExpired,
+        //            APP_G3_MANAGEMENT_NTW_ALIVE_CHECK_PERIOD_MS, SYS_TIME_PERIODIC);
+        //}
+
         /* Identify Registering Process */
 #ifndef PANEL_LED_BLUE_CTRL        
         RGB_LED_RED_On();
 #endif        
-        /* Reset Reboot Protection */
-        timeoutTraffic = 0;
+
         
         if ((app_g3_managementData.bestNetwork.mediaType == MAC_WRP_MEDIA_TYPE_REQ_PLC_BACKUP_RF) ||
             (app_g3_managementData.bestNetwork.mediaType == MAC_WRP_MEDIA_TYPE_REQ_PLC_NO_BACKUP))
@@ -281,8 +303,10 @@ static void _LBP_ADP_NetworkJoinConfirm(LBP_ADP_NETWORK_JOIN_CFM_PARAMS* pNetwor
                             _APP_G3_MANAGEMENT_TimeExpiredSetFlag, (uintptr_t) &app_g3_managementData.timerLedExpired, SYS_TIME_PERIODIC);
         }
 
-        SYS_DEBUG_PRINT(SYS_ERROR_INFO, "APP_G3_MANAGEMENT: Joined to the network. "
-                "PAN ID: 0x%04X, Short Address: 0x%04X\r\n", panId, shortAddress);
+        /* Reset Reboot Protection */
+        timeoutTraffic = (TIMEOUT_WAIT_TRAFFIC_BLINK_FIRST >> (blink_rate_factor - 1));
+
+        app_g3_managementData.state = APP_G3_MANAGEMENT_STATE_JOINED;
         
     }
     else
@@ -302,11 +326,13 @@ static void _LBP_ADP_NetworkJoinConfirm(LBP_ADP_NETWORK_JOIN_CFM_PARAMS* pNetwor
         else
         {
             /* Maximum join retries reached. Go to back-off before start
-             * network discovery. */
+             * network discovery - reboot */
+            
+            _APP_G3_MANAGEMENT_Reboot();
+            
             app_g3_managementData.state = APP_G3_MANAGEMENT_STATE_START_BACKOFF_DISCOVERY;
             app_g3_managementData.backoffWindowLow = APP_G3_MANAGEMENT_DISCOVERY_BACKOFF_LOW_MIN;
             app_g3_managementData.backoffWindowHigh = APP_G3_MANAGEMENT_DISCOVERY_BACKOFF_HIGH_MIN;
-
             SYS_DEBUG_MESSAGE(SYS_ERROR_WARNING, "APP_G3_MANAGEMENT: Failed to join after last retry\r\n");
         }
     }
@@ -524,6 +550,20 @@ static void _APP_G3_MANAGEMENT_InitializeParameters(void)
     /* Set user-specific MAC parameters */
     ADP_MacSetRequestSync(MAC_WRP_PIB_DUTY_CYCLE_LIMIT_RF, 0, 2,
             (const uint8_t*) &app_g3_managementConst.dutyCycleLimitRF, &setConfirm);
+
+    /* Set user-specific ADP parameters */
+    
+    ADP_SetRequestSync(ADP_IB_RREQ_WAIT, 0, 1,
+            (const uint8_t*) &app_g3_managementConst.rreqWait, &setConfirm);
+    
+    ADP_SetRequestSync(ADP_IB_RREP_WAIT, 0, 1, 
+            (const uint8_t*) &app_g3_managementConst.rrepWait, &setConfirm);
+    
+    ADP_SetRequestSync(ADP_IB_BLACKLIST_TABLE_ENTRY_TTL, 0, 2,
+            (const uint8_t*) &app_g3_managementConst.blacklistTableEntryTTL, &setConfirm);
+    
+    ADP_SetRequestSync(ADP_IB_NET_TRAVERSAL_TIME, 0, 1, 
+            (const uint8_t*) &app_g3_managementConst.netTraversalTime, &setConfirm);    
 
     if (app_g3_managementData.conformanceTest == true)
     {
@@ -1014,8 +1054,6 @@ void APP_G3_MANAGEMENT_Initialize ( void )
     USER_LED_OutputEnable();
     USER_LED_Set();
 #endif    
-    
-    APP_MATRIX_LED_Initialize();
 }
 
 
@@ -1029,13 +1067,10 @@ void APP_G3_MANAGEMENT_Initialize ( void )
 
 void APP_G3_MANAGEMENT_Tasks ( void )
 {
-    /* Refresh Watchdog */
-    CLEAR_WATCHDOG();
     
 #define NUMBER_BLINKS_PANEL_LED 10   // 5 seconds at least showing ALARM/Blink
     if (flag_received_panel_cmd)
     {
-        times = NUMBER_BLINKS_PANEL_LED;
         flag_received_panel_cmd = false;
     }
 
@@ -1044,24 +1079,12 @@ void APP_G3_MANAGEMENT_Tasks ( void )
     {
         app_g3_managementData.timerLedExpired = false;
 
+		/* Refresh Watchdog */
+        CLEAR_WATCHDOG();
 #ifndef PANEL_LED_BLUE_CTRL        
         /* Activity */
         USER_BLINK_LED_Toggle();
 #endif        
-        
-        /* Reboot protection */
-        if (app_udp_responderData.dataReceived)
-        {
-            app_udp_responderData.dataReceived = false;
-            timeoutTraffic = 0;
-        }else {
-        timeoutTraffic++;
-        if (timeoutTraffic == (TIMEOUT_WAIT_TRAFFIC_BLINK >> (blink_rate_factor - 1)))
-        {
-                // Leave and Reboot
-                app_g3_managementData.ntwAliveCheckExpired = true;
-            }
-        }
         
         // Make actions according with commands received or events        
         if (app_g3_managementData.state < APP_G3_MANAGEMENT_STATE_JOINED)
@@ -1071,13 +1094,26 @@ void APP_G3_MANAGEMENT_Tasks ( void )
             RGB_LED_RED_Toggle();
 #endif            
         }        
-
-#if 0 //APP_DEV_TYPE == APP_DEV_TYPE_EMERGENCY_BUTTON
+        
         if (app_g3_managementData.state == APP_G3_MANAGEMENT_STATE_JOINED)
-            {
-            _APP_G3_MANAGEMENT_button_handle();
-        }
-#endif
+        {
+            /* Reboot protection after joining */
+        	if (app_udp_responderData.dataReceived)
+        	{
+            	app_udp_responderData.dataReceived = false;
+            	timeoutTraffic = (TIMEOUT_WAIT_TRAFFIC_BLINK >> (blink_rate_factor - 1));
+        	}else 
+        	{
+                timeoutTraffic--;
+                if (!timeoutTraffic)
+        		{
+                	// Leave and Reboot
+                	app_g3_managementData.ntwAliveCheckExpired = true;
+            	}
+        	}
+        	/* User Button Handler */
+        	//_APP_G3_MANAGEMENT_button_handle();
+		}
     }
 
 	/* RBG LED handling */

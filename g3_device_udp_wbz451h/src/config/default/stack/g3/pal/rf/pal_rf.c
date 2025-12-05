@@ -84,7 +84,7 @@ static PAL_RF_PHY_STATUS palRfPhyStatus[] = {
 };
 
 // Transceiver Configuration
-#define CHANNEL_TRANSMIT_RECEIVE (11U)
+#define CHANNEL_TRANSMIT_RECEIVE (26U)
 #define CHANNEL_PAGE_TRANSMIT_RECEIVE (0U)
 #define CCA_MODE (3U)
 #define PROMISCUOUS_MODE (true)
@@ -537,6 +537,10 @@ PAL_RF_TX_HANDLE PAL_RF_TxRequest(PAL_RF_HANDLE handle, uint8_t *pData,
     palRfData.txBuffer[0] = (uint8_t)length;
     (void) memcpy(&palRfData.txBuffer[1], pData, (uint8_t)length);
 
+#ifdef PAL_RF_FORCE_TX_MAX_POWER    
+    palRfData.csmaMode = NO_CSMA_NO_IFS;
+    pwrDbm = 12;
+#else    
     if (txParameters->csmaEnable)
     {
         palRfData.csmaMode = CSMA_UNSLOTTED;
@@ -552,6 +556,7 @@ PAL_RF_TX_HANDLE PAL_RF_TxRequest(PAL_RF_HANDLE handle, uint8_t *pData,
     {
         pwrDbm = -14;
     }
+#endif
 
     (void) PHY_ConfigTxPwr(PWR_DBM_VALUE, (int8_t)pwrDbm);
 

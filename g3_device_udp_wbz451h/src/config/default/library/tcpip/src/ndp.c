@@ -674,6 +674,7 @@ IPV6_HEAP_NDP_DR_ENTRY * TCPIP_NDP_DefaultRouterGet (TCPIP_NET_IF * pNetIf)
   ***************************************************************************/
 void TCPIP_NDP_Task (void)
 {
+    return ;
     TCPIP_NDP_DupAddrDiscoveryTask();
     TCPIP_NDP_RouterSolicitTask();
     TCPIP_NDP_NborUnreachDetectTask();

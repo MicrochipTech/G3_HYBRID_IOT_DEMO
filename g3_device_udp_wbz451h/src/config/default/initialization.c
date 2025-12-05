@@ -116,10 +116,10 @@
 #pragma config WAKE2SPD =      ON
 #pragma config CKSWEN =      ON
 #pragma config FSCMEN =      ON
-#pragma config WDTPSR =      PS1048576
+#pragma config WDTPSR =      PS4096
 #pragma config WDTSPGM =      STOPS
 #pragma config WINDIS =      NORMAL
-#pragma config WDTEN =      OFF
+#pragma config WDTEN =      ON
 #pragma config WDTWINSZ =    WINSZ_25
 #pragma config DMTCNT =      DMT31
 #pragma config DMTEN =      OFF
@@ -867,6 +867,7 @@ void SYS_Initialize ( void* data )
     APP_UDP_RESPONDER_Initialize();
     APP_STORAGE_WBZ451H_Initialize();
     APP_TCPIP_MANAGEMENT_Initialize();
+    APP_MATRIX_LED_Initialize();
 
     NVIC_Initialize();
 

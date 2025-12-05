@@ -74,7 +74,7 @@ typedef enum
             
     APP_MATRIX_LED_STATE_WAIT,
 
-    APP_MATRIX_LED_STATE_REFRESH,
+    APP_MATRIX_LED_STATE_ACTIVE,
 
     /* Error state */
     APP_MATRIX_LED_STATE_ERROR,
@@ -109,6 +109,7 @@ typedef struct
     bool screenIndex;
     
     SYS_TIME_HANDLE timerRefresh_handler;
+    SYS_TIME_HANDLE timerIcon_handler;
     
     uint32_t timeout_ms;
     
@@ -119,6 +120,11 @@ typedef struct
     
     /* PANEL LED Output Enable State */
     bool panelLEDon;
+    
+    uint8_t *panel;
+    uintptr_t context;
+    uintptr_t context_refresh;
+    
     
 } APP_MATRIX_LED_DATA;
 

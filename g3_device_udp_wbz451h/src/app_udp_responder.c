@@ -447,13 +447,13 @@ void _APP_UDP_RESPONDER_UdpRxCallback(UDP_SOCKET hUDP, TCPIP_NET_HANDLE hNet, TC
             {
                 // GPIO off
                 SYS_DEBUG_PRINT(SYS_ERROR_DEBUG, "Logo\r\n");
-                APP_MATRIX_LED_RefreshScreen(0);
+                APP_MATRIX_LED_ShowIcon(0);
             }
             else
             {
                 // GPIO on
                 SYS_DEBUG_PRINT(SYS_ERROR_DEBUG, "Alarm\r\n");
-                APP_MATRIX_LED_RefreshScreen(1);
+                APP_MATRIX_LED_ShowIcon(1);
             }
             break;
         }      
@@ -521,9 +521,6 @@ void APP_UDP_RESPONDER_Initialize ( void )
 
 void APP_UDP_RESPONDER_Tasks ( void )
 {
-    
-    APP_MATRIX_LED_Tasks();
-    
     /* Check the application's current state. */
     switch ( app_udp_responderData.state )
     {

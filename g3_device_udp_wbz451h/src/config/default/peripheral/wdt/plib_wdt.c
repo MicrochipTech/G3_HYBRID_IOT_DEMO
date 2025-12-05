@@ -55,18 +55,6 @@
 // *****************************************************************************
 // *****************************************************************************
 
-void WDT_Enable( void )
-{
-    /* ON = 1 */
-    WDT_REGS->WDT_WDTCONSET = WDT_WDTCON_ON_Msk;
-}
-
-void WDT_Disable( void )
-{
-    /* ON = 0 */
-    WDT_REGS->WDT_WDTCONCLR = WDT_WDTCON_ON_Msk;
-}
-
 bool WDT_IsEnabled( void )
 {
     return((WDT_REGS->WDT_WDTCON & WDT_WDTCON_ON_Msk) == WDT_WDTCON_ON_Msk ? true : false);

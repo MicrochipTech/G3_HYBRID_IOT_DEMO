@@ -11318,7 +11318,7 @@
         &lt;ElementPosition dnOrder=&quot;0&quot; id=&quot;g3PalPlc&quot; x=&quot;237&quot; y=&quot;244&quot;/&gt;
         &lt;ElementPosition dnOrder=&quot;1&quot; id=&quot;g3PalRf&quot; x=&quot;240&quot; y=&quot;131&quot;/&gt;
         &lt;ElementPosition dnOrder=&quot;2&quot; id=&quot;g3_config&quot; x=&quot;20&quot; y=&quot;20&quot;/&gt;
-        &lt;ElementPosition dnOrder=&quot;3&quot; id=&quot;lib_crypto&quot; x=&quot;231&quot; y=&quot;396&quot;/&gt;
+        &lt;ElementPosition dnOrder=&quot;3&quot; id=&quot;lib_crypto&quot; x=&quot;232&quot; y=&quot;396&quot;/&gt;
         &lt;ElementPosition dnOrder=&quot;4&quot; id=&quot;lib_wolfcrypt&quot; x=&quot;20&quot; y=&quot;352&quot;/&gt;
         &lt;ElementPosition dnOrder=&quot;5&quot; id=&quot;srvLogReport&quot; x=&quot;539&quot; y=&quot;19&quot;/&gt;
         &lt;ElementPosition dnOrder=&quot;6&quot; id=&quot;srvQueue&quot; x=&quot;547&quot; y=&quot;136&quot;/&gt;
@@ -11349,30 +11349,30 @@
     &lt;ComponentGraph dnOrder=&quot;8&quot; id=&quot;__ROOTVIEW&quot;&gt;
       &lt;ElementPositions dnOrder=&quot;0&quot;&gt;
         &lt;ElementPosition dnOrder=&quot;0&quot; id=&quot;BSP_WBZ451HPE_Curiosity&quot; x=&quot;20&quot; y=&quot;85&quot;/&gt;
-        &lt;ElementPosition dnOrder=&quot;1&quot; id=&quot;FreeRTOS&quot; x=&quot;460&quot; y=&quot;21&quot;/&gt;
-        &lt;ElementPosition dnOrder=&quot;2&quot; id=&quot;G3 STACK&quot; x=&quot;509&quot; y=&quot;306&quot;/&gt;
+        &lt;ElementPosition dnOrder=&quot;1&quot; id=&quot;FreeRTOS&quot; x=&quot;477&quot; y=&quot;20&quot;/&gt;
+        &lt;ElementPosition dnOrder=&quot;2&quot; id=&quot;G3 STACK&quot; x=&quot;81&quot; y=&quot;159&quot;/&gt;
         &lt;ElementPosition dnOrder=&quot;3&quot; id=&quot;HarmonyCore&quot; x=&quot;679&quot; y=&quot;18&quot;/&gt;
-        &lt;ElementPosition dnOrder=&quot;4&quot; id=&quot;IEEE_802154_PHY&quot; x=&quot;680&quot; y=&quot;550&quot;/&gt;
-        &lt;ElementPosition dnOrder=&quot;5&quot; id=&quot;TCP/IP STACK&quot; x=&quot;470&quot; y=&quot;549&quot;/&gt;
-        &lt;ElementPosition dnOrder=&quot;6&quot; id=&quot;cmsis&quot; x=&quot;323&quot; y=&quot;86&quot;/&gt;
-        &lt;ElementPosition dnOrder=&quot;7&quot; id=&quot;core&quot; x=&quot;229&quot; y=&quot;86&quot;/&gt;
-        &lt;ElementPosition dnOrder=&quot;8&quot; id=&quot;dfp&quot; x=&quot;226&quot; y=&quot;21&quot;/&gt;
+        &lt;ElementPosition dnOrder=&quot;4&quot; id=&quot;IEEE_802154_PHY&quot; x=&quot;402&quot; y=&quot;482&quot;/&gt;
+        &lt;ElementPosition dnOrder=&quot;5&quot; id=&quot;TCP/IP STACK&quot; x=&quot;731&quot; y=&quot;373&quot;/&gt;
+        &lt;ElementPosition dnOrder=&quot;6&quot; id=&quot;cmsis&quot; x=&quot;166&quot; y=&quot;52&quot;/&gt;
+        &lt;ElementPosition dnOrder=&quot;7&quot; id=&quot;core&quot; x=&quot;272&quot; y=&quot;53&quot;/&gt;
+        &lt;ElementPosition dnOrder=&quot;8&quot; id=&quot;dfp&quot; x=&quot;165&quot; y=&quot;20&quot;/&gt;
         &lt;ElementPosition dnOrder=&quot;9&quot; id=&quot;drvG3MacRt&quot; x=&quot;215&quot; y=&quot;220&quot;/&gt;
-        &lt;ElementPosition dnOrder=&quot;10&quot; id=&quot;eic&quot; x=&quot;21&quot; y=&quot;133&quot;/&gt;
+        &lt;ElementPosition dnOrder=&quot;10&quot; id=&quot;eic&quot; x=&quot;349&quot; y=&quot;21&quot;/&gt;
         &lt;ElementPosition dnOrder=&quot;11&quot; id=&quot;evsys&quot; x=&quot;20&quot; y=&quot;20&quot;/&gt;
-        &lt;ElementPosition dnOrder=&quot;12&quot; id=&quot;nvm&quot; x=&quot;27&quot; y=&quot;638&quot;/&gt;
-        &lt;ElementPosition dnOrder=&quot;13&quot; id=&quot;pdsSystem&quot; x=&quot;210&quot; y=&quot;630&quot;/&gt;
-        &lt;ElementPosition dnOrder=&quot;14&quot; id=&quot;pic32cx_bz2_devsupport&quot; x=&quot;677&quot; y=&quot;288&quot;/&gt;
-        &lt;ElementPosition dnOrder=&quot;15&quot; id=&quot;sercom1&quot; x=&quot;46&quot; y=&quot;476&quot;/&gt;
-        &lt;ElementPosition dnOrder=&quot;16&quot; id=&quot;sercom2&quot; x=&quot;33&quot; y=&quot;287&quot;/&gt;
-        &lt;ElementPosition dnOrder=&quot;17&quot; id=&quot;srv_pcoup&quot; x=&quot;213&quot; y=&quot;128&quot;/&gt;
-        &lt;ElementPosition dnOrder=&quot;18&quot; id=&quot;srv_pcrc&quot; x=&quot;31&quot; y=&quot;375&quot;/&gt;
-        &lt;ElementPosition dnOrder=&quot;19&quot; id=&quot;sys_console&quot; x=&quot;216&quot; y=&quot;405&quot;/&gt;
-        &lt;ElementPosition dnOrder=&quot;20&quot; id=&quot;sys_debug&quot; x=&quot;464&quot; y=&quot;402&quot;/&gt;
+        &lt;ElementPosition dnOrder=&quot;12&quot; id=&quot;nvm&quot; x=&quot;30&quot; y=&quot;464&quot;/&gt;
+        &lt;ElementPosition dnOrder=&quot;13&quot; id=&quot;pdsSystem&quot; x=&quot;173&quot; y=&quot;418&quot;/&gt;
+        &lt;ElementPosition dnOrder=&quot;14&quot; id=&quot;pic32cx_bz2_devsupport&quot; x=&quot;623&quot; y=&quot;482&quot;/&gt;
+        &lt;ElementPosition dnOrder=&quot;15&quot; id=&quot;sercom1&quot; x=&quot;409&quot; y=&quot;346&quot;/&gt;
+        &lt;ElementPosition dnOrder=&quot;16&quot; id=&quot;sercom2&quot; x=&quot;33&quot; y=&quot;288&quot;/&gt;
+        &lt;ElementPosition dnOrder=&quot;17&quot; id=&quot;srv_pcoup&quot; x=&quot;31&quot; y=&quot;215&quot;/&gt;
+        &lt;ElementPosition dnOrder=&quot;18&quot; id=&quot;srv_pcrc&quot; x=&quot;277&quot; y=&quot;150&quot;/&gt;
+        &lt;ElementPosition dnOrder=&quot;19&quot; id=&quot;sys_console&quot; x=&quot;557&quot; y=&quot;282&quot;/&gt;
+        &lt;ElementPosition dnOrder=&quot;20&quot; id=&quot;sys_debug&quot; x=&quot;731&quot; y=&quot;263&quot;/&gt;
         &lt;ElementPosition dnOrder=&quot;21&quot; id=&quot;sys_time&quot; x=&quot;680&quot; y=&quot;140&quot;/&gt;
-        &lt;ElementPosition dnOrder=&quot;22&quot; id=&quot;tc0&quot; x=&quot;470&quot; y=&quot;185&quot;/&gt;
-        &lt;ElementPosition dnOrder=&quot;23&quot; id=&quot;tc3&quot; x=&quot;861&quot; y=&quot;22&quot;/&gt;
-        &lt;ElementPosition dnOrder=&quot;24&quot; id=&quot;trng&quot; x=&quot;30&quot; y=&quot;203&quot;/&gt;
+        &lt;ElementPosition dnOrder=&quot;22&quot; id=&quot;tc0&quot; x=&quot;490&quot; y=&quot;185&quot;/&gt;
+        &lt;ElementPosition dnOrder=&quot;23&quot; id=&quot;tc3&quot; x=&quot;490&quot; y=&quot;119&quot;/&gt;
+        &lt;ElementPosition dnOrder=&quot;24&quot; id=&quot;trng&quot; x=&quot;348&quot; y=&quot;70&quot;/&gt;
       &lt;/ElementPositions&gt;
     &lt;/ComponentGraph&gt;
   &lt;/UserData&gt;
@@ -12328,7 +12328,7 @@
          <value>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;core&gt;
   &lt;core dnOrder=&quot;0&quot; id=&quot;BSP_PIN_39_FUNCTION_NAME&quot;&gt;
     &lt;Values dnOrder=&quot;0&quot;&gt;
-      &lt;User dnOrder=&quot;0&quot; value=&quot;mikroBUS MOSI&quot;/&gt;
+      &lt;User dnOrder=&quot;0&quot; value=&quot;PLC_SPI_MOSI&quot;/&gt;
     &lt;/Values&gt;
   &lt;/core&gt;
 &lt;/core&gt;
@@ -12441,7 +12441,7 @@
          <value>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;core&gt;
   &lt;core dnOrder=&quot;0&quot; id=&quot;BSP_PIN_5_FUNCTION_NAME&quot;&gt;
     &lt;Values dnOrder=&quot;0&quot;&gt;
-      &lt;User dnOrder=&quot;0&quot; value=&quot;mikroBUS SCK&quot;/&gt;
+      &lt;User dnOrder=&quot;0&quot; value=&quot;PLC_SPI_SCK&quot;/&gt;
     &lt;/Values&gt;
   &lt;/core&gt;
 &lt;/core&gt;
@@ -12503,7 +12503,7 @@
          <value>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;core&gt;
   &lt;core dnOrder=&quot;0&quot; id=&quot;BSP_PIN_6_FUNCTION_NAME&quot;&gt;
     &lt;Values dnOrder=&quot;0&quot;&gt;
-      &lt;User dnOrder=&quot;0&quot; value=&quot;mikroBUS MISO&quot;/&gt;
+      &lt;User dnOrder=&quot;0&quot; value=&quot;PLC_SPI_MISO&quot;/&gt;
     &lt;/Values&gt;
   &lt;/core&gt;
 &lt;/core&gt;
@@ -12698,6 +12698,28 @@
   &lt;core dnOrder=&quot;0&quot; id=&quot;CONFIG_SYS_CLK_REFCLK6_FREQ&quot;&gt;
     &lt;Values dnOrder=&quot;0&quot;&gt;
       &lt;User dnOrder=&quot;0&quot; value=&quot;0&quot;/&gt;
+    &lt;/Values&gt;
+  &lt;/core&gt;
+&lt;/core&gt;
+</value>
+      </entry>
+      <entry>
+         <key class="com.microchip.mcc.core.tokenManager.CustomKey" moduleName="core" name="CONFIG_WDTEN"/>
+         <value>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;core&gt;
+  &lt;core dnOrder=&quot;0&quot; id=&quot;CONFIG_WDTEN&quot;&gt;
+    &lt;Values dnOrder=&quot;0&quot;&gt;
+      &lt;User dnOrder=&quot;0&quot; value=&quot;ON&quot;/&gt;
+    &lt;/Values&gt;
+  &lt;/core&gt;
+&lt;/core&gt;
+</value>
+      </entry>
+      <entry>
+         <key class="com.microchip.mcc.core.tokenManager.CustomKey" moduleName="core" name="CONFIG_WDTPSR"/>
+         <value>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;core&gt;
+  &lt;core dnOrder=&quot;0&quot; id=&quot;CONFIG_WDTPSR&quot;&gt;
+    &lt;Values dnOrder=&quot;0&quot;&gt;
+      &lt;User dnOrder=&quot;0&quot; value=&quot;PS4096&quot;/&gt;
     &lt;/Values&gt;
   &lt;/core&gt;
 &lt;/core&gt;
@@ -15345,7 +15367,7 @@
          <value>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;core&gt;
   &lt;core dnOrder=&quot;0&quot; id=&quot;WDT_ALLOWED_WINDOW_PERIOD&quot;&gt;
     &lt;Values dnOrder=&quot;0&quot;&gt;
-      &lt;Dynamic dnOrder=&quot;0&quot; id=&quot;core&quot; value=&quot;256.0 s&quot;/&gt;
+      &lt;Dynamic dnOrder=&quot;0&quot; id=&quot;core&quot; value=&quot;1000.0 ms&quot;/&gt;
     &lt;/Values&gt;
   &lt;/core&gt;
 &lt;/core&gt;
@@ -15405,8 +15427,13 @@
          <key class="com.microchip.mcc.core.tokenManager.CustomKey" moduleName="core" name="WDT_TIMEOUT_PERIOD"/>
          <value>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;core&gt;
   &lt;core dnOrder=&quot;0&quot; id=&quot;WDT_TIMEOUT_PERIOD&quot;&gt;
-    &lt;Values dnOrder=&quot;0&quot;&gt;
-      &lt;Dynamic dnOrder=&quot;0&quot; id=&quot;core&quot; value=&quot;1024.0 s&quot;/&gt;
+    &lt;Attributes dnOrder=&quot;0&quot;&gt;
+      &lt;Boolean dnOrder=&quot;0&quot; id=&quot;visible&quot;&gt;
+        &lt;Value dnOrder=&quot;0&quot;&gt;true&lt;/Value&gt;
+      &lt;/Boolean&gt;
+    &lt;/Attributes&gt;
+    &lt;Values dnOrder=&quot;1&quot;&gt;
+      &lt;Dynamic dnOrder=&quot;0&quot; id=&quot;core&quot; value=&quot;4.0 s&quot;/&gt;
     &lt;/Values&gt;
   &lt;/core&gt;
 &lt;/core&gt;
@@ -15416,8 +15443,13 @@
          <key class="com.microchip.mcc.core.tokenManager.CustomKey" moduleName="core" name="WDT_USE"/>
          <value>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;core&gt;
   &lt;core dnOrder=&quot;0&quot; id=&quot;WDT_USE&quot;&gt;
-    &lt;Values dnOrder=&quot;0&quot;&gt;
-      &lt;User dnOrder=&quot;0&quot; value=&quot;true&quot;/&gt;
+    &lt;Attributes dnOrder=&quot;0&quot;&gt;
+      &lt;Boolean dnOrder=&quot;0&quot; id=&quot;readOnly&quot;&gt;
+        &lt;Value dnOrder=&quot;0&quot;&gt;true&lt;/Value&gt;
+      &lt;/Boolean&gt;
+    &lt;/Attributes&gt;
+    &lt;Values dnOrder=&quot;1&quot;&gt;
+      &lt;Dynamic dnOrder=&quot;0&quot; id=&quot;core&quot; value=&quot;true&quot;/&gt;
     &lt;/Values&gt;
   &lt;/core&gt;
 &lt;/core&gt;
@@ -16810,7 +16842,9 @@
          <key class="com.microchip.mcc.core.tokenManager.CustomKey" moduleName="g3PalRf" name="G3_PAL_RF_PHY_CHANNEL"/>
          <value>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;g3PalRf&gt;
   &lt;g3PalRf dnOrder=&quot;0&quot; id=&quot;G3_PAL_RF_PHY_CHANNEL&quot;&gt;
-    &lt;Values dnOrder=&quot;0&quot;/&gt;
+    &lt;Values dnOrder=&quot;0&quot;&gt;
+      &lt;User dnOrder=&quot;0&quot; value=&quot;26&quot;/&gt;
+    &lt;/Values&gt;
   &lt;/g3PalRf&gt;
 &lt;/g3PalRf&gt;
 </value>
@@ -35645,7 +35679,7 @@
       </entry>
       <entry>
          <file>..\src\config\default\FreeRTOSConfig.h</file>
-         <hash>bdcc48076811639f7fe1185287b16a312ce79981f2ab4823cd0c2b8e9adcb317</hash>
+         <hash>2dee6baf0f0bb0fa9fbc8c37bb5dc730fa1411cf1418ec81860abdad4a79a55b</hash>
       </entry>
       <entry>
          <file>..\src\config\default\WBZ451H.ld</file>
@@ -35817,7 +35851,7 @@
       </entry>
       <entry>
          <file>..\src\config\default\definitions.h</file>
-         <hash>0d6fd9c28660c2eaf20296629ae2a5894719062ad5e74700c4a517aa9eac4ebe</hash>
+         <hash>7eb2d8dfa91b51224e2646e748f197bba12b5e89a6555578efa5a6ec4c899f3f</hash>
       </entry>
       <entry>
          <file>..\src\config\default\device.h</file>
@@ -35997,7 +36031,7 @@
       </entry>
       <entry>
          <file>..\src\config\default\initialization.c</file>
-         <hash>87df9313eb5382ff7715c73b8fe3da34eee79c6e19a521a409e557796db0f7dc</hash>
+         <hash>8d45114243787aceac493e59a0b79c5ce1711f045bec285f5f4bacdd44bb9a17</hash>
       </entry>
       <entry>
          <file>..\src\config\default\interrupts.c</file>
@@ -36713,11 +36747,11 @@
       </entry>
       <entry>
          <file>..\src\config\default\peripheral\wdt\plib_wdt.c</file>
-         <hash>a0e96e293619041c23ba2eb1134c6f2c0f722f5377d651901be6ab6eb059e452</hash>
+         <hash>bdbc527f192e47d1e40fef32bc7a024dc8df03ef8814e87e5ef81526632ad246</hash>
       </entry>
       <entry>
          <file>..\src\config\default\peripheral\wdt\plib_wdt.h</file>
-         <hash>cb8dd5865885397dedcf11696f54ad5f8eca20c8a28d3c707b48efbf355e2812</hash>
+         <hash>30f18afc64a7a2758188c034934f13aeb8c67d45eec2aa8c1bb66296d33951d6</hash>
       </entry>
       <entry>
          <file>..\src\config\default\service\log_report\srv_log_report.h</file>
@@ -36921,7 +36955,7 @@
       </entry>
       <entry>
          <file>..\src\config\default\stack\g3\pal\rf\pal_rf.c</file>
-         <hash>bbe2f5584e00c094c9df52f1305ea8d8d4bd4d39319c2a2ad86b33b1f72c6881</hash>
+         <hash>a64c821165b33e7a5c8ba599320991a296911dfdfddfc0adf3ed6f4b1e19fddc</hash>
       </entry>
       <entry>
          <file>..\src\config\default\stack\g3\pal\rf\pal_rf.h</file>
