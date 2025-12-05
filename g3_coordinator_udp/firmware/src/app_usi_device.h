@@ -62,13 +62,11 @@ extern "C" {
 typedef enum
 {
     /* Application's state machine's initial state. */
-    APP_USI_DEVICE_STATE_INIT=0,            
+    APP_USI_DEVICE_STATE_WAIT_TCPIP_READY = 0,
+    APP_USI_DEVICE_STATE_INIT,           
     /* TODO: Define states used by the application state machine. */
     APP_USI_DEVICE_STATE_CONFIG,
     APP_USI_DEVICE_STATE_READY,
-    APP_USI_DEVICE_STATE_PING_DEVICE,
-    APP_USI_DEVICE_STATE_PING_DEVICE_ANSWER,
-    APP_USI_DEVICE_STATE_DELAY,
     APP_USI_DEVICE_STATE_ERROR            
 } APP_USI_DEVICE_STATES;
 

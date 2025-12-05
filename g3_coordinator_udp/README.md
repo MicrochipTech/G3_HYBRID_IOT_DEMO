@@ -4,7 +4,7 @@
 
 > "IoT Made Easy!" - This is an application using the unified G3-Hybrid PLC+RF protocol.
 
-Devices: **| PIC32CX-BZ |**<br>
+Devices: **| PIC32CX-BZ | PL460 |**<br>
 Features: **| G3 Hybrid protocol |**
 
 
@@ -45,36 +45,43 @@ According with G3 technologies[*](#links) each G3 network requires the existence
 | [MikroBUS to PL460-EK adaptation board](docs/WBZ451mikroBUStoPL460EKadapter.png) | 1 |
 
 ## Hardware Setup
-- Connect the power supply on J7
-- Connect a USB cable on J7 for device programming and debugging with terminal program
-- Connect PB13 and PB12 (available removing R11 and R16) on WBZ451 acting like coordinator to PD24 and PD25 available on J401 of PIC32CZCA80 Host Controller.
+
 - The PL460-EK rev4 need to be modified with these changes:
   - Replace C9 by a 10K Pull Down resistor to GND (PL460_NRST)
   - Include 10K Pull Up resistor to 3V3 on PL460_ENABLE and cut trace to XPLAINED PRO connector
   - Include 10K Pull Down resistor to GND on PL460_STBY and cut trace to XPLAINED PRO connector
 
+- Connect the PL460-EK to MikroBUS connector of WBZ451 with the adaptation board and supply it with the provided +15V Power Supply
+- Connect PB13 and PB12 (available removing R11 and R16) on WBZ451 acting like coordinator to PD24 and PD25 available on J401 of PIC32CZCA80 Host Controller - Serial Port Communication.
+- Connect the +5V power supply on WBZ451 uUSB connector J7
+- Connect a USB cable on J7 for device programming and debugging with terminal program
+
+![G3 Hybrid Coordinator Design](docs/WBZ451_hybrid_coordinator.png)
 
 ## Software Setup
 ## Development Tools
-  - MPLAB X v6.20
+  - MPLAB X v6.25
   - MPLAB® XC32 C/C++ Compiler v4.60
   - MPLAB® X IDE plug-ins: MPLAB® Code Configurator (MCC) v5.7.1 and above
-  - Device Pack: PIC32CX-BZ2-DFP (1.4.243) , PIC32CX-BZ3-DFP (1.1.171),PIC32CX-BZ6-DFP(1.2.17)
+  - Device Pack: PIC32CX-BZ2-DFP (1.4.243)
 	
 ## MCC Content Libraries
 
-| Harmony MCC dependencies | version |
-| :-                       | :-      |
-| bsp                      | v3.22.0 |
-| csp                      | v3.22.0 |
-| core                     | v3.15.0 |
-| CMSIS_5                  | v5.9.0  |
-| wireless_pic32cxbz_wbz   | v1.6.0  |
-| wolfssl                  | v5.4.0  |
-| crypto                   | v3.8.1  |
-| wireless_phy             | v1.4.0  |
-| wireless_mac             | v1.2.0  |
-| CMSIS-FreeRTOS           | v10.4.6 |
+| Harmony MCC dependencies | version  |
+| :-                       | :-       |
+| bsp                      | v3.20.1  |
+| csp                      | v3.19.1  |
+| core                     | v3.13.5  |
+| CMSIS_5                  | v5.8.0   |
+| wireless_pic32cxbz_wbz   | v1.2.0   |
+| wolfssl                  | v5.6.7-E1|
+| crypto                   | v4.0.0-E1|
+| wireless_15_4_phy        | v1.2.0   |
+| CMSIS-FreeRTOS           | v10.5.1  |
+| smartenergy              | v1.2.1   |
+| smartenergy_g3           | v1.0.1   |
+| net                      | v3.12.0  |
+
 
 ## Harmony MCC Configuration
 
@@ -210,7 +217,7 @@ The state machine of the G3 Coordinator cycling can be summarize on:
 
 ![G3 cycling state machine](docs/G3coordinatorCyclingStateMachine.png)
 
-#### Communication Protocol between G3 Coordinator and Host Controller
+### Communication Protocol between G3 Coordinator and Host Controller
 
 The communication protocol between the G3 coodinator and the Host Controller runs over the USI Service serialization from <a href="https://github.com/Microchip-MPLAB-Harmony/smartenergy" target="_blank">Microhip MPLAB Harmony smartenergy repository</a>.
 
@@ -264,14 +271,14 @@ where:
 |Emergency Button|10|
 |LED Panel|11|
 
-| Color | X(H)
-| :- | :- |
-|Red|00|
-|Yellow|2B|
-|Green|55|
-|Cyan|80|
-|Blue|AA|
-|Magenta|D5|
+| Color | X(H)|
+| :-    | :-  |
+|Red    |00   |
+|Yellow |2B   |
+|Green  |55   |
+|Cyan   |80   |
+|Blue   |AA   |
+|Magenta|D5   |
 
 [TOP](#contents)
 
@@ -281,6 +288,22 @@ Programming the application can be done using MPLAB X IDE
 - Open the given project using MPLAB X IDE
 - Select the connected hardware tool in the project properties
 - Make and program device
+
+[TOP](#contents)
+
+## Run the demo
+
+After powering up the WBZ451 (5V Power Supply) + PL460 (15V Power Supply), the coordinator starts creating the G3 Network. It keeps waiting for G3 devices start joining the network through PLC or RF. At the same time the information about the status of the G3 devices is notified to PICZA80 Host Controller through the serial port between both.
+
+Each time an alarm is sent from the Emergency Button, the RGB LED on G3 coordinator keeps on red for 2 seconds.
+
+<b>UART interface</b>  
+For debugging purposes, a UART interface to the PC is implemented. A serial port terminal (e.g. PuTTY) can be used to open a connection to the device.  
+  
+USART configuration:
+- Baud rate: 115 200 Hz
+- Parity mode: no parity
+- Stop bit mode: 1 Stop bit
 
 [TOP](#contents)
 

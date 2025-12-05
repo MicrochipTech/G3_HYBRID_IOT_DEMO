@@ -98,16 +98,12 @@ static void _PHY_Tasks(  void *pvParameters  )
     }
 }
 
-
-
-
-
 void _TCPIP_STACK_Task(  void *pvParameters  )
 {
     while(1)
     {
         TCPIP_STACK_Task(sysObj.tcpip);
-        vTaskDelay(1 / portTICK_PERIOD_MS);
+        vTaskDelay(10 / portTICK_PERIOD_MS);
     }
 }
 
@@ -130,7 +126,7 @@ static void lAPP_UDP_RESPONDER_Tasks(  void *pvParameters  )
     while(true)
     {
         APP_UDP_RESPONDER_Tasks();
-        vTaskDelay(10U / portTICK_PERIOD_MS);
+        vTaskDelay(20U / portTICK_PERIOD_MS);
     }
 }
 /* Handle for the APP_STORAGE_WBZ451_Tasks. */
@@ -162,7 +158,7 @@ static void lAPP_CYCLES_Tasks(  void *pvParameters  )
     while(true)
     {
         APP_CYCLES_Tasks();
-        vTaskDelay(5U / portTICK_PERIOD_MS);
+        vTaskDelay(15U / portTICK_PERIOD_MS);
     }
 }
 /* Handle for the APP_TCPIP_MANAGEMENT_Tasks. */
@@ -173,7 +169,7 @@ static void lAPP_TCPIP_MANAGEMENT_Tasks(  void *pvParameters  )
     while(true)
     {
         APP_TCPIP_MANAGEMENT_Tasks();
-        vTaskDelay(10U / portTICK_PERIOD_MS);
+        vTaskDelay(15U / portTICK_PERIOD_MS);
     }
 }
 /* Handle for the APP_INTERFACE_Tasks. */
@@ -184,7 +180,7 @@ static void lAPP_INTERFACE_Tasks(  void *pvParameters  )
     while(true)
     {
         APP_INTERFACE_Tasks();
-        vTaskDelay(5U / portTICK_PERIOD_MS);
+        vTaskDelay(20U / portTICK_PERIOD_MS);
     }
 }
 /* Handle for the APP_USI_DEVICE_Tasks. */
@@ -195,7 +191,7 @@ static void lAPP_USI_DEVICE_Tasks(  void *pvParameters  )
     while(true)
     {
         APP_USI_DEVICE_Tasks();
-        vTaskDelay(5U / portTICK_PERIOD_MS);
+        vTaskDelay(10U / portTICK_PERIOD_MS);
     }
 }
 
@@ -205,7 +201,7 @@ void lSYS_CMD_Tasks(  void *pvParameters  )
     while(1)
     {
         SYS_CMD_Tasks();
-        vTaskDelay(10 / portTICK_PERIOD_MS);
+        vTaskDelay(20 / portTICK_PERIOD_MS);
     }
 }
 

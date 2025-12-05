@@ -64,7 +64,7 @@ extern "C" {
 /* Timeout in ms to consider reply not received */
 #define APP_CYCLES_TIMEOUT_MS 10000
 
-#define APP_CYCLES_DELAY_ROUTE_REQUEST_AFTER_JOIN 10000 // 10 seconds
+#define APP_CYCLES_DELAY_ROUTE_REQUEST_AFTER_JOIN 20000 // 10 seconds
 
 #ifndef APP_CYCLES_METROLOGY_DATA_REQUEST
     /* UDP packet size in bytes */
@@ -202,7 +202,7 @@ typedef struct
 
 #define APP_COORDINATOR_MAX_DEVICES 12   // TYPE_PANEL_LED - TYPE_LIGHTING_INDOOR + 1
 
-#define APP_COORDINATOR_ALIVE_TRIES 8
+#define APP_COORDINATOR_ALIVE_TRIES 6
 
 #define INDEX_UNKNOWN 255
 

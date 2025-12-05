@@ -271,7 +271,7 @@ void APP_USI_DEVICE_ProtocolEventHandler(uint8_t *pData, size_t length)
 
             if (type == TYPE_PANEL_LED)
             {               
-                onoff = (*pData++ == 0)? false : true;
+                onoff = *pData++;
                 APP_COORDINATOR_deviceDoSnapshot(&device_info_usi);            
                 bool joined = APP_COORDINATOR_deviceGetJoinedSnapshot(device_info_usi, type);
                 if (joined)
@@ -279,7 +279,7 @@ void APP_USI_DEVICE_ProtocolEventHandler(uint8_t *pData, size_t length)
                     deviceCmd.index = index;
                     deviceCmd.index = TYPE_PANEL_LED - TYPE_LIGHTING_INDOOR;  // Fixed
                     deviceCmd.data[0] = CMD_SET_PANEL_LED;
-                    deviceCmd.data[1] = *pData++; // 0: Microchip Logo, 1: Alarm
+                    deviceCmd.data[1] = onoff; // 0: Microchip Logo, 1: Alarm
                     deviceCmd.length = 2;
                     deviceCmd.answer = false; 
                     APP_COORDINATOR_PushCoordCmdsQueue(&deviceCmd);
@@ -353,7 +353,7 @@ void APP_USI_DEVICE_ProtocolEventHandler(uint8_t *pData, size_t length)
 void APP_USI_DEVICE_Initialize ( void )
 {
     /* Place the App state machine in its initial state. */
-    app_usi_deviceData.state = APP_USI_DEVICE_STATE_INIT;
+    app_usi_deviceData.state = APP_USI_DEVICE_STATE_WAIT_TCPIP_READY;
     app_usi_deviceData.timerDelay = SYS_TIME_HANDLE_INVALID;
     
     SYS_DEBUG_PRINT(SYS_ERROR_INFO, "[APP_USI] Init\r\n");
@@ -375,6 +375,25 @@ void APP_USI_DEVICE_Tasks ( void )
     /* Check the application's current state. */
     switch ( app_usi_deviceData.state )
     {
+        
+        /* Application's initial state. */
+        case APP_USI_DEVICE_STATE_WAIT_TCPIP_READY:
+        {
+            SYS_STATUS tcpipStat = TCPIP_STACK_Status(sysObj.tcpip);
+            if (tcpipStat <= SYS_STATUS_ERROR)
+            {
+                SYS_DEBUG_MESSAGE(SYS_ERROR_ERROR, "[APP_USI] TCP/IP stack initialization failed!\r\n");
+                app_usi_deviceData.state = APP_USI_DEVICE_STATE_ERROR;
+            }
+            else if(tcpipStat == SYS_STATUS_READY)
+            {
+                /* TCP/IP stack ready */
+                app_usi_deviceData.state = APP_USI_DEVICE_STATE_INIT;
+            }
+
+            break;
+        }
+        
         case APP_USI_DEVICE_STATE_INIT:
         {   /* Application's initial state. */
             /* Open USI Service */

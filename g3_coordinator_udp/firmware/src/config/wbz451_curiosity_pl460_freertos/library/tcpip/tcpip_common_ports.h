@@ -77,9 +77,9 @@ Microchip or any third party.
 // and is meant for the selection of ephemeral ports (RFC 6056).
 // Adjust to your needs but stay within the IANA range 
 // First port number for randomized local port number selection
-#define TCPIP_UDP_LOCAL_PORT_START_NUMBER         (49152)
+#define TCPIP_UDP_LOCAL_PORT_START_NUMBER         0xF0B0 // (49152)
 // Last port number for randomized local port number selection
-#define TCPIP_UDP_LOCAL_PORT_END_NUMBER           (65535)
+#define TCPIP_UDP_LOCAL_PORT_END_NUMBER           0xF0BE // (65535)
 
 
 

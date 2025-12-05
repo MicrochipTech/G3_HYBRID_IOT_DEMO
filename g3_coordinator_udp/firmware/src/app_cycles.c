@@ -728,8 +728,8 @@ void APP_CYCLES_TRANSFER_Tasks()
                 app_cyclesData.timeCountTotalCycle += SYS_TIME_CountToMS((uint32_t)elapsedTimeCount);
                 
                 APP_COORDINATOR_deviceGetTriesByType(app_cyclesData.shortAddress, &tries);
-                SYS_DEBUG_PRINT(SYS_ERROR_ERROR, "APP_CYCLES: UDP Device Info reply not received (timeout %u ms - tries %d)\r\n",
-                        SYS_TIME_CountToMS(elapsedTimeCount), tries);
+                SYS_DEBUG_PRINT(SYS_ERROR_ERROR, "APP_CYCLES: UDP Device Info reply from 0x%04X not received (timeout %u ms - tries %d)\r\n",
+                        app_cyclesData.shortAddress, SYS_TIME_CountToMS(elapsedTimeCount), tries);
 
                 /* Free Transfer State */
                 app_cyclesData.transferFlag = false;
@@ -746,7 +746,7 @@ void APP_CYCLES_TRANSFER_Tasks()
                 break;
             }
 
-            SYS_DEBUG_MESSAGE(SYS_ERROR_ERROR, "APP_CYCLES: RECEIVED PACKET\r\n");
+            SYS_DEBUG_PRINT(SYS_ERROR_INFO, "APP_CYCLES: RECEIVED PACKET from 0x%04X\r\n", app_cyclesData.shortAddress);
 
             app_cyclesData.answerOK = true;
             app_cyclesData.timeDataExpired = true;
@@ -783,8 +783,8 @@ void APP_CYCLES_TRANSFER_Tasks()
                     app_cyclesData.pStatsEntry->numUdpReplies++;
                 // Refresh tries for this short address == type
                 APP_COORDINATOR_deviceSetTriesByType(app_cyclesData.shortAddress, APP_COORDINATOR_ALIVE_TRIES);
-                SYS_DEBUG_PRINT(SYS_ERROR_DEBUG, "APP_CYCLES: UDP Device Info reply received from 0x%04X (%u ms)\r\n", 
-                        app_cyclesData.shortAddress, SYS_TIME_CountToMS(elapsedTimeCount));
+                SYS_DEBUG_PRINT(SYS_ERROR_DEBUG, "APP_CYCLES: UDP Device Info reply received (%u ms)\r\n", 
+                        SYS_TIME_CountToMS(elapsedTimeCount));
             }
             else
             {

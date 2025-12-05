@@ -609,13 +609,14 @@ PAL_PLC_PIB_RESULT PAL_PLC_SetMacRtPib(PAL_PLC_HANDLE handle, MAC_RT_PIB_OBJ *pi
 #include "stack/g3/adaptation/adp.h"
 void PAL_PLC_SetCoordinator(PAL_PLC_HANDLE handle)
 {
-    ADP_MAC_GET_CFM_PARAMS getMacConfirm;
-
     if (handle != (PAL_PLC_HANDLE)&palPlcData)
     {
         return;
     }
 
+#ifdef PAL_PLC_COORD_ONLY_RF
+    ADP_MAC_GET_CFM_PARAMS getMacConfirm;
+    
     /* Enable Coordinator capabilities */
     ADP_MacGetRequestSync(/*MAC_WRP_PIB_MANUF_PLC_IFACE_AVAILABLE*/0x0800002C, 0, &getMacConfirm);
     if((getMacConfirm.status != G3_SUCCESS) || (getMacConfirm.attributeValue[0] == 0))
@@ -626,6 +627,9 @@ void PAL_PLC_SetCoordinator(PAL_PLC_HANDLE handle)
     {
         DRV_G3_MACRT_SetCoordinator(palPlcData.drvG3MacRtHandle);
     }
+#else 
+    DRV_G3_MACRT_SetCoordinator(palPlcData.drvG3MacRtHandle);
+#endif    
     palPlcData.mibInitData.coordinator = true;
     palPlcData.coordinator = true;
 }
