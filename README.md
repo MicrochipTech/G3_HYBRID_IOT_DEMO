@@ -18,7 +18,7 @@ For additional Microchip repos, see: <a href="https://github.com/Microchip-MPLAB
 Checkout the <a href="https://microchipsupport.force.com/s/" target="_blank">Technical support portal</a> to access our knowledge base, community forums or submit support ticket requests.
 </span></p></b>
 
-## Contents <!-- omit in toc -->
+## Contents 
 - [Introduction](#introduction)
 - [Solution Diagram](#solution-diagram)
 - [Run the demo](#run-the-demo)
