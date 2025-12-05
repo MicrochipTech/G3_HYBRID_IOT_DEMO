@@ -79,6 +79,10 @@ static const APP_G3_MANAGEMENT_CONSTANTS app_g3_managementConst = {
     .maxHops = APP_G3_MANAGEMENT_MAX_HOPS,
     .dutyCycleLimitRF = APP_G3_MANAGEMENT_DUTY_CYCLE_LIMIT_RF,
     .defaultCoordRouteEnabled = APP_G3_MANAGEMENT_DEFAULT_COORD_ROUTE_ENABLED,
+    .rrepWait = APP_G3_MANAGEMENT_RREP_WAIT,
+    .rreqWait = APP_G3_MANAGEMENT_RREQ_WAIT,
+    .netTraversalTime = APP_G3_MANAGEMENT_NET_TRAVERSAL_TIME,
+    .blacklistTableEntryTTL = APP_G3_MANAGEMENT_BLACKLIST_TABLE_ENTRY_TTL,
 
     /* G3 Conformance parameters */
     .pskConformance = APP_G3_MANAGEMENT_PSK_KEY_CONFORMANCE,
@@ -295,9 +299,6 @@ static void _LBP_ADP_NetworkJoinConfirm(LBP_ADP_NETWORK_JOIN_CFM_PARAMS* pNetwor
                             _APP_G3_MANAGEMENT_TimeExpiredSetFlag, (uintptr_t) &app_g3_managementData.timerLedExpired, SYS_TIME_PERIODIC);
         }
 
-        SYS_DEBUG_PRINT(SYS_ERROR_INFO, "APP_G3_MANAGEMENT: Joined to the network. "
-                "PAN ID: 0x%04X, Short Address: 0x%04X\r\n", panId, shortAddress);
-        
         /* Reset Reboot Protection */
         timeoutTraffic = (TIMEOUT_WAIT_TRAFFIC_BLINK_FIRST >> (blink_rate_factor - 1));
         
@@ -321,11 +322,13 @@ static void _LBP_ADP_NetworkJoinConfirm(LBP_ADP_NETWORK_JOIN_CFM_PARAMS* pNetwor
         else
         {
             /* Maximum join retries reached. Go to back-off before start
-             * network discovery. */
+             * network discovery - reboot */
+            
+            _APP_G3_MANAGEMENT_Reboot();
+            
             app_g3_managementData.state = APP_G3_MANAGEMENT_STATE_START_BACKOFF_DISCOVERY;
             app_g3_managementData.backoffWindowLow = APP_G3_MANAGEMENT_DISCOVERY_BACKOFF_LOW_MIN;
             app_g3_managementData.backoffWindowHigh = APP_G3_MANAGEMENT_DISCOVERY_BACKOFF_HIGH_MIN;
-
             SYS_DEBUG_MESSAGE(SYS_ERROR_WARNING, "APP_G3_MANAGEMENT: Failed to join after last retry\r\n");
         }
     }
@@ -551,6 +554,9 @@ static void _APP_G3_MANAGEMENT_InitializeParameters(void)
     
     ADP_SetRequestSync(ADP_IB_RREP_WAIT, 0, 1,
             (const uint8_t*) &app_g3_managementConst.rrepWait, &setConfirm);
+    
+    ADP_SetRequestSync(ADP_IB_ROUTING_TABLE_ENTRY_TTL, 0, 2,
+            (const uint8_t*) &app_g3_managementConst.blacklistTableEntryTTL, &setConfirm);
     
     ADP_SetRequestSync(ADP_IB_NET_TRAVERSAL_TIME, 0, 1,
             (const uint8_t*) &app_g3_managementConst.netTraversalTime, &setConfirm);
@@ -1052,13 +1058,14 @@ void APP_G3_MANAGEMENT_Initialize ( void )
 
 void APP_G3_MANAGEMENT_Tasks ( void )
 {
-    /* Refresh Watchdog */
-    CLEAR_WATCHDOG();
-
     /* Signaling: LED Toggle */
     if (app_g3_managementData.timerLedExpired == true)
     {
         app_g3_managementData.timerLedExpired = false;
+        
+        /* Found some devices don't blink user led - unhandled behaviour -> refresh watchdog inside */
+        /* Refresh Watchdog */
+        CLEAR_WATCHDOG();
         
         /* Activity */
         USER_BLINK_LED_Toggle();

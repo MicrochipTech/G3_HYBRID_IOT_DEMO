@@ -114,6 +114,7 @@ typedef enum
     /* Device Type */
     APP_DEV_TYPE_LIGHTING_INDOOR        = 0x10,
     APP_DEV_TYPE_LIGHTING_OUTDOOR       = 0x11,
+    APP_DEV_TYPE_LIGHTING_UNKNOWN       = 0x12,
     APP_DEV_TYPE_LIQUID_DETECTION       = 0x13,
     APP_DEV_TYPE_SOLAR_INVERTER         = 0x14,
     APP_DEV_TYPE_BATTERY_CHARGER        = 0x15,

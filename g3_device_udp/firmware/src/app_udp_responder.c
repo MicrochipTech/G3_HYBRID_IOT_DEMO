@@ -407,6 +407,11 @@ void _APP_UDP_RESPONDER_UdpRxCallback(UDP_SOCKET hUDP, TCPIP_NET_HANDLE hNet, TC
         case CMD_GET_DEVICE_INFO:
         {
             SYS_DEBUG_PRINT(SYS_ERROR_DEBUG, "APP_UDP_RESPONDER: GET_DEVICE_INFO\r\n");
+            app_g3_rgbData.rgbValues[0] = 0xAA;
+            app_g3_rgbData.rgbValues[1] = 0xFF;
+            app_g3_rgbData.blinkFreq = 500;
+            app_g3_rgbData.blinkTime = 2000;
+            app_g3_rgbData.newData = true;
             TCPIP_UDP_Put(hUDP, CMD_GET_DEVICE_INFO_RESP);
             TCPIP_UDP_Put(hUDP, APP_DEV_TYPE); // device type
             TCPIP_UDP_Flush(hUDP);
@@ -459,6 +464,11 @@ void _APP_UDP_RESPONDER_UdpRxCallback(UDP_SOCKET hUDP, TCPIP_NET_HANDLE hNet, TC
         {
             uint8_t onOffValue;
             SYS_DEBUG_PRINT(SYS_ERROR_DEBUG, "APP_UDP_RESPONDER: SET_LIGHT - ");//\r\n");
+            app_g3_rgbData.rgbValues[0] = 0x2B;
+            app_g3_rgbData.rgbValues[1] = 0xFF;
+            app_g3_rgbData.blinkFreq = 500;
+            app_g3_rgbData.blinkTime = 2000;
+			app_g3_rgbData.newData = true;
             TCPIP_UDP_Get(hUDP, &onOffValue);
             if(onOffValue == 0)
             {

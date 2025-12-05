@@ -209,9 +209,10 @@ extern "C" {
 #define APP_G3_MANAGEMENT_JOIN_BACKOFF_HIGH_MIN 5000
 #define APP_G3_MANAGEMENT_JOIN_BACKOFF_HIGH_MAX 20000
 
-#define APP_G3_MANAGEMENT_RREQ_WAIT           5    
-#define APP_G3_MANAGEMENT_RREP_WAIT           5
-#define APP_G3_MANAGEMENT_NET_TRAVERSAL_TIME  10
+#define APP_G3_MANAGEMENT_RREP_WAIT           4
+#define APP_G3_MANAGEMENT_NET_TRAVERSAL_TIME  5
+#define APP_G3_MANAGEMENT_RREQ_WAIT           6
+#define APP_G3_MANAGEMENT_BLACKLIST_TABLE_ENTRY_TTL 0
 
 /* Period to blink LED in milliseconds */
 #define APP_G3_MANAGEMENT_LED_BLINK_PERIOD_MS 500
@@ -423,6 +424,9 @@ typedef struct
 
     /* ADP_IB_MAX_HOPS */
     const uint8_t maxHops;
+    
+    /* ADP_IB_ROUTING_TABLE_ENTRY_TTL */
+    const uint16_t blacklistTableEntryTTL;
     
     /* ADP_IB_NET_TRAVERSAL_TIME */
     const uint8_t netTraversalTime;
