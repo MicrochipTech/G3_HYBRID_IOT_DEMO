@@ -299,7 +299,7 @@ The system status is displayed in the upper-right corner of the screen and is re
 
 - <b>Wifi Connection Status</b>: The icon is "red" if the WINCS02 module is not ready, "yellow" when searching for a Wi-Fi network, and "green" when a connection is established.
 
-![Hybrid IoT Wi-Fi Status](docs/SystemStatusWifiready.png)
+![Hybrid IoT Wi-Fi Status](docs/SystemStatusWiFiready.png)
 
 - <b>Cloud Connection Status</b>: The icon is "red" when Wi-Fi is not ready, "yellow" when Wi-Fi is ready and the system is attempting to connect to the cloud, and "green" when the cloud connection is established.
 
@@ -330,7 +330,7 @@ To navigate to the next screen, press the "Next" button.
 ##### Sustainability Wall Screen
 The Sustainability Wall screen enables interaction with devices featured in the Sustainability Wall Demo.
 
-![Hybrid IoT Sustainability Wall Screen](docs/SWallScreenMix.png)
+![Hybrid IoT Sustainability Wall Screen](docs/SwallScreenMix.png)
 
 By pressing a device picture button, the system sends a command to the selected device (if available) to activate the RGB LED in cyan and initiate blinking for 10 seconds.
 
