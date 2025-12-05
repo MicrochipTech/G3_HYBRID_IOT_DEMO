@@ -133,7 +133,7 @@ According with G3 technologies[*](#links) each G3 network requires the existence
 #### Full Configuration
 
 The full MCC configuration is:
-![G3 coordinator MCC configuraion](doc/MCCfull.png)
+![G3 coordinator MCC configuraion](doc/MCCFull.png)
 
 #### System Console and Debugging
 The system console is configured to use SERCOM1 in USART mode and is accessible on TX-RX pins of MikroBUS connector.
@@ -215,7 +215,7 @@ The G3 Hybrid device has been configured fixing some parameters:
 ### G3 Hybrid device applications  
 
 The G3 device is based on different application files:
-- <b>app_g3_management</b>: keeps the G3 device feature running including registering. Additionally a protection mechanism to reset the device if not traffic is received for a while has been implemented too. Besides, the "User Button" is monitored and an alarm is generated if it is pressed during 2 or more seconds. 
+- <b>app_g3_management</b>: keeps the G3 device feature running including registering. Additionally a protection mechanism to reset the device if not traffic is received for a while has been implemented too. 
 - <b>app_tcpip_management</b>: keeps the TCP/IP stack available to be able to interact with the network at UDP layer and also keep the UDP responder server where the alarms are received.
 - <b>app_udp_responder</b>: provides a UDP server where receive any command from coordinator.
 - <b>app_matrix_led</b>: controls the information shown into the Panel LED.
@@ -253,7 +253,7 @@ Programming the application can be done using MPLAB X IDE
 After powering up the WBZ451HPE (5V Power Supply), PL460 (15V Power Supply) and Panel LED (5V Power Supply), the Panel LED shows the Microchip Logo and the G3 device starts trying to join a G3 Network.
 
 Each time the device is pinged from the LCD Touch Screen or the Cloud, the Panel Led shows the Microchip Logo.
-Each time there is an alarm the device is notified from the systema and the Panel Led shows the Alarm Logo.
+Each time there is an alarm (pressing the Emergency Button) the device is notified from the system and the Panel Led shows the Alarm Logo for a while.
 
 <b>UART interface</b>  
 For debugging purposes, a UART interface to the PC is implemented. A serial port terminal (e.g. PuTTY) can be used to open a connection to the device.  
