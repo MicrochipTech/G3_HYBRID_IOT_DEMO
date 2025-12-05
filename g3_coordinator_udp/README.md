@@ -1,6 +1,6 @@
 # G3 HYBRID COORDINATOR <!-- omit in toc -->
 
-<img src="images/IoT-Made-Easy-Logo.png" width=100>
+<img src="../images/IoT-Made-Easy-Logo.png" width=100>
 
 > "IoT Made Easy!" - This is an application using the unified G3-Hybrid PLC+RF protocol.
 
@@ -26,10 +26,10 @@ Checkout the <a href="https://microchipsupport.force.com/s/" target="_blank">Tec
 - [Software Setup](#software-setup)
   - [Development Tools](#development-tools)
   - [MCC Content Libraries](#mcc-content-libraries)
-  - [Harmony MCC Configuration](#mcc-configuration)
+  - [Harmony MCC Configuration](#harmony-mcc-configuration)
   - [Application](#application)
 - [Board Programming](#board-programming)
-- [Run the demo](#run-demo)
+- [Run the demo](#run-the-demo)
 - [Links](#links)
 
 ## Introduction
