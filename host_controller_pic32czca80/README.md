@@ -58,22 +58,28 @@ PIC32CZCA80 host controller receives network data from the coordinator via USI i
 ## Hardware Setup
 - Connect the WVGA LCD Display to the SSD1963 LCD Controller Graphics Card throught a flat cable
 - Connect the SSD1963 LCD Controller Graphics Card to the GFX Connector on PIC32CZCA Curiosity Board
-- Connect the WINCS02 Add on board into the MikroBUS connector on PIC32CZCA Curiosity Board
-- Connect the power supply on J100 (+9V)
-- Connect Debug USB (J200) to PC
-- Connect USI interface to coordinator
-  - Connect PD24 and PD25 available on J401 to PB13 and PB12 (available on test point array J9 Pin 7 and 6) on WBZ451 acting like coordinator 
 - Connect the SSD1963 LCD Controller Card to the Graphics Connector
 - Connect the WVGA LCD Display to the SSD1963 LCD Controller Card
+- Connect USI interface to coordinator
+  - Connect PD24 and PD25 available on J401 to PB13 and PB12 (available on test point array J9 Pin 7 and 6) on WBZ451 acting like coordinator. Connect also GND.
+
+![Host Controller USI connection](docs/HostControllerCableConnectionGnd.png)
+
 - Connect the WINCS02 Add-on Board on microBUS header using the stacking header
   - connect mikroBus pins: 2-10 and 15, avoiding SERCOM0 (PC0-PC1 pins) and SERCOM1 (PC4-PC7 pins)
+- Connect the power supply on J100 (+9V)
+- Connect Debug USB (J200) to PC
+
+![Host Controller Design](docs/PIC32CZCA_host_controller_only_wifi.png)
+
 - Connect the MIKROBUS XPLAINED PRO on EXT2 header
   - connect +5V and +3.3V at External Power Header of mikroBUS Xplained Pro, remove voltage selection jumper
 - Connect the LTE IoT 10 Click on microBus of the MIKROBUS XPLAINED PRO using the stacking header
   - connect mikroBus pins: 1, 2, 7, 8, 9, 10, 13, 14
-- Connect PKoB USB to PC for device programming and debugging with terminal program
 
-![Host Controller Design](docs/PIC32CZCA_host_controller.png)  
+![Host Controller Design with LTE module](docs/PIC32CZCA_host_controller.png)  
+
+- Connect PKoB USB to PC for device programming and debugging with terminal program
 
 [TOP](#contents)
 

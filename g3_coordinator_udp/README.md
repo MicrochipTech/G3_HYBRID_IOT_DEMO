@@ -52,7 +52,7 @@ According with G3 technologies[*](#links) each G3 network requires the existence
   - Include 10K Pull Down resistor to GND on PL460_STBY and cut trace to XPLAINED PRO connector
 
 - Connect the PL460-EK to MikroBUS connector of WBZ451 with the adaptation board and supply it with the provided +15V Power Supply
-- Connect PB13 and PB12 (available removing R11 and R16) on WBZ451 acting like coordinator to PD24 and PD25 available on J401 of PIC32CZCA80 Host Controller - Serial Port Communication.
+- Connect PB13 and PB12 (available removing R11 and R16) on WBZ451 acting like coordinator to PD24 and PD25 available on J401 of PIC32CZCA80 Host Controller - Serial Port Communication. Connect also GND - pins 2 or 19 on XPLAINED PRO.
 - Connect the +5V power supply on WBZ451 uUSB connector J7
 - Connect a USB cable on J7 for device programming and debugging with terminal program
 
@@ -173,12 +173,13 @@ The G3 devices able to connect into the G3 coordinator and their functionalties 
 ### G3 Hybrid coordinator specific configuration  
 
 The G3 Hybrid coordinator has been configured fixing some parameters:
-- Short Address: assigned short address is fixed according with the device type functionality of the G3 device.
-- Black List Table Entry TTL: fixed to zero as the short address is fixed by device type. It avoids issues with joins from the same device.
-- PAN_ID: PAN ID identifies the G3 network in use. It is masked to be on 0x782X range. 
-- PSK: Pre-shared Key used on the registering process. Avoids to register any unexpected G3 device. A fixed value different from default used on G3 certification has been configured.
-- ADP PIBs: These ADP Pibs have been set according with the network: MaxHops, RrepWait and NetTraversalTime.
-- RF Duty Cycle: the limit has been fixed to 100% removing any transmission restriction
+- <b>Short Address</b>: assigned short address is fixed according with the device type functionality of the G3 device.
+- <b>Black List Table Entry TTL</b>: fixed to zero as the short address is fixed by device type. It avoids issues with joins from the same device.
+- <b>PAN_ID</b>: PAN ID identifies the G3 network in use. It is masked to be on 0x782X range. 
+- <b>PSK</b>: Pre-shared Key used on the registering process. Avoids to register any unexpected G3 device. A fixed value different from default used on G3 certification has been configured.
+- <b>ADP PIBs</b>: These ADP Pibs have been set according with the network: MaxHops, RrepWait and NetTraversalTime.
+- <b>MAC Tables</b>: The Device Table size has been set to 1 to allow fixed addressing without security problems.
+- <b>RF Duty Cycle</b>: the limit has been fixed to 100% removing any transmission restriction
 
 ### G3 Hybrid coordinator applications  
 

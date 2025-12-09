@@ -169,6 +169,7 @@ The G3 Hybrid device has been configured fixing some parameters:
 
 - <b>PAN_ID</b>: PAN ID identifies the G3 network in use. It is masked to be on 0x782X range. 
 - <b>ADP PIBs</b>: These ADP Pibs have been set according with the network: MaxHops, RREQWait, RREPWait and NetTraversalTime.
+- <b>MAC Tables</b>: The Device Table size has been set to 1 to allow fixed addressing without security problems.
 - <b>RF Duty Cycle</b>: the limit has been fixed to 100% removing any transmission restriction
 
 ### G3 Hybrid device applications  
@@ -209,6 +210,9 @@ Programming the application can be done using MPLAB X IDE
 ## Run the demo
 
 After powering up the WBZ451 (5V Power Supply) + PL460 (15V Power Supply), the G3 device starts trying to join a G3 Network, the RGB LED blinks on green. When the device has joined the corresponding G3 network, the RGB LED keeps green for about 10 seconds and the Blue "User Led" will start blinking with a cadency of 0.5 secs if connected through RF or 1 sec if connected through PLC.
+
+Each time the device is pinged from the G3 coordinator on the cycling process, the RGB Led will blink for 2 seconds in blue.
+For lighting devices, each time the device is receive a command for switching on-off from the G3 coordinator, the RGB Led will blink for 2 seconds in yellow.
 
 Each time the device is pinged from the LCD Touch Screen or the Cloud, the RGB Led will blink for 10 seconds in the corresponding colour (typically cyan).
 

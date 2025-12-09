@@ -210,6 +210,7 @@ The G3 Hybrid device has been configured fixing some parameters:
 
 - <b>PAN_ID</b>: PAN ID identifies the G3 network in use. It is masked to be on 0x782X range. 
 - <b>ADP PIBs</b>: These ADP Pibs have been set according with the network: MaxHops, RREQWait, RREPWait and NetTraversalTime.
+- <b>MAC Tables</b>: The Device Table size has been set to 1 to allow fixed addressing without security problems.
 - <b>RF Duty Cycle</b>: the limit has been fixed to 100% removing any transmission restriction
 
 ### G3 Hybrid device applications  
@@ -278,16 +279,6 @@ More information about devices and hardware can be found on:
 - [WBZ451 Datasheet](https://ww1.microchip.com/downloads/aemDocuments/documents/WSG/ProductDocuments/DataSheets/PIC32CX-BZ2-and-WBZ45-Family-Data-Sheet-DS70005504.pdf)
 - [WBZ451 HPE Curiosity Board](https://www.microchip.com/en-us/development-tool/ev79y91a)
 - [WBZ451 Curiosity Board User Guide](https://ww1.microchip.com/downloads/aemDocuments/documents/WSG/ProductDocuments/UserGuides/WBZ451HPE-Curiosity-Board-User-Guide-DS50003681.pdf)
-
-More information about the Sustainability Wall reference designs configured as G3 devices can be found on:
-
-- [Liquid Detection Reference Design](https://www.microchip.com/en-us/development-tool/EV24U22A)
-- [Solar Microinverter Reference Design](https://www.microchip.com/en-us/tools-resources/reference-designs/grid-connected-solar-microinverter)
-- [Solar MPPT Battery charger Reference Design](https://www.microchip.com/en-us/tools-resources/reference-designs/solar-mppt-battery-charger-reference-design)
-- [Energy Storage Reference Design](https://www.microchip.com/en-us/tools-resources/reference-designs/high-voltage-auxiliary-e-fuse-reference-design)
-- [Heat Pump Reference Design](https://www.microchip.com/en-us/tools-resources/reference-designs/11-kw-totem-pole-demonstration-application)
-- [EV Charger Reference Design](https://www.microchip.com/en-us/tools-resources/reference-designs/three-phase-ac-commercial-with-ocpp-and-display-electric-vehicle-charger-reference-design)
-- [Electricity Meter Reference Design](https://www.microchip.com/en-us/development-tool/EV58E84A)
 
 [TOP](#contents)
 
